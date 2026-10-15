@@ -1931,6 +1931,7 @@ function setLang(lang){
     s=s.replace(/[\s\u3000]+/g,'');
     s=s.replace(/[。．.!！?？、，,；;：:（）()「」『』・｜|\u2014\u2013\u00b7]/g,'');
     s=kataToHira(s);
+    s=s.replace(/ー/g,'う');
     s=s.toLowerCase();
     return s;
   }
