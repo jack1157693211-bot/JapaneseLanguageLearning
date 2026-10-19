@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大家日语1动词变形练习</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b0341f'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%23fff' font-family='serif'%3E動%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="toolbar">
+  <div class="tb-inner">
+    <a class="btn-ghost back-home" href="index.html" title="返回入口 / Home / Trang chủ"><span class="i18n zh">← 返回入口</span><span class="i18n en">← Home</span><span class="i18n vi">← Trang chủ</span></a>
+    <h1>
+      <span class="i18n zh">大家日语1动词变形练习</span><span class="i18n en">Minna no Nihongo 1 Verb Conjugation</span><span class="i18n vi">Minna no Nihongo 1 – Luyện biến hóa động từ</span>
+      <small><span class="i18n zh">第1課 ～ 第25課 · 动词变形</span><span class="i18n en">Lessons 1–25 · Verb conjugation</span><span class="i18n vi">Bài 1–25 · Biến hóa động từ</span></small>
+    </h1>
+    <div class="tb-controls">
+      <select id="modeSel" class="btn-ghost" aria-label="模式 / Mode / Chế độ" title="切换模式">
+        <option value="write" data-i18n-static="modeWrite">默写模式</option>
+        <option value="wrong" data-i18n-static="modeWrong">错题模式</option>
+      </select>
+      <button type="button" id="toggleAll" class="btn-primary">全部显示答案</button>
+      <button type="button" id="errBook" class="btn-ghost"><span class="i18n zh">错题本</span><span class="i18n en">Error book</span><span class="i18n vi">Sổ lỗi</span>（<span id="errCount">0</span>）</button>
+      <button type="button" class="btn-ghost" onclick="window.print()"><span class="i18n zh">打印（A4）</span><span class="i18n en">Print (A4)</span><span class="i18n vi">In (A4)</span></button>
+      <select id="lessonSel" class="btn-ghost" aria-label="选择课 / Lesson">
+      </select>
+      <select id="langBtn" class="btn-ghost" aria-label="语言 / Language / Ngôn ngữ" title="切换语言">
+        <option value="zh">中文</option>
+        <option value="en">English</option>
+        <option value="vi">Tiếng Việt</option>
+      </select>
+      <span id="counter" class="counter">0 / 0</span>
+    </div>
+  </div>
+</header>
+<main>
+  <section class="howto">
+    <b><span class="i18n zh">怎么用</span><span class="i18n en">How to use</span><span class="i18n vi">Cách sử dụng</span></b>
+    <ol>
+      <li><span class="i18n zh">每课一个变形网格：行是动词（左列显示动词・辞书形・类型・词义），列是各种变形，第一列是「ます形」。</span><span class="i18n en">Each lesson is a conjugation grid: rows are verbs (left column shows the verb, dictionary form, group and meaning), columns are forms, with “ます形” first.</span><span class="i18n vi">Mỗi bài là một bảng biến hóa: hàng là động từ (cột trái hiện động từ・từ điển・nhóm・nghĩa), cột là các dạng biến hóa, cột đầu là “ます形”.</span></li>
+      <li><span class="i18n zh">格子默认隐藏答案、可输入：填入该动词在该变形下的正确形式，按回车或「验证」判对错：绿色=对；红色=错并自动记入错题本（错误+1）、显示正确答案。</span><span class="i18n en">Cells hide answers by default and accept input: type the correct form of the verb in that conjugation, press Enter or “Check” to grade: green = correct; red = wrong, recorded in the error book (+1) with the answer shown.</span><span class="i18n vi">Ô mặc định ẩn đáp án và có thể nhập: gõ đúng dạng biến hóa của động từ, bấm Enter hoặc “Kiểm tra” để chấm: xanh = đúng; đỏ = sai, tự ghi vào sổ lỗi (+1) và hiện đáp án.</span></li>
+      <li><span class="i18n zh">每列表头有「显示答案/隐藏答案」：先显示基准列（比如「ます形」）的答案，再推导其他所有变形填入其余各列，是这页的核心玩法。</span><span class="i18n en">Each column header has “Show/Hide answers”: first reveal a base column (e.g. “ます形”), then derive and fill every other form — that is the core practice of this page.</span><span class="i18n vi">Đầu mỗi cột có “Hiện/Ẩn đáp án”: hãy hiện cột gốc (ví dụ “ます形”) rồi suy ra mọi biến hóa khác để điền vào các cột còn lại — đây là cách luyện chính của trang này.</span></li>
+      <li><span class="i18n zh">验证宽容：输入的汉字会自动转成假名再比对，「起きます」或「おきます」都判对；只看基准列推导时想不起来，可随时点该列「显示答案」。</span><span class="i18n en">Lenient checking: kanji is converted to kana before comparison, so “起きます” or “おきます” both count; if you get stuck, reveal that column anytime.</span><span class="i18n vi">Chấm điểm linh hoạt: kanji được chuyển sang giả danh trước khi so, “起きます” hay “おきます” đều đúng; lúc bí có thể hiện đáp án cột đó bất cứ lúc nào.</span></li>
+      <li><span class="i18n zh">列头「?」按钮可查看该列变形的构成规则（按一类/二类/三类动词分别说明）。</span><span class="i18n en">The “?” button on each column header shows the conjugation rule for that form (explained by verb group 1/2/3).</span><span class="i18n vi">Nút “?” ở đầu cột xem quy tắc biến hóa của dạng đó (theo nhóm động từ 1/2/3).</span></li>
+      <li><span class="i18n zh">全部课程已一次性显示（瀑布流），顶部「第N課」下拉只用于跳转到对应课程的位置。</span><span class="i18n en">All lessons are shown at once (waterfall); the “Lesson N” dropdown at the top just jumps to that lesson.</span><span class="i18n vi">Tất cả các bài hiển thị cùng lúc (dạng dòng chảy); menu “Bài N” trên đầu chỉ dùng để nhảy đến bài đó.</span></li>
+      <li><span class="i18n zh">打印：点「打印（A4）」——打印时会显示全部答案，可当对照表用。</span><span class="i18n en">Print: click “Print (A4)” — all answers are shown when printing, useful as a reference sheet.</span><span class="i18n vi">In ấn: bấm “In (A4)” — khi in hiện tất cả đáp án, dùng làm bảng đối chiếu.</span></li>
+      <li><span class="i18n zh">错题：写错或点「错」按钮都记入错题本（自动累计次数）；顶部「错题本」可查看、「导出」存成 Markdown；选「错题模式」只保留有错的格子。</span><span class="i18n en">Errors: wrong answers or clicking “Wrong” are recorded (counts accumulate); view via “Error book” at the top, “Export” saves Markdown; “Wrong-only” mode keeps only the cells with errors.</span><span class="i18n vi">Lỗi: viết sai hoặc bấm “Sai” đều ghi vào sổ lỗi (tự cộng dồn); xem từ “Sổ lỗi” trên đầu, “Xuất” lưu Markdown; chế độ “Chỉ lỗi” chỉ giữ các ô sai.</span></li>
+    </ol>
+  </section>
+  <section class="wrong-zone" id="wrongZone" hidden>
+    <h2 class="wrong-zone-title" id="wrongZoneTitle"></h2>
+    <p class="wrong-zone-sum" id="wrongZoneSum"></p>
+  </section>
+  <div id="list"></div>
+</main>
+<footer><span class="i18n zh">内容按《大家的日语 初级》第2版整理 · 动词变形练习</span><span class="i18n en">Compiled from “Minna no Nihongo Shokyu” 2nd edition · Verb conjugation practice</span><span class="i18n vi">Biên soạn theo “Minna no Nihongo Sơ cấp” bản 2 · Luyện biến hóa động từ</span></footer>
+<div class="err-panel" id="errPanel">
+  <div class="err-card">
+    <div class="err-head">
+      <h2><span class="i18n zh">错题本</span><span class="i18n en">Error book</span><span class="i18n vi">Sổ lỗi</span> <span id="errPanelCount"></span></h2>
+      <div class="spacer">
+        <button type="button" id="errExport" class="btn-primary"><span class="i18n zh">导出错题本（.md）</span><span class="i18n en">Export (.md)</span><span class="i18n vi">Xuất (.md)</span></button>
+        <button type="button" id="errClear" class="btn-ghost"><span class="i18n zh">清空</span><span class="i18n en">Clear</span><span class="i18n vi">Xóa</span></button>
+        <button type="button" id="errClose" class="btn-ghost"><span class="i18n zh">关闭</span><span class="i18n en">Close</span><span class="i18n vi">Đóng</span></button>
+      </div>
+    </div>
+    <div class="err-list" id="errList"></div>
+    <p class="err-hint"><span class="i18n zh">点击条目可回到对应题目位置。错题自动保存在本浏览器中，同一台电脑下次打开还在；换电脑或换浏览器时点「导出」即可带走。</span><span class="i18n en">Click an item to jump back to that question. Errors are saved automatically in this browser and remain when you reopen the file on the same computer; use “Export” to take them with you to another device or browser.</span><span class="i18n vi">Bấm vào mục để quay lại câu hỏi đó. Lỗi được lưu tự động trong trình duyệt này, mở lại trên cùng máy vẫn còn; muốn mang đi nơi khác hãy bấm “Xuất”.</span></p>
+  </div>
+</div>
+<script>
+var UI_I18N = {"listenMode": {"zh": "听写模式", "en": "Listening mode", "vi": "Chế độ nghe"}, "exitListenMode": {"zh": "退出听写模式", "en": "Exit listening mode", "vi": "Thoát chế độ nghe"}, "modeLabel": {"zh": "模式", "en": "Mode", "vi": "Chế độ"}, "modeWrite": {"zh": "默写模式", "en": "Dictation", "vi": "Chính tả"}, "modeListen": {"zh": "听写模式", "en": "Listening", "vi": "Nghe"}, "modeWrong": {"zh": "错题模式", "en": "Wrong-only", "vi": "Chỉ lỗi"}, "wrongZoneTitle": {"zh": "错题复习 · 按错误次数从多到少", "en": "Wrong-item review · most errors first", "vi": "Ôn lỗi · nhiều lỗi trước"}, "wrongZoneSum": {"zh": "共 %d 题 · 累计 %d 次错误", "en": "%d items · %d errors total", "vi": "%d mục · %d lần lỗi"}, "wrongZoneEmpty": {"zh": "还没有错题。写错或点「错」按钮后会自动出现在这里。", "en": "No wrong items yet. Write a wrong answer or click “Wrong” and they will appear here.", "vi": "Chưa có lỗi. Viết sai hoặc bấm “Sai” thì sẽ tự hiện ở đây."}, "showAll": {"zh": "全部显示答案", "en": "Show all answers", "vi": "Hiện tất cả đáp án"}, "hideAll": {"zh": "全部隐藏答案", "en": "Hide all answers", "vi": "Ẩn tất cả đáp án"}, "errBook": {"zh": "错题本", "en": "Error book", "vi": "Sổ lỗi"}, "print": {"zh": "打印（A4）", "en": "Print (A4)", "vi": "In (A4)"}, "jump": {"zh": "跳转到课…", "en": "Jump to lesson…", "vi": "Chuyển đến bài…"}, "langLabel": {"zh": "中文", "en": "English", "vi": "Tiếng Việt"}, "howtoTitle": {"zh": "怎么用", "en": "How to use", "vi": "Cách sử dụng"}, "howto1": {"zh": "只看左侧中文提示，默写出日语单词、例句和语法句，点「全部显示答案」一次核对。", "en": "Look at the prompt on the left, write the Japanese word, example sentence and grammar sentence, then click “Show all answers” to check at once.", "vi": "Chỉ nhìn gợi ý bên trái, viết từ vựng, câu ví dụ và câu ngữ pháp tiếng Nhật, rồi bấm “Hiện tất cả đáp án” để đối chiếu một lần."}, "howto2": {"zh": "每条右侧都有输入框：直接打字输入日语（假名、汉字、假名+汉字混合都行），按回车或「验证」自动判对错：绿色=对；红色=错并自动记入错题本（错误+1），同时显示正确答案。", "en": "Each item has an input box on the right: type your Japanese directly (kana, kanji, or a mix), press Enter or “Check” to auto-grade: green = correct; red = wrong and automatically recorded in the error book (+1 error), with the correct answer shown.", "vi": "Mỗi dòng có ô nhập bên phải: gõ tiếng Nhật trực tiếp (giả danh, kanji hoặc trộn cả hai), bấm Enter hoặc “Kiểm tra” để tự chấm: xanh = đúng; đỏ = sai và tự ghi vào sổ lỗi (+1 lỗi), đồng thời hiển thị đáp án đúng."}, "howto3": {"zh": "验证时会自动把你输入的汉字转成假名再比对，所以写「財布がなくて困ったなあ」「さいふがなくてこまったなあ」或两者混合都能判对；只写单词或只写例句也算对。", "en": "When checking, the kanji you type is converted to kana before comparison, so “財布がなくて困ったなあ”, “さいふがなくてこまったなあ” or a mix of both all count as correct; writing only the word or only the sentence also counts.", "vi": "Khi kiểm tra, kanji bạn gõ sẽ được chuyển sang giả danh trước khi so sánh, nên viết “財布がなくて困ったなあ”, “さいふがなくてこまったなあ” hoặc trộn cả hai đều tính đúng; chỉ viết từ hoặc chỉ viết câu cũng tính đúng."}, "howto4": {"zh": "「显示答案」可单独查看或再次点击关闭某条答案；点过「全部显示答案」后，也可用单条「显示答案」按钮把某条关掉。", "en": "“Show answer” shows or hides a single answer; after “Show all answers”, you can also use the per-item “Show answer” button to close one answer.", "vi": "“Hiện đáp án” hiện hoặc ẩn từng đáp án; sau khi “Hiện tất cả đáp án”, bạn cũng có thể dùng nút “Hiện đáp án” của từng dòng để ẩn riêng đáp án đó."}, "howto5": {"zh": "听写模式：在顶部「模式」下拉里选「听写模式」，中文提示会变成喇叭图标——点击喇叭播放该条答案的日语读音（用 VOICEVOX 预生成的音频；还没生成音频的词条会自动用浏览器日语语音朗读）。切回「默写模式」即退出。", "en": "Listening mode: choose “Listening” from the Mode dropdown at the top, the prompt changes to a speaker icon — click it to play the Japanese audio of that answer (VOICEVOX-generated audio; items without audio fall back to the browser's Japanese voice). Switch back to “Dictation” to exit.", "vi": "Chế độ nghe: chọn “Nghe” từ menu Chế độ trên đầu, gợi ý chuyển thành biểu tượng loa — bấm để phát âm thanh tiếng Nhật của đáp án đó (âm thanh tạo bằng VOICEVOX; dòng chưa có âm thanh sẽ dùng giọng tiếng Nhật của trình duyệt). Chuyển về “Chính tả” để thoát."}, "howto6": {"zh": "打印：点「打印（A4）」——答案印在每行右栏，把纸沿中线折起即可遮住右栏默写。", "en": "Print: click “Print (A4)” — answers are printed in the right column; fold the paper along the middle to cover the answers and practice.", "vi": "In ấn: bấm “In (A4)” — đáp án in ở cột phải; gấp giấy theo đường giữa để che đáp án và luyện viết."}, "howto7": {"zh": "错题：写错或点「错」按钮都记入错题本（自动累计次数）；顶部「错题本」可查看，「导出」存成 Markdown。选「错题模式」可只看错题复习，错误多的排最前面。", "en": "Errors: wrong answers or clicking “Wrong” are recorded in the error book (counts accumulate); view it from “Error book” at the top, “Export” saves it as Markdown. Choose “Wrong-only” mode to review just your wrong items, most errors first.", "vi": "Lỗi: viết sai hoặc bấm “Sai” đều ghi vào sổ lỗi (tự cộng dồn số lần); xem từ “Sổ lỗi” trên đầu, “Xuất” lưu thành Markdown. Chọn chế độ “Chỉ lỗi” để chỉ ôn những câu sai, nhiều lỗi trước."}, "vocabTitle": {"zh": "单词默写", "en": "Vocabulary dictation", "vi": "Từ vựng chính tả"}, "vocabHint": {"zh": "看中文写单词和例句", "en": "Read the prompt and write the Japanese", "vi": "Nhìn gợi ý và viết tiếng Nhật"}, "grammarTitle": {"zh": "文法默写", "en": "Grammar dictation", "vi": "Ngữ pháp chính tả"}, "grammarHint": {"zh": "看用法标签写例句", "en": "Read the usage label and write the sentence", "vi": "Nhìn nhãn cách dùng và viết câu"}, "lessonMeta": {"zh": "单词 %d 条 · 文法 %d 点", "en": "%d vocab · %d grammar", "vi": "%d từ vựng · %d ngữ pháp"}, "placeholder": {"zh": "写日语答案", "en": "Write your answer in Japanese", "vi": "Viết câu trả lời bằng tiếng Nhật"}, "check": {"zh": "验证", "en": "Check", "vi": "Kiểm tra"}, "showAnswer": {"zh": "显示答案", "en": "Show answer", "vi": "Hiện đáp án"}, "wrong": {"zh": "错", "en": "Wrong", "vi": "Sai"}, "rule": {"zh": "变形规则", "en": "Conjugation rule", "vi": "Quy tắc biến hóa"}, "showCol": {"zh": "显示答案", "en": "Show", "vi": "Hiện"}, "hideCol": {"zh": "隐藏答案", "en": "Hide", "vi": "Ẩn"}, "correct": {"zh": "✓ 对了", "en": "✓ Correct", "vi": "✓ Đúng"}, "wrongMsg": {"zh": "✗ 错了，已记入错题本（×%d）；正确答案已显示在下方", "en": "✗ Wrong, recorded in the error book (×%d); the correct answer is shown below", "vi": "✗ Sai, đã ghi vào sổ lỗi (×%d); đáp án đúng hiển thị bên dưới"}, "errEmptyAlert": {"zh": "错题本是空的", "en": "The error book is empty", "vi": "Sổ lỗi đang trống"}, "listenTitle": {"zh": "播放日语读音", "en": "Play Japanese audio", "vi": "Phát âm thanh tiếng Nhật"}, "errPanelTitle": {"zh": "错题本", "en": "Error book", "vi": "Sổ lỗi"}, "errEmpty": {"zh": "还没有错题记录。写错时点该行右侧的「错」按钮即可记录。", "en": "No error records yet. Click the “Wrong” button next to an item to record it.", "vi": "Chưa có ghi chép lỗi. Bấm nút “Sai” bên phải dòng đó để ghi lại."}, "errSum": {"zh": "（%d 条 · 累计 %d 次）", "en": "(%d items · %d times total)", "vi": "(%d mục · %d lần)"}, "export": {"zh": "导出", "en": "Export", "vi": "Xuất"}, "clear": {"zh": "清空", "en": "Clear", "vi": "Xóa"}, "close": {"zh": "关闭", "en": "Close", "vi": "Đóng"}, "confirmClear": {"zh": "确定清空所有错题记录？", "en": "Clear all error records?", "vi": "Xóa toàn bộ ghi chép lỗi?"}, "lesson": {"zh": "第%d课", "en": "Lesson %d", "vi": "Bài %d"}};
+var WORD_I18N = {"l4w1": {"en": "get up", "vi": "Thức dậy"}, "l4w2": {"en": "go to bed; to sleep", "vi": "Đi ngủ"}, "l4w3": {"en": "work; to labor", "vi": "Làm việc"}, "l4w4": {"en": "rest; to take a day off", "vi": "Nghỉ ngơi; nghỉ phép"}, "l4w5": {"en": "study", "vi": "Học"}, "l4w6": {"en": "end; to finish", "vi": "Kết thúc"}, "l5w1": {"en": "go", "vi": "Đi"}, "l5w3": {"en": "return; to go back", "vi": "Trở về"}, "l6w1": {"en": "eat", "vi": "Ăn"}, "l6w2": {"en": "drink", "vi": "Uống"}, "l6w3": {"en": "smoke", "vi": "Hút"}, "l6w5": {"en": "watch; to look", "vi": "Xem; nhìn"}, "l6w6": {"en": "listen; to hear", "vi": "Nghe; hỏi"}, "l6w7": {"en": "read", "vi": "Đọc"}, "l6w8": {"en": "write; to draw", "vi": "Viết; vẽ"}, "l6w9": {"en": "buy", "vi": "Mua"}, "l6w10": {"en": "take", "vi": "Chụp"}, "l6w12": {"en": "do", "vi": "Làm"}, "l6w13": {"en": "meet; to see", "vi": "Gặp gỡ"}, "l7w1": {"en": "cut", "vi": "Cắt; cắt giấy"}, "l7w2": {"en": "send", "vi": "Gửi"}, "l7w3": {"en": "give", "vi": "Tặng; cho"}, "l7w4": {"en": "receive; to get", "vi": "Nhận được"}, "l7w5": {"en": "lend", "vi": "Cho mượn"}, "l7w6": {"en": "borrow", "vi": "Mượn"}, "l7w7": {"en": "teach", "vi": "Dạy"}, "l7w8": {"en": "learn; to practice", "vi": "Học; luyện tập"}, "l7w9": {"en": "call", "vi": "Gọi điện"}, "l9w1": {"en": "understand", "vi": "Hiểu"}, "l9w2": {"en": "there is; to have", "vi": "Có"}, "l10w1": {"en": "there is; to exist", "vi": "Có"}, "l10w2": {"en": "there is; to exist", "vi": "Có"}, "l11w1": {"en": "have ; to live", "vi": "Có ; ở"}, "l11w2": {"en": "take", "vi": "Mất"}, "l11w3": {"en": "take a day off", "vi": "Xin nghỉ"}, "l13w1": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l13w2": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l13w3": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l13w4": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l13w5": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l13w6": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l13w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l13w8": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l13w9": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l13w10": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l13w11": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l14w2": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w3": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w4": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w5": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w6": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w7": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w8": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w9": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w10": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w11": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w12": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w13": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w14": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w15": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w16": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w17": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w18": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l14w19": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w20": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l14w42": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w43": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l14w44": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w5": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w6": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w8": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w9": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w10": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l15w11": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w12": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w24": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l15w26": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w1": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w4": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w6": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w8": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w9": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w10": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w11": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w12": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w13": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w14": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l16w15": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l16w51": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l16w52": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l17w2": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l17w3": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l17w4": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w5": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w6": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w8": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l17w9": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w10": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w11": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l17w12": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l17w13": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l17w14": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l17w15": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l17w16": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l18w4": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l18w5": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l18w6": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l18w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l18w8": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l18w9": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l18w10": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l18w11": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l18w12": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l19w1": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l19w2": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l19w3": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l19w4": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l19w5": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l19w6": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l19w7": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l20w3": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l20w4": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l20w5": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l21w2": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l21w10": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l21w14": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l21w16": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w17": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w18": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w19": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l21w20": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w21": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w42": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l21w43": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l22w2": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l22w10": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l22w11": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l22w12": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l22w13": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l22w14": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l23w12": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w14": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w15": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w16": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w17": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l23w18": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w19": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l23w20": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l23w21": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l24w1": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l24w2": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l24w3": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l24w4": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l24w5": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l24w6": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l24w7": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l24w19": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l24w20": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l24w21": {"en": "group III verb", "vi": "Động từ nhóm III"}, "l25w2": {"en": "group II verb", "vi": "Động từ nhóm II"}, "l25w3": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l25w4": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l25w15": {"en": "group I verb", "vi": "Động từ nhóm I"}, "l25w18": {"en": "group II verb", "vi": "Động từ nhóm II"}};
+
+/* ============ 数据：由 build 脚本注入 ============ */
+var VERBS = {"1":[{"lesson":4,"verbs":[{"num":1,"word":"おきます","dict":"おきる","kana":"おきます","type":"2","zhs":"起床","zh":"每天早上7点起床。","sent":"まいあさしちじにおきます","obj":""},{"num":2,"word":"ねます","dict":"ねる","kana":"ねます","type":"2","zhs":"睡觉；就寝","zh":"晚上11点睡觉。","sent":"よるじゅういちじにねます","obj":""},{"num":3,"word":"はたらきます","dict":"はたらく","kana":"はたらきます","type":"1","zhs":"工作；劳动","zh":"在公司上班。","sent":"かいしゃではたらいています","obj":"かいしゃで"},{"num":4,"word":"やすみます","dict":"やすむ","kana":"やすみます","type":"1","zhs":"休息；请假","zh":"星期天休息。","sent":"にちようびはやすみます","obj":""},{"num":5,"word":"べんきょうします","dict":"べんきょうする","kana":"べんきょうします","type":"3","zhs":"学习","zh":"每晚学日语。","sent":"まいばんにほんごをべんきょうします","obj":"にほんごを"},{"num":6,"word":"おわります","dict":"おわる","kana":"おわります","type":"1","zhs":"结束；完","zh":"银行到下午5点结束。","sent":"ぎんこうはごさいまでです","obj":"ごさいまで"}]},{"lesson":5,"verbs":[{"num":1,"word":"いきます","dict":"いく","kana":"いきます","type":"1","zhs":"去；往","zh":"去学校。","sent":"がっこうへいきます","obj":"がっこうへ"},{"num":3,"word":"かえります","dict":"かえる","kana":"かえります","type":"1","zhs":"回去；回来","zh":"下午6点回家。","sent":"ごごろくじにうちへかえります","obj":"うちへ"}]},{"lesson":6,"verbs":[{"num":1,"word":"たべます","dict":"たべる","kana":"たべます","type":"2","zhs":"吃","zh":"午饭吃面包。","sent":"ひるごはんにパンをたべます","obj":"パンを"},{"num":2,"word":"のみます","dict":"のむ","kana":"のみます","type":"1","zhs":"喝","zh":"在咖啡馆喝咖啡。","sent":"喫茶店でコーヒーをのみます","obj":"コーヒーを"},{"num":3,"word":"すいます","dict":"すう","kana":"すいます","type":"1","zhs":"吸（烟）","zh":"","sent":"","obj":"タバコを"},{"num":5,"word":"みます","dict":"みる","kana":"みます","type":"2","zhs":"看；观看","zh":"晚上看电影。","sent":"よるえいがをみます","obj":"よるえいがを"},{"num":6,"word":"ききます","dict":"きく","kana":"ききます","type":"1","zhs":"听；问","zh":"每天早上听广播。","sent":"まいあさラジオをききます","obj":"ラジオを"},{"num":7,"word":"よみます","dict":"よむ","kana":"よみます","type":"1","zhs":"读；念","zh":"在图书馆读书。","sent":"としょかんでほんをよみます","obj":"ほんを"},{"num":8,"word":"かきます","dict":"かく","kana":"かきます","type":"1","zhs":"写；画","zh":"写报告。","sent":"レポートをかきます","obj":"レポートを"},{"num":9,"word":"かいます","dict":"かう","kana":"かいます","type":"1","zhs":"买","zh":"在超市买蔬菜。","sent":"スーパーでやさいをかいます","obj":"やさいを"},{"num":10,"word":"とります","dict":"とる","kana":"とります","type":"1","zhs":"拍；照（相）","zh":"","sent":"","obj":"写真を"},{"num":12,"word":"します","dict":"する","kana":"します","type":"3","zhs":"做；干","zh":"做作业。","sent":"しゅくだいをします","obj":"しゅくだいを"},{"num":13,"word":"あいます","dict":"あう","kana":"あいます","type":"1","zhs":"见面；遇见","zh":"在图书馆见朋友。","sent":"としょかんでともだちにあいます","obj":"ともだちに"}]},{"lesson":7,"verbs":[{"num":1,"word":"きります","dict":"きる","kana":"きります","type":"1","zhs":"切；剪","zh":"用剪刀剪纸。","sent":"はさみでかみをきります","obj":"かみを"},{"num":2,"word":"おくります","dict":"おくる","kana":"おくります","type":"1","zhs":"寄；送","zh":"给家人寄信。","sent":"かぞくにてがみをおくります","obj":"てがみを"},{"num":3,"word":"あげます","dict":"あげる","kana":"あげます","type":"2","zhs":"给（别人）","zh":"","sent":"","obj":"プレゼントを"},{"num":4,"word":"もらいます","dict":"もらう","kana":"もらいます","type":"1","zhs":"得到；收到","zh":"生日收到了礼物。","sent":"たんじょうびにプレゼントをもらいました","obj":"プレゼントを"},{"num":5,"word":"かします","dict":"かす","kana":"かします","type":"1","zhs":"借出；借给","zh":"把书借给他。","sent":"かれにほんをかします","obj":"ほんを"},{"num":6,"word":"かります","dict":"かりる","kana":"かります","type":"2","zhs":"借入；借来","zh":"在图书馆借书。","sent":"としょかんでほんをかります","obj":"ほんを"},{"num":7,"word":"おしえます","dict":"おしえる","kana":"おしえます","type":"2","zhs":"教；告诉","zh":"教日语。","sent":"にほんごをおしえます","obj":"にほんごを"},{"num":8,"word":"ならいます","dict":"ならう","kana":"ならいます","type":"1","zhs":"学习；练习","zh":"学钢琴。","sent":"ピアノをならいます","obj":"ピアノを"},{"num":9,"word":"かけます","dict":"かける","kana":"かけます","type":"2","zhs":"打（电话）","zh":"","sent":"","obj":"電話を"}]},{"lesson":9,"verbs":[{"num":1,"word":"わかります","dict":"わかる","kana":"わかります","type":"1","zhs":"明白；懂","zh":"懂一点日语。","sent":"にほんごがすこしわかります","obj":"にほんごが"},{"num":2,"word":"あります","dict":"ある","kana":"あります","type":"1","zhs":"有；在（无生命）","zh":"","sent":"","obj":""}]},{"lesson":10,"verbs":[{"num":1,"word":"います","dict":"いる","kana":"います","type":"2","zhs":"有；在（人·动物）","zh":"","sent":"","obj":""},{"num":2,"word":"あります","dict":"ある","kana":"あります","type":"1","zhs":"有；在（物·植物）","zh":"","sent":"","obj":""}]},{"lesson":11,"verbs":[{"num":1,"word":"います","dict":"いる","kana":"います","type":"2","zhs":"有（孩子）；在（住）","zh":"","sent":"","obj":""},{"num":2,"word":"かかります","dict":"かかる","kana":"かかります","type":"1","zhs":"花费（时间·金钱）","zh":"","sent":"","obj":"時間が"},{"num":3,"word":"やすみます","dict":"やすむ","kana":"やすみます","type":"1","zhs":"请假；缺（班）","zh":"","sent":"","obj":""}]},{"lesson":13,"verbs":[{"num":1,"word":"あそびます","dict":"あそぶ","kana":"あそびます","type":"1","zhs":"玩；玩耍","zh":"孩子们在公园玩。","sent":"こうえんでこどもたちがあそんでいます","obj":""},{"num":2,"word":"およぎます","dict":"およぐ","kana":"およぎます","type":"1","zhs":"游泳","zh":"在海里游泳。","sent":"うみでおよぎます","obj":"うみで"},{"num":3,"word":"むかえます","dict":"むかえる","kana":"むかえます","type":"2","zhs":"迎接；接","zh":"去车站接他。","sent":"えきまでかれをむかえにいきます","obj":"かれを"},{"num":4,"word":"つかれます","dict":"つかれる","kana":"つかれます","type":"2","zhs":"疲劳；累","zh":"工作了一天，累了。","sent":"いちにちはたらいてつかれました","obj":""},{"num":5,"word":"だします","dict":"だす","kana":"だします","type":"1","zhs":"寄（信）；出示","zh":"","sent":"","obj":""},{"num":6,"word":"はいります","dict":"はいる","kana":"はいります","type":"1","zhs":"进入；入座","zh":"走进咖啡馆。","sent":"きっさてんにはいります","obj":"きっさてんに"},{"num":7,"word":"でます","dict":"でる","kana":"でます","type":"2","zhs":"出来；出发","zh":"走出咖啡馆。","sent":"きっさてんをでます","obj":"きっさてんを"},{"num":8,"word":"けっこんします","dict":"けっこんする","kana":"けっこんします","type":"3","zhs":"结婚","zh":"下个月结婚。","sent":"らいげつけっこんします","obj":""},{"num":9,"word":"かいものします","dict":"かいものする","kana":"かいものします","type":"3","zhs":"买东西","zh":"周末去买东西。","sent":"しゅうまつにかいものします","obj":""},{"num":10,"word":"しょくじします","dict":"しょくじする","kana":"しょくじします","type":"3","zhs":"吃饭；进餐","zh":"一起吃饭好吗。","sent":"いっしょにしょくじしませんか","obj":"いっしょに"},{"num":11,"word":"さんぽします","dict":"さんぽする","kana":"さんぽします","type":"3","zhs":"散步","zh":"在公园散步。","sent":"こうえんをさんぽします","obj":"こうえんを"}]},{"lesson":14,"verbs":[{"num":2,"word":"［に］入ります","dict":"入る","kana":"［に］はいります","type":"1","zhs":"进入；搭乘（交通工具）","zh":"","sent":"","obj":"教室に"},{"num":3,"word":"［を］出ます","dict":"出る","kana":"［を］でます","type":"2","zhs":"离开；驶出","zh":"每天早上8点出门。","sent":"毎朝8時に家を出ます","obj":"家を"},{"num":4,"word":"つけます","dict":"つける","kana":"つけます","type":"2","zhs":"打开（电器、灯）","zh":"","sent":"","obj":"電気を"},{"num":5,"word":"消します","dict":"消す","kana":"けします","type":"1","zhs":"关掉（电器、灯）","zh":"","sent":"","obj":"電気を"},{"num":6,"word":"開けます","dict":"開ける","kana":"あけます","type":"2","zhs":"打开（门、窗）","zh":"","sent":"","obj":"窓を"},{"num":7,"word":"閉めます","dict":"閉める","kana":"しめます","type":"2","zhs":"关闭（门、窗）","zh":"","sent":"","obj":"ドアを"},{"num":8,"word":"急ぎます","dict":"急ぐ","kana":"いそぎます","type":"1","zhs":"赶快；着急","zh":"因为赶电车时间，请快点。","sent":"電車の時間ですから、急いでください","obj":""},{"num":9,"word":"待ちます","dict":"待つ","kana":"まちます","type":"1","zhs":"等待","zh":"不好意思，请稍等。","sent":"すみませんが、ちょっと待ってください","obj":"ちょっと"},{"num":10,"word":"［音楽を］止めます","dict":"止める","kana":"［おんがくを］とめます","type":"2","zhs":"停止（音乐、机器）","zh":"","sent":"","obj":"音楽を"},{"num":11,"word":"［車を］停めます","dict":"停める","kana":"［くるまを］とめます","type":"2","zhs":"停车","zh":"把车停在停车场。","sent":"車を駐車場に停めます","obj":"車を"},{"num":12,"word":"持ちます","dict":"持つ","kana":"もちます","type":"1","zhs":"拿；携带","zh":"我帮您拿行李吧？","sent":"荷物を持ちましょうか","obj":"荷物を"},{"num":13,"word":"取ります","dict":"取る","kana":"とります","type":"1","zhs":"取；拿；要（食物）","zh":"","sent":"","obj":"お箸を"},{"num":14,"word":"手伝います","dict":"手伝う","kana":"てつだいます","type":"1","zhs":"帮忙","zh":"行李真多啊。我帮您吧？","sent":"荷物が多いですね。手伝いましょうか","obj":"仕事を"},{"num":15,"word":"呼びます","dict":"呼ぶ","kana":"よびます","type":"1","zhs":"叫（出租车等）；呼喊","zh":"","sent":"","obj":"タクシーを"},{"num":16,"word":"話します","dict":"話す","kana":"はなします","type":"1","zhs":"说；谈话","zh":"用日语和老师交谈。","sent":"先生と日本語で話します","obj":"日本語で"},{"num":17,"word":"見せます","dict":"見せる","kana":"みせます","type":"2","zhs":"出示；给～看","zh":"麻烦您，请出示护照。","sent":"すみません、パスポートを見せてください","obj":"パスポートを"},{"num":18,"word":"［住所を］教えます","dict":"教える","kana":"［じゅうしょを］おしえます","type":"2","zhs":"告诉（地址、电话）；教","zh":"","sent":"","obj":"住所を"},{"num":19,"word":"［雨が］降ります","dict":"降る","kana":"［あめが］ふります","type":"1","zhs":"下（雨、雪）","zh":"","sent":"","obj":"雨が"},{"num":20,"word":"コピーします","dict":"コピーする","kana":"コピーします","type":"3","zhs":"复印","zh":"请把这份文件复印5份。","sent":"この書類を5枚コピーしてください","obj":"書類を"},{"num":42,"word":"立ちます","dict":"立つ","kana":"たちます","type":"1","zhs":"站立","zh":"等公交车时请按顺序排队站好。","sent":"バスのとき、順番に立ってください","obj":""},{"num":43,"word":"座ります","dict":"座る","kana":"すわります","type":"1","zhs":"坐","zh":"请坐这里。","sent":"どうぞここに座ってください","obj":"ここに"},{"num":44,"word":"使います","dict":"使う","kana":"つかいます","type":"1","zhs":"使用","zh":"不好意思，请用那支笔。","sent":"このペンを使ってもいいですか。→ すみません、そのペンを使ってください","obj":"ペンを"}]},{"lesson":15,"verbs":[{"num":5,"word":"置きます","dict":"置く","kana":"おきます","type":"1","zhs":"放置；摆","zh":"请把电脑放在桌子上。","sent":"パソコンを机の上に置いてください","obj":"パソコンを"},{"num":6,"word":"作ります","dict":"作る","kana":"つくります","type":"1","zhs":"做；制作；制造","zh":"妈妈每天做便当。","sent":"母は毎日お弁当を作ります","obj":"お弁当を"},{"num":7,"word":"売ります","dict":"売る","kana":"うります","type":"1","zhs":"卖；销售","zh":"这家店卖蛋糕。","sent":"この店はケーキを売っています","obj":"ケーキを"},{"num":8,"word":"知ります","dict":"知る","kana":"しります","type":"1","zhs":"知道；认识（瞬间动词，结果状态用知っています）","zh":"","sent":"","obj":"答えを"},{"num":9,"word":"住みます","dict":"住む","kana":"すみます","type":"1","zhs":"居住","zh":"我现在住在东京。","sent":"わたしは今、東京に住んでいます","obj":""},{"num":10,"word":"研究します","dict":"研究する","kana":"けんきゅうします","type":"3","zhs":"研究","zh":"在研究日本历史。","sent":"日本の歴史を研究しています","obj":"歴史を"},{"num":11,"word":"知っています","dict":"知る","kana":"しっています","type":"1","zhs":"知道；认识（结果状态）","zh":"","sent":"","obj":""},{"num":12,"word":"住んでいます","dict":"住む","kana":"すんでいます","type":"1","zhs":"住在～（结果状态）","zh":"","sent":"","obj":""},{"num":24,"word":"思い出します","dict":"思い出す","kana":"おもいだします","type":"1","zhs":"想起；回忆起","zh":"","sent":"","obj":"あの人の名前を"},{"num":26,"word":"いらっしゃいます","dict":"いらっしゃう","kana":"いらっしゃいます","type":"1","zhs":"（人）在；来；去（尊敬语）","zh":"","sent":"","obj":""}]},{"lesson":16,"verbs":[{"num":1,"word":"下ろします","dict":"下ろす","kana":"おろします","type":"1","zhs":"取（钱）；取出；放下","zh":"","sent":"","obj":"お金を"},{"num":4,"word":"飲みます","dict":"飲む","kana":"のみます","type":"1","zhs":"喝；吃药","zh":"早饭喝牛奶。","sent":"朝ご飯に牛乳を飲みます","obj":"牛乳を"},{"num":6,"word":"始めます","dict":"始める","kana":"はじめます","type":"2","zhs":"开始","zh":"9点开始上课。","sent":"9時から授業を始めます","obj":"授業を"},{"num":7,"word":"［電車に］乗ります","dict":"乗る","kana":"［でんしゃに］のります","type":"1","zhs":"乘坐（电车等）","zh":"","sent":"","obj":"電車に"},{"num":8,"word":"［電車を］降ります","dict":"降りる","kana":"［でんしゃを］おります","type":"2","zhs":"下（电车等）","zh":"","sent":"","obj":"電車を"},{"num":9,"word":"乗り換えます","dict":"乗り換える","kana":"のりかえます","type":"2","zhs":"换乘","zh":"在新宿换乘山手线。","sent":"新宿で山手線に乗り換えます","obj":"山手線に"},{"num":10,"word":"［を］浴びます","dict":"浴びる","kana":"［を］あびます","type":"2","zhs":"淋；浴（淋浴、澡）","zh":"","sent":"","obj":"シャワーを"},{"num":11,"word":"入れます","dict":"入れる","kana":"いれます","type":"2","zhs":"放入；装入","zh":"咖啡里放糖。","sent":"コーヒーに砂糖を入れます","obj":"砂糖を"},{"num":12,"word":"出します","dict":"出す","kana":"だします","type":"1","zhs":"拿出；取出；提交","zh":"请从包里拿出钱包。","sent":"かばんから財布を出してください","obj":"かばんから財布を"},{"num":13,"word":"［大学に］入ります","dict":"入る","kana":"［だいがくに］はいります","type":"1","zhs":"考入；进入（大学）","zh":"","sent":"","obj":"大学に"},{"num":14,"word":"［大学を］出ます","dict":"出る","kana":"［だいがくを］でます","type":"2","zhs":"毕业（大学）","zh":"","sent":"","obj":"大学を"},{"num":15,"word":"押します","dict":"押す","kana":"おします","type":"1","zhs":"推；按","zh":"请按这个按钮。","sent":"このボタンを押してください","obj":"ボタンを"},{"num":51,"word":"見学します","dict":"見学する","kana":"けんがくします","type":"3","zhs":"参观学习","zh":"明天参观公司。","sent":"明日、会社を見学します","obj":"会社を"},{"num":52,"word":"電話します","dict":"電話する","kana":"でんわします","type":"3","zhs":"打电话","zh":"稍后给学校打电话。","sent":"後で学校へ電話します","obj":"会社に"}]},{"lesson":17,"verbs":[{"num":2,"word":"覚えます","dict":"覚える","kana":"おぼえます","type":"2","zhs":"记住；学会","zh":"记很多单词。","sent":"単語をたくさん覚えます","obj":"単語を"},{"num":3,"word":"忘れます","dict":"忘れる","kana":"わすれます","type":"2","zhs":"忘记","zh":"请不要忘记约定。","sent":"約束を忘れないでください","obj":"約束を"},{"num":4,"word":"なくします","dict":"無くす","kana":"なくします","type":"1","zhs":"丢失；弄丢","zh":"钱包弄丢了。","sent":"財布をなくしました","obj":"財布を"},{"num":5,"word":"［を］出します","dict":"出す","kana":"［を］だします","type":"1","zhs":"提交（报告等）","zh":"","sent":"","obj":"レポートを"},{"num":6,"word":"払います","dict":"払う","kana":"はらいます","type":"1","zhs":"支付","zh":"房租总是月底付。","sent":"家賃はいつも月末に払います","obj":"家賃を"},{"num":7,"word":"返します","dict":"返す","kana":"かえします","type":"1","zhs":"归还；放回","zh":"书明天还。","sent":"本は明日返します","obj":"本を"},{"num":8,"word":"出かけます","dict":"出かける","kana":"でかけます","type":"2","zhs":"出门；外出","zh":"我出去一下。","sent":"ちょっと出かけます","obj":"ちょっと"},{"num":9,"word":"脱ぎます","dict":"脱ぐ","kana":"ぬぎます","type":"1","zhs":"脱（衣、鞋）","zh":"","sent":"","obj":"靴を"},{"num":10,"word":"持って行きます","dict":"持って行く","kana":"もっていきます","type":"1","zhs":"带去；拿走","zh":"请带毛巾去温泉。","sent":"温泉にタオルを持って行ってください","obj":"タオルを"},{"num":11,"word":"持って来ます","dict":"持って来る","kana":"もってきます","type":"3","zhs":"带来；拿来","zh":"请明天把作业带来。","sent":"宿題を明日持って来てください","obj":"宿題を"},{"num":12,"word":"心配します","dict":"心配する","kana":"しんぱいします","type":"3","zhs":"担心","zh":"妈妈总是担心我。","sent":"母はわたしのことをいつも心配します","obj":"子どものことを"},{"num":13,"word":"残業します","dict":"残業する","kana":"ざんぎょうします","type":"3","zhs":"加班","zh":"今天必须加班。","sent":"今日は残業しなければなりません","obj":""},{"num":14,"word":"出張します","dict":"出張する","kana":"しゅっちょうします","type":"3","zhs":"出差","zh":"下周去大阪出差。","sent":"来週、大阪へ出張します","obj":"大阪へ"},{"num":15,"word":"［薬を］飲みます","dict":"飲む","kana":"［くすりを］のみます","type":"1","zhs":"吃（药）","zh":"","sent":"","obj":"薬を"},{"num":16,"word":"［お風呂に］入ります","dict":"入る","kana":"［おふろに］はいります","type":"1","zhs":"洗（澡）；入浴","zh":"","sent":"","obj":"お風呂に"}]},{"lesson":18,"verbs":[{"num":4,"word":"できます","dict":"できる","kana":"できます","type":"2","zhs":"会；能；做得到","zh":"田中先生会开车。","sent":"田中さんは車の運転ができます","obj":"運転が"},{"num":5,"word":"洗います","dict":"洗う","kana":"あらいます","type":"1","zhs":"洗","zh":"自己的衣服自己洗。","sent":"自分の服は自分で洗います","obj":"手を"},{"num":6,"word":"弾きます","dict":"弾く","kana":"ひきます","type":"1","zhs":"弹（钢琴、吉他等）","zh":"","sent":"","obj":"ピアノを"},{"num":7,"word":"歌います","dict":"歌う","kana":"うたいます","type":"1","zhs":"唱","zh":"洗澡时唱歌。","sent":"お風呂の中で歌を歌います","obj":"歌を"},{"num":8,"word":"集めます","dict":"集める","kana":"あつめます","type":"2","zhs":"收集；聚集","zh":"集邮是爱好。","sent":"切手を集めるのが趣味です","obj":"切手を"},{"num":9,"word":"捨てます","dict":"捨てる","kana":"すてます","type":"2","zhs":"扔；丢弃","zh":"不要的纸请扔掉。","sent":"要らない紙は捨ててください","obj":"ゴミを"},{"num":10,"word":"換えます","dict":"換える","kana":"かえます","type":"2","zhs":"换；兑换","zh":"在日本把钱换成美元。","sent":"日本でお金をドルに換えます","obj":"お金を"},{"num":11,"word":"運転します","dict":"運転する","kana":"うんてんします","type":"3","zhs":"开车；驾驶","zh":"哥哥每天开车去公司。","sent":"兄は毎日車を運転して会社へ行きます","obj":"車を"},{"num":12,"word":"予約します","dict":"予約する","kana":"よやくします","type":"3","zhs":"预约；预订","zh":"预约了餐厅。","sent":"レストランを予約しました","obj":"レストランを"}]},{"lesson":19,"verbs":[{"num":1,"word":"上がります","dict":"上がる","kana":"あがります","type":"1","zhs":"上；登；升起","zh":"坐电梯上5楼。","sent":"エレベーターで5階に上がります","obj":"エレベーターで"},{"num":2,"word":"［山に］登ります","dict":"登る","kana":"［やまに］のぼります","type":"1","zhs":"登（山）","zh":"","sent":"","obj":"山に"},{"num":3,"word":"［に］泊まります","dict":"泊まる","kana":"［に］とまります","type":"1","zhs":"住（旅馆）；投宿","zh":"","sent":"","obj":"旅館に"},{"num":4,"word":"掃除します","dict":"掃除する","kana":"そうじします","type":"3","zhs":"打扫","zh":"每周末打扫房间。","sent":"毎週末、部屋を掃除します","obj":"部屋を"},{"num":5,"word":"洗濯します","dict":"洗濯する","kana":"せんたくします","type":"3","zhs":"洗（衣服）","zh":"","sent":"","obj":"服を"},{"num":6,"word":"練習します","dict":"練習する","kana":"れんしゅうします","type":"3","zhs":"练习","zh":"每天练30分钟钢琴。","sent":"ピアノを毎日30分練習します","obj":"ピアノを"},{"num":7,"word":"なります","dict":"なる","kana":"なります","type":"1","zhs":"变成；成为","zh":"渐渐变热了。","sent":"だんだん暑くなりました","obj":"医者に"}]},{"lesson":20,"verbs":[{"num":3,"word":"［パスポートが］要ります","dict":"要る","kana":"［パスポートが］いります","type":"1","zhs":"需要；必要","zh":"去日本需要签证吗？","sent":"日本へ行くにはビザが要りますか","obj":"ビザが"},{"num":4,"word":"調べます","dict":"調べる","kana":"しらべます","type":"2","zhs":"查；调查","zh":"我用电脑查一下。","sent":"ちょっとパソコンで調べてみます","obj":"言葉を"},{"num":5,"word":"修理します","dict":"修理する","kana":"しゅうりします","type":"3","zhs":"修理","zh":"修理坏了的表。","sent":"壊れた時計を修理します","obj":"壊れた時計を"}]},{"lesson":21,"verbs":[{"num":2,"word":"留学します","dict":"留学する","kana":"りゅうがくします","type":"3","zhs":"留学","zh":"明年想去日本留学。","sent":"来年、日本へ留学したいです","obj":""},{"num":10,"word":"放送します","dict":"放送する","kana":"ほうそうします","type":"3","zhs":"广播；播放","zh":"那条新闻在电视上播出了。","sent":"そのニュースはテレビで放送されました","obj":"ニュースを"},{"num":14,"word":"［会社を］やめます","dict":"辞める","kana":"［かいしゃを］やめます","type":"2","zhs":"辞职；辞掉","zh":"下个月辞职去留学。","sent":"来月、会社をやめて留学します","obj":"会社を"},{"num":16,"word":"思います","dict":"思う","kana":"おもいます","type":"1","zhs":"想；认为","zh":"我也这么想。","sent":"わたしもそう思います","obj":"そう"},{"num":17,"word":"言います","dict":"言う","kana":"いいます","type":"1","zhs":"说；讲","zh":"老师说“别忘了写作业”。","sent":"先生は「宿題を忘れないで」と言いました","obj":""},{"num":18,"word":"勝ちます","dict":"勝つ","kana":"かちます","type":"1","zhs":"胜利；赢","zh":"我们队赢了。","sent":"わたしたちのチームが勝ちました","obj":"チームが"},{"num":19,"word":"負けます","dict":"負ける","kana":"まけます","type":"2","zhs":"输；失败","zh":"比赛输了。","sent":"試合で負けてしまいました","obj":"チームが"},{"num":20,"word":"［お祭りが］あります","dict":"ある","kana":"［おまつりが］あります","type":"1","zhs":"举办（节日等）","zh":"","sent":"","obj":"お祭りが"},{"num":21,"word":"役に立ちます","dict":"役に立つ","kana":"やくにたちます","type":"1","zhs":"有用；起作用","zh":"这本书非常有用。","sent":"この本はとても役に立ちます","obj":""},{"num":42,"word":"［車が］動きます","dict":"動く","kana":"［くるまが］うごきます","type":"1","zhs":"（车）开动；运转","zh":"","sent":"","obj":"車が"},{"num":43,"word":"気をつけます","dict":"気をつける","kana":"きをつけます","type":"2","zhs":"小心；注意","zh":"走路时请注意车辆。","sent":"道を歩くとき、車に気をつけてください","obj":""}]},{"lesson":22,"verbs":[{"num":2,"word":"［ネクタイを］します","dict":"する","kana":"","type":"3","zhs":"系（领带）","zh":"","sent":"","obj":"ネクタイを"},{"num":10,"word":"［シャツを］着ます","dict":"着る","kana":"［シャツを］きます","type":"2","zhs":"穿（上衣）","zh":"","sent":"","obj":"シャツを"},{"num":11,"word":"［靴を］履きます","dict":"履く","kana":"［くつを］はきます","type":"1","zhs":"穿（鞋、裤子）","zh":"","sent":"","obj":"靴を"},{"num":12,"word":"［帽子を］かぶります","dict":"被る","kana":"［ぼうしを］かぶります","type":"1","zhs":"戴（帽子）","zh":"","sent":"","obj":"帽子を"},{"num":13,"word":"［眼鏡を］かけます","dict":"掛ける","kana":"［めがねを］かけます","type":"2","zhs":"戴（眼镜）","zh":"","sent":"","obj":"眼鏡を"},{"num":14,"word":"生まれます","dict":"生まれる","kana":"うまれます","type":"2","zhs":"出生","zh":"我出生在东京。","sent":"わたしは東京で生まれました","obj":"赤ちゃんが"}]},{"lesson":23,"verbs":[{"num":12,"word":"［右へ］曲がります","dict":"曲がる","kana":"［みぎへ］まがります","type":"1","zhs":"拐（弯）；转","zh":"","sent":"","obj":"右へ"},{"num":14,"word":"［先生に］聞きます","dict":"聞く","kana":"［せんせいに］ききます","type":"1","zhs":"问；打听","zh":"不懂的时候请问老师。","sent":"わからないとき、先生に聞いてください","obj":"先生に"},{"num":15,"word":"回します","dict":"回す","kana":"まわします","type":"1","zhs":"转；转动","zh":"请把门把手向右转。","sent":"ドアの取っ手を右に回してください","obj":"取っ手を"},{"num":16,"word":"引きます","dict":"引く","kana":"ひきます","type":"1","zhs":"拉；拽","zh":"拉一下把手，热水就出来。","sent":"レバーを引くと、お湯が出ます","obj":"レバーを"},{"num":17,"word":"変えます","dict":"変える","kana":"かえます","type":"2","zhs":"改变；更换","zh":"必须改变计划。","sent":"予定を変えなければなりません","obj":"予定を"},{"num":18,"word":"［に］触ります","dict":"触る","kana":"［に］さわります","type":"1","zhs":"摸；碰","zh":"请不要碰那台机器。","sent":"その機械に触らないでください","obj":"画面に"},{"num":19,"word":"［ジュースが］出ます","dict":"出る","kana":"［ジュースが］でます","type":"2","zhs":"（饮料等）出；出来","zh":"","sent":"","obj":"ジュースが"},{"num":20,"word":"［道を］歩きます","dict":"歩く","kana":"［みちを］あるきます","type":"1","zhs":"走；步行","zh":"每天从家走到车站。","sent":"毎日、家から駅まで歩きます","obj":"公園を"},{"num":21,"word":"［橋を］渡ります","dict":"渡る","kana":"［はしを］わたります","type":"1","zhs":"过（桥、马路）","zh":"","sent":"","obj":"道を"}]},{"lesson":24,"verbs":[{"num":1,"word":"くれます","dict":"呉れる","kana":"くれます","type":"2","zhs":"给（我/我方）","zh":"","sent":"","obj":"プレゼントを"},{"num":2,"word":"連れて行きます","dict":"連れて行く","kana":"つれていきます","type":"1","zhs":"带（人）去","zh":"","sent":"","obj":"子どもを"},{"num":3,"word":"連れて来ます","dict":"連れて来る","kana":"つれてきます","type":"3","zhs":"带（人）来","zh":"","sent":"","obj":"友達を"},{"num":4,"word":"［人を］送ります","dict":"送る","kana":"［ひとを］おくります","type":"1","zhs":"送（人）；送行","zh":"","sent":"","obj":"友達を"},{"num":5,"word":"紹介します","dict":"紹介する","kana":"しょうかいします","type":"3","zhs":"介绍","zh":"把朋友介绍到了我公司。","sent":"友達をわたしの会社に紹介しました","obj":"友達を"},{"num":6,"word":"案内します","dict":"案内する","kana":"あんないします","type":"3","zhs":"向导；带路","zh":"明天我带你逛逛东京吧。","sent":"明日、東京の町を案内しましょう","obj":"町を"},{"num":7,"word":"説明します","dict":"説明する","kana":"せつめいします","type":"3","zhs":"说明；解释","zh":"请再说明一遍用法。","sent":"もう一度、使い方を説明してください","obj":"使い方を"},{"num":19,"word":"［自転車を］直します","dict":"直す","kana":"［じてんしゃを］なおします","type":"1","zhs":"修理（自行车等）","zh":"","sent":"","obj":"自転車を"},{"num":20,"word":"［答えを］直します","dict":"直す","kana":"［こたえを］なおします","type":"1","zhs":"订正；修改（答案）","zh":"","sent":"","obj":"答えを"},{"num":21,"word":"引っ越しします","dict":"引っ越しする","kana":"ひっこしします","type":"3","zhs":"搬家","zh":"下个月搬去横滨。","sent":"来月、横浜へ引っ越しします","obj":"横浜へ"}]},{"lesson":25,"verbs":[{"num":2,"word":"考えます","dict":"考える","kana":"かんがえます","type":"2","zhs":"思考；考虑","zh":"请让我考虑一下。","sent":"ちょっと考えさせてください","obj":"ちょっと"},{"num":3,"word":"［駅に］着きます","dict":"着く","kana":"［えきに］つきます","type":"1","zhs":"到达（车站等）","zh":"","sent":"","obj":"駅に"},{"num":4,"word":"［年を］取ります","dict":"取る","kana":"［としを］とります","type":"1","zhs":"上年纪；年老","zh":"上了年纪也想精神地生活。","sent":"年を取っても、元気に過ごしたいです","obj":""},{"num":15,"word":"頑張ります","dict":"頑張る","kana":"がんばります","type":"1","zhs":"努力；加油","zh":"今后也会努力学日语。","sent":"これからも日本語の勉強を頑張ります","obj":"勉強を"},{"num":18,"word":"足ります","dict":"足りる","kana":"たります","type":"2","zhs":"足够；够","zh":"钱不够，没买成。","sent":"お金が足りなくて、買えませんでした","obj":"時間が"}]}]};
+
+/* ============ 活用引擎 ============ */
+var KANA_RE = /[\u3040-\u30ffー]/;
+function conj(dict, type){
+  var tail = dict.slice(-1);
+  var stem = dict.slice(0, -1);
+  var c = {};
+  if (type === '3'){
+    if (dict === 'する' || dict.endsWith('する')){
+      var s = dict.slice(0, -2);
+      c.masu = s + 'します'; c.masen = s + 'しません'; c.mashita = s + 'しました';
+      c.masendeshita = s + 'しませんでした';
+      c.te = s + 'して'; c.ta = s + 'した'; c.nai = s + 'しない'; c.nakatta = s + 'しなかった';
+      c.ba = s + 'すれば'; c.tara = s + 'したら'; c.kanou = s + 'できます'; c.kanou_dic = s + 'できる';
+      c.ukemi = s + 'されます'; c.shieki = s + 'させます'; c.shieki_ukemi = s + 'させられます';
+      c.meirei = s + 'しろ'; c.mashou = s + 'しましょう'; c.tai = s + 'したい'; c.takatta = s + 'したかった';
+    } else if (dict === '来る' || dict === 'くる' || dict.endsWith('来る') || dict.endsWith('くる')){
+      var k = dict.slice(0, -2);
+      c.masu = k + '来ます'; c.masen = k + '来ません'; c.mashita = k + '来ました';
+      c.masendeshita = k + '来ませんでした';
+      c.te = k + '来て'; c.ta = k + '来た'; c.nai = k + '来ない'; c.nakatta = k + '来なかった';
+      c.ba = k + '来れば'; c.tara = k + '来たら'; c.kanou = k + '来られます'; c.kanou_dic = k + '来られる';
+      c.ukemi = k + '来られます'; c.shieki = k + '来させます'; c.shieki_ukemi = k + '来させられます';
+      c.meirei = k + '来い'; c.mashou = k + '来ましょう'; c.tai = k + '来たい'; c.takatta = k + '来たかった';
+    } else { c.masu = dict; }
+    return c;
+  }
+  if (type === '2'){
+    c.masu = stem + 'ます'; c.masen = stem + 'ません'; c.mashita = stem + 'ました';
+    c.masendeshita = stem + 'ませんでした';
+    c.te = stem + 'て'; c.ta = stem + 'た'; c.nai = stem + 'ない'; c.nakatta = stem + 'なかった';
+    c.ba = stem + 'れば'; c.tara = stem + 'たら'; c.kanou = stem + 'られます'; c.kanou_dic = stem + 'られる';
+    c.ukemi = stem + 'られます'; c.shieki = stem + 'させます'; c.shieki_ukemi = stem + 'させられます';
+    c.meirei = stem + 'ろ'; c.mashou = stem + 'ましょう'; c.tai = stem + 'たい'; c.takatta = stem + 'たかった';
+    return c;
+  }
+  var naiStem = '';
+  if (dict === 'ある'){ naiStem = 'な'; c.nai = 'ない'; c.nakatta = 'なかった'; }
+  else if (dict === 'くれる'){ naiStem = 'くれ'; c.nai = 'くれない'; c.nakatta = 'くれなかった'; }
+  else {
+    var aMap = {'う':'わ','く':'か','ぐ':'が','す':'さ','つ':'た','ぬ':'な','ぶ':'ば','む':'ま','る':'ら'};
+    var aK = aMap[tail] || 'あ';
+    c.nai = stem + aK + 'ない'; c.nakatta = stem + aK + 'なかった';
+    naiStem = stem + aK;
+  }
+  var teTa = {'く':'いて','ぐ':'いで','う':'って','つ':'って','る':'って','む':'んで','ぶ':'んで','ぬ':'んで','す':'して'};
+  if ((dict === '行く') || (dict === 'いく')){ c.te = '行って'; c.ta = '行った'; }
+  else if ((dict === '逝く') || (dict === 'いく')){ c.te = '逝って'; c.ta = '逝った'; }
+  else {
+    var tt = teTa[tail] || 'って';
+    c.te = stem + tt; c.ta = stem + tt.slice(0, -1) + (tt.slice(-1) === 'で' ? 'だ' : 'た');
+  }
+  var eMap = {'う':'え','く':'け','ぐ':'げ','す':'せ','つ':'て','ぬ':'ね','ぶ':'べ','む':'め','る':'れ'};
+  var eK = eMap[tail] || tail;
+  c.ba = stem + eK + 'ば';
+  c.meirei = stem + eK;
+  c.kanou = (tail === 'す') ? (stem + 'せます') : (stem + eK + 'ます');
+  c.kanou_dic = (tail === 'す') ? (stem + 'せる') : (stem + eK + 'る');
+  c.ukemi = naiStem + 'れる';
+  c.shieki = naiStem + 'せる';
+  c.shieki_ukemi = naiStem + 'せられる';
+  c.masu = stem + {'う':'い','く':'き','ぐ':'ぎ','す':'し','つ':'ち','ぬ':'に','ぶ':'び','む':'み','る':'り'}[tail] + 'ます';
+  c.masen = c.masu.slice(0, -2) + 'ません';
+  c.mashita = c.masu.slice(0, -2) + 'ました';
+  c.masendeshita = c.masu.slice(0, -2) + 'ませんでした';
+  c.mashou = c.masu.slice(0, -2) + 'ましょう';
+  c.tai = c.masu.slice(0, -2) + 'たい';
+  c.takatta = c.masu.slice(0, -2) + 'たかった';
+  c.tara = c.ta + 'ら';
+  return c;
+}
+
+/* ============ 变形模板（高频在前；enTag/viTag 为三语提示的情境标签） ============ */
+function O(v){ return v.obj || ''; }
+function Uk(v){ return v.obj ? v.obj.replace(/を$/, 'が') : ''; }
+/* 过去时：ます形（させます→させました）或辞书形（せる→せました）统一转过去 */
+function past(s){
+  s = s.replace(/ます$/, 'ました');
+  return s.replace(/る$/, 'ました');
+}
+
+/* ============ 变形列（第一列=ます形；列答案=该变形形式） ============ */
+var COLS = [
+  {id:'masu', name:{zh:'ます形',en:'Present',vi:'Hiện tại'}, ans:function(v,c){return c.masu;}},
+  {id:'te', name:{zh:'て形',en:'Te-form',vi:'Te-form'}, ans:function(v,c){return c.te;}},
+  {id:'ta', name:{zh:'た形',en:'Ta-form',vi:'Ta-form'}, ans:function(v,c){return c.ta;}},
+  {id:'nai', name:{zh:'ない形',en:'Nai-form',vi:'Nai-form'}, ans:function(v,c){return c.nai;}},
+  {id:'mashita', name:{zh:'ました',en:'Past',vi:'Quá khứ'}, ans:function(v,c){return c.mashita;}},
+  {id:'masen', name:{zh:'ません',en:'Negative',vi:'Phủ định'}, ans:function(v,c){return c.masen;}},
+  {id:'masendeshita', name:{zh:'ませんでした',en:'Neg. past',vi:'Phủ định QK'}, ans:function(v,c){return c.masendeshita;}},
+  {id:'mashou', name:{zh:'ましょう',en:"Let's",vi:'Cùng nào'}, ans:function(v,c){return c.mashou;}},
+  {id:'tai', name:{zh:'たいです',en:'Want to',vi:'Muốn'}, ans:function(v,c){return c.tai+'です';}},
+  {id:'takatta', name:{zh:'たかった',en:'Wanted to',vi:'Từng muốn'}, ans:function(v,c){return c.takatta+'です';}},
+  {id:'te_imasu', name:{zh:'ています',en:'-te iru',vi:'Đang'}, ans:function(v,c){return c.te+'います';}},
+  {id:'te_kara', name:{zh:'てから',en:'After -ing',vi:'Sau khi'}, ans:function(v,c){return c.te+'から';}},
+  {id:'te_kudasai', name:{zh:'てください',en:'Please (te)',vi:'Vui lòng'}, ans:function(v,c){return c.te+'ください';}},
+  {id:'nai_de', name:{zh:'ないでください',en:"Don't",vi:'Xin đừng'}, ans:function(v,c){return c.nai+'でください';}},
+  {id:'nakatta', name:{zh:'なかった',en:'Neg. past',vi:'Chưa từng'}, ans:function(v,c){return c.nakatta;}},
+  {id:'ba', name:{zh:'ば形',en:'-ba',vi:'Nếu'}, ans:function(v,c){return c.ba;}},
+  {id:'tara', name:{zh:'たら',en:'-tara',vi:'Nếu (tara)'}, ans:function(v,c){return c.tara;}},
+  {id:'kanou', name:{zh:'可能形',en:'Potential',vi:'Khả năng'}, ans:function(v,c){return c.kanou_dic;}},
+  {id:'ukemi', name:{zh:'受身形',en:'Passive',vi:'Bị động'}, ans:function(v,c){return (v.type === '1') ? c.ukemi : c.ukemi.slice(0,-2)+'る';}},
+  {id:'shieki', name:{zh:'使役形',en:'Causative',vi:'Sai khiến'}, ans:function(v,c){return (v.type === '1') ? c.shieki : c.shieki.slice(0,-2)+'る';}},
+  {id:'shieki_ukemi', name:{zh:'使役受身',en:'Caus. pass.',vi:'Bị sai khiến'}, ans:function(v,c){return (v.type === '1') ? c.shieki_ukemi : c.shieki_ukemi.slice(0,-2)+'る';}},
+  {id:'meirei', name:{zh:'命令形',en:'Imperative',vi:'Mệnh lệnh'}, ans:function(v,c){return c.meirei;}},
+  {id:'kinshi', name:{zh:'禁止形',en:'Prohibition',vi:'Cấm'}, ans:function(v,c){return v.dict+'な';}},
+  {id:'te_oku', name:{zh:'ておく',en:'-te oku',vi:'Trước'}, ans:function(v,c){return c.te+'おく';}},
+  {id:'te_shimau', name:{zh:'てしまう',en:'-te shimau',vi:'Xong'}, ans:function(v,c){return c.te+'しまう';}},
+  {id:'te_miru', name:{zh:'てみる',en:'-te miru',vi:'Thử'}, ans:function(v,c){return c.te+'みる';}},
+  {id:'nagara', name:{zh:'ながら',en:'While',vi:'Trong khi'}, ans:function(v,c){return c.masu.slice(0,-2)+'ながら';}}
+];
+
+/* ============ 变形规则（按动词类型 1类/2类/3类） ============ */
+var RULES = {
+  te: {
+    '1': ['【一类动词】て形音便：く→いて・ぐ→いで・う/つ/る→って・む/ぶ/ぬ→んで・す→して（行く→行って）', '[Group 1] te-form: く→いて, ぐ→いで, う/つ/る→って, む/ぶ/ぬ→んで, す→して (行く→行って)', '[Nhóm 1] te: く→いて, ぐ→いで, う/つ/る→って, む/ぶ/ぬ→んで, す→して (行く→行って)'],
+    '2': ['【二类动词】去掉词尾「る」＋「て」（起きる→起きて）', '[Group 2] drop る + て (起きる→起きて)', '[Nhóm 2] bỏ る + て (起きる→起きて)'],
+    '3': ['【三类动词】する→して／来る→来て', '[Group 3] する→して / 来る→来て', '[Nhóm 3] する→して / 来る→来て']},
+  masu: {
+    '1': ['【一类动词】う段假名→同行的い段＋「ます」（話す→話します）', '[Group 1] u-row → i-row + ます (話す→話します)', '[Nhóm 1] âm u → âm i + ます (話す→話します)'],
+    '2': ['【二类动词】去掉词尾「る」＋「ます」（起きる→起きます）', '[Group 2] drop final る + ます (起きる→起きます)', '[Nhóm 2] bỏ る cuối + ます (起きる→起きます)'],
+    '3': ['【三类动词】する→します／来る（くる）→来ます（きます）', '[Group 3] する→します / 来る→来ます', '[Nhóm 3] する→します / 来る→来ます']},
+  mashita: {
+    '1': ['【一类动词】ます形の「ます」→「ました」（話します→話しました）', '[Group 1] ます→ました (話します→話しました)', '[Nhóm 1] ます→ました (話します→話しました)'],
+    '2': ['【二类动词】ます形の「ます」→「ました」（起きます→起きました）', '[Group 2] ます→ました (起きます→起きました)', '[Nhóm 2] ます→ました (起きます→起きました)'],
+    '3': ['【三类动词】します→しました／来ます→来ました', '[Group 3] します→しました / 来ます→来ました', '[Nhóm 3] します→しました / 来ます→来ました']},
+  masen: {
+    '1': ['【一类动词】ます形の「ます」→「ません」（話します→話しません）', '[Group 1] ます→ません (話します→話しません)', '[Nhóm 1] ます→ません (話します→話しません)'],
+    '2': ['【二类动词】ます形の「ます」→「ません」（起きます→起きません）', '[Group 2] ます→ません (起きます→起きません)', '[Nhóm 2] ます→ません (起きます→起きません)'],
+    '3': ['【三类动词】します→しません／来ます→来ません', '[Group 3] します→しません / 来ます→来ません', '[Nhóm 3] します→しません / 来ます→来ません']},
+  masendeshita: {
+    '1': ['【一类动词】ます形の「ます」→「ませんでした」（話しました→話しませんでした）', '[Group 1] ます→ませんでした', '[Nhóm 1] ます→ませんでした'],
+    '2': ['【二类动词】ます形の「ます」→「ませんでした」（起きました→起きませんでした）', '[Group 2] ます→ませんでした', '[Nhóm 2] ます→ませんでした'],
+    '3': ['【三类动词】しました→しませんでした／来ました→来ませんでした', '[Group 3] しました→しませんでした / 来ました→来ませんでした', '[Nhóm 3] しました→しませんでした / 来ました→来ませんでした']},
+  te_kudasai: {
+    '1': ['【一类动词】て形＋「ください」。て形音便：く→いて・ぐ→いで・う/つ/る→って・む/ぶ/ぬ→んで・す→して（行く→行って）', '[Group 1] te-form + ください: く→いて, ぐ→いで, う/つ/る→って, む/ぶ/ぬ→んで, す→して (行く→行って)', '[Nhóm 1] te + ください: く→いて, ぐ→いで, う/つ/る→って, む/ぶ/ぬ→んで, す→して (行く→行って)'],
+    '2': ['【二类动词】去掉词尾「る」＋「て」＋ください（起きる→起きてください）', '[Group 2] drop る + て + ください (起きる→起きてください)', '[Nhóm 2] bỏ る + て + ください (起きる→起きてください)'],
+    '3': ['【三类动词】する→して＋ください／来る→来て＋ください', '[Group 3] する→して + ください / 来る→来て + ください', '[Nhóm 3] する→して + ください / 来る→来て + ください']},
+  te_imasu: {
+    '1': ['【一类动词】て形＋「います」（正在～／习惯～）（話す→話しています）', '[Group 1] te-form + います (話す→話しています)', '[Nhóm 1] te + います (話す→話しています)'],
+    '2': ['【二类动词】去掉词尾「る」＋「て」＋います（起きる→起きています）', '[Group 2] drop る + て + います (起きる→起きています)', '[Nhóm 2] bỏ る + て + います (起きる→起きています)'],
+    '3': ['【三类动词】する→して＋います／来る→来て＋います', '[Group 3] する→して + います / 来る→来て + います', '[Nhóm 3] する→して + います / 来る→来て + います']},
+  te_kara: {
+    '1': ['【一类动词】て形＋「から」（～之后）：話す→話してから', '[Group 1] te-form + から (話す→話してから)', '[Nhóm 1] te + から (話す→話してから)'],
+    '2': ['【二类动词】去掉词尾「る」＋「て」＋から（起きる→起きてから）', '[Group 2] drop る + て + から (起きる→起きてから)', '[Nhóm 2] bỏ る + て + から (起きる→起きてから)'],
+    '3': ['【三类动词】する→して＋から／来る→来て＋から', '[Group 3] する→して + から / 来る→来て + から', '[Nhóm 3] する→して + から / 来る→来て + から']},
+  ta: {
+    '1': ['【一类动词】た形音便：く→いた・ぐ→いだ・う/つ/る→った・む/ぶ/ぬ→んだ・す→した（行く→行った）', '[Group 1] ta-form: く→いた, ぐ→いだ, う/つ/る→った, む/ぶ/ぬ→んだ, す→した (行く→行った)', '[Nhóm 1] ta: く→いた, ぐ→いだ, う/つ/る→った, む/ぶ/ぬ→んだ, す→した (行く→行った)'],
+    '2': ['【二类动词】去掉词尾「る」＋「た」（起きる→起きた）', '[Group 2] drop る + た (起きる→起きた)', '[Nhóm 2] bỏ る + た (起きる→起きた)'],
+    '3': ['【三类动词】する→した／来る→来た', '[Group 3] する→した / 来る→来た', '[Nhóm 3] する→した / 来る→来た']},
+  nai: {
+    '1': ['【一类动词】う段假名→同行的あ段＋「ない」（話す→話さない；ある→ない例外）', '[Group 1] u-row → a-row + ない (話す→話さない; ある→ない)', '[Nhóm 1] âm u → âm a + ない (話す→話さない; ある→ない)'],
+    '2': ['【二类动词】去掉词尾「る」＋「ない」（起きる→起きない）', '[Group 2] drop る + ない (起きる→起きない)', '[Nhóm 2] bỏ る + ない (起きる→起きない)'],
+    '3': ['【三类动词】する→しない／来る→来ない', '[Group 3] する→しない / 来る→来ない', '[Nhóm 3] する→しない / 来る→来ない']},
+  nakatta: {
+    '1': ['【一类动词】ない形の「ない」→「なかった」（話さない→話さなかった）', '[Group 1] ない→なかった (話さない→話さなかった)', '[Nhóm 1] ない→なかった (話さない→話さなかった)'],
+    '2': ['【二类动词】ない形の「ない」→「なかった」（起きない→起きなかった）', '[Group 2] ない→なかった (起きない→起きなかった)', '[Nhóm 2] ない→なかった (起きない→起きなかった)'],
+    '3': ['【三类动词】しない→しなかった／来ない→来なかった', '[Group 3] しない→しなかった / 来ない→来なかった', '[Nhóm 3] しない→しなかった / 来ない→来なかった']},
+  nai_de: {
+    '1': ['【一类动词】ない形＋「でください」（話さない→話さないでください）', '[Group 1] nai-form + でください (話さないでください)', '[Nhóm 1] nai + でください (話さないでください)'],
+    '2': ['【二类动词】ない形＋「でください」（起きない→起きないでください）', '[Group 2] nai + でください (起きないでください)', '[Nhóm 2] nai + でください (起きないでください)'],
+    '3': ['【三类动词】しない＋でください／来ない＋でください', '[Group 3] しない + でください / 来ない + でください', '[Nhóm 3] しない + でください / 来ない + でください']},
+  mashou: {
+    '1': ['【一类动词】ます形の「ます」→「ましょう」（話します→話しましょう）', '[Group 1] ます→ましょう (話します→話しましょう)', '[Nhóm 1] ます→ましょう (話します→話しましょう)'],
+    '2': ['【二类动词】ます形の「ます」→「ましょう」（起きます→起きましょう）', '[Group 2] ます→ましょう (起きます→起きましょう)', '[Nhóm 2] ます→ましょう (起きます→起きましょう)'],
+    '3': ['【三类动词】します→しましょう／来ます→来ましょう', '[Group 3] します→しましょう / 来ます→来ましょう', '[Nhóm 3] します→しましょう / 来ます→来ましょう']},
+  tai: {
+    '1': ['【一类动词】ます形去掉「ます」＋「たいです」（話します→話したいです）', '[Group 1] drop ます + たいです (話したいです)', '[Nhóm 1] bỏ ます + たいです (話したいです)'],
+    '2': ['【二类动词】ます形去掉「ます」＋「たいです」（起きます→起きたいです）', '[Group 2] drop ます + たいです (起きたいです)', '[Nhóm 2] bỏ ます + たいです (起きたいです)'],
+    '3': ['【三类动词】します→したいです／来ます→来たいです', '[Group 3] します→したいです / 来ます→来たいです', '[Nhóm 3] します→したいです / 来ます→来たいです']},
+  takatta: {
+    '1': ['【一类动词】ます形去掉「ます」＋「たかったです」（話したかったです）', '[Group 1] drop ます + たかったです', '[Nhóm 1] bỏ ます + たかったです'],
+    '2': ['【二类动词】ます形去掉「ます」＋「たかったです」（起きたかったです）', '[Group 2] drop ます + たかったです', '[Nhóm 2] bỏ ます + たかったです'],
+    '3': ['【三类动词】します→したかったです／来ます→来たかったです', '[Group 3] します→したかったです / 来ます→来たかったです', '[Nhóm 3] します→したかったです / 来ます→来たかったです']},
+  ba: {
+    '1': ['【一类动词】う段假名→同行的え段＋「ば」（話す→話せば）', '[Group 1] u-row → e-row + ば (話す→話せば)', '[Nhóm 1] âm u → âm e + ば (話す→話せば)'],
+    '2': ['【二类动词】去掉词尾「る」＋「れば」（起きる→起きれば）', '[Group 2] drop る + れば (起きる→起きれば)', '[Nhóm 2] bỏ る + れば (起きる→起きれば)'],
+    '3': ['【三类动词】する→すれば／来る→来れば', '[Group 3] する→すれば / 来る→来れば', '[Nhóm 3] する→すれば / 来る→来れば']},
+  tara: {
+    '1': ['【一类动词】た形＋「ら」（話す→話したら）', '[Group 1] ta-form + ら (話したら)', '[Nhóm 1] ta + ら (話したら)'],
+    '2': ['【二类动词】た形＋「ら」（起きる→起きたら）', '[Group 2] ta + ら (起きたら)', '[Nhóm 2] ta + ら (起きたら)'],
+    '3': ['【三类动词】したら／来たら', '[Group 3] したら / 来たら', '[Nhóm 3] したら / 来たら']},
+  kanou: {
+    '1': ['【一类动词】う段假名→同行的え段＋「る」（話す→話せる）', '[Group 1] u-row → e-row + る (話す→話せる)', '[Nhóm 1] âm u → âm e + る (話す→話せる)'],
+    '2': ['【二类动词】去掉词尾「る」＋「られる」（起きる→起きられる）', '[Group 2] drop る + られる (起きる→起きられる)', '[Nhóm 2] bỏ る + られる (起きる→起きられる)'],
+    '3': ['【三类动词】する→できる／来る→来られる', '[Group 3] する→できる / 来る→来られる', '[Nhóm 3] する→できる / 来る→来られる']},
+  ukemi: {
+    '1': ['【一类动词】ない形＋「れる」（話す→話される）', '[Group 1] nai-stem + れる (話される)', '[Nhóm 1] nai + れる (話される)'],
+    '2': ['【二类动词】去掉词尾「る」＋「られる」（起きる→起きられる）', '[Group 2] drop る + られる (起きられる)', '[Nhóm 2] bỏ る + られる (起きられる)'],
+    '3': ['【三类动词】する→される／来る→来られる', '[Group 3] する→される / 来る→来られる', '[Nhóm 3] する→される / 来る→来られる']},
+  shieki: {
+    '1': ['【一类动词】ない形＋「せる」（話す→話させる）', '[Group 1] nai-stem + せる (話させる)', '[Nhóm 1] nai + せる (話させる)'],
+    '2': ['【二类动词】去掉词尾「る」＋「させる」（起きる→起きさせる）', '[Group 2] drop る + させる (起きさせる)', '[Nhóm 2] bỏ る + させる (起きさせる)'],
+    '3': ['【三类动词】する→させる／来る→来させる', '[Group 3] する→させる / 来る→来させる', '[Nhóm 3] する→させる / 来る→来させる']},
+  shieki_ukemi: {
+    '1': ['【一类动词】使役形＋「られる」（話す→話させられる）', '[Group 1] causative + られる (話させられる)', '[Nhóm 1] sai khiến + られる (話させられる)'],
+    '2': ['【二类动词】使役形＋「られる」（起きる→起きさせられる）', '[Group 2] causative + られる (起きさせられる)', '[Nhóm 2] sai khiến + られる (起きさせられる)'],
+    '3': ['【三类动词】する→させられる／来る→来させられる', '[Group 3] する→させられる / 来る→来させられる', '[Nhóm 3] する→させられる / 来る→来させられる']},
+  meirei: {
+    '1': ['【一类动词】う段假名→同行的え段（話す→話せ！）', '[Group 1] u-row → e-row (話せ!)', '[Nhóm 1] âm u → âm e (話せ!)'],
+    '2': ['【二类动词】去掉词尾「る」＋「ろ」（起きる→起きろ）', '[Group 2] drop る + ろ (起きろ)', '[Nhóm 2] bỏ る + ろ (起きろ)'],
+    '3': ['【三类动词】する→しろ／来る→来い', '[Group 3] する→しろ / 来る→来い', '[Nhóm 3] する→しろ / 来る→来い']},
+  kinshi: {
+    '1': ['【一类动词】辞书形＋「な」（話す→話すな）', '[Group 1] dictionary form + な (話すな)', '[Nhóm 1] từ điển + な (話すな)'],
+    '2': ['【二类动词】辞书形＋「な」（起きる→起きるな）', '[Group 2] dictionary form + な (起きるな)', '[Nhóm 2] từ điển + な (起きるな)'],
+    '3': ['【三类动词】する→するな／来る→来るな', '[Group 3] する→するな / 来る→来るな', '[Nhóm 3] する→するな / 来る→来るな']},
+  te_oku: {
+    '1': ['【一类动词】て形＋「おく」（事先做好：話す→話しておく）', '[Group 1] te + おく (話しておく)', '[Nhóm 1] te + おく (話しておく)'],
+    '2': ['【二类动词】て形＋「おく」（起きる→起きておく）', '[Group 2] te + おく (起きておく)', '[Nhóm 2] te + おく (起きておく)'],
+    '3': ['【三类动词】して＋おく／来て＋おく', '[Group 3] して + おく / 来て + おく', '[Nhóm 3] して + おく / 来て + おく']},
+  te_shimau: {
+    '1': ['【一类动词】て形＋「しまう」（遗憾/完了：話す→話してしまう）', '[Group 1] te + しまう (話してしまう)', '[Nhóm 1] te + しまう (話してしまう)'],
+    '2': ['【二类动词】て形＋「しまう」（起きる→起きてしまう）', '[Group 2] te + しまう (起きてしまう)', '[Nhóm 2] te + しまう (起きてしまう)'],
+    '3': ['【三类动词】して＋しまう／来て＋しまう', '[Group 3] して + しまう / 来て + しまう', '[Nhóm 3] して + しまう / 来て + しまう']},
+  te_miru: {
+    '1': ['【一类动词】て形＋「みる」（试着～：話す→話してみる）', '[Group 1] te + みる (話してみる)', '[Nhóm 1] te + みる (話してみる)'],
+    '2': ['【二类动词】て形＋「みる」（起きる→起きてみる）', '[Group 2] te + みる (起きてみる)', '[Nhóm 2] te + みる (起きてみる)'],
+    '3': ['【三类动词】して＋みる／来て＋みる', '[Group 3] して + みる / 来て + みる', '[Nhóm 3] して + みる / 来て + みる']},
+  nagara: {
+    '1': ['【一类动词】ます形去掉「ます」＋「ながら」（話します→話しながら）', '[Group 1] drop ます + ながら (話しながら)', '[Nhóm 1] bỏ ます + ながら (話しながら)'],
+    '2': ['【二类动词】ます形去掉「ます」＋「ながら」（起きます→起きながら）', '[Group 2] drop ます + ながら (起きながら)', '[Nhóm 2] bỏ ます + ながら (起きながら)'],
+    '3': ['【三类动词】します→しながら／来ます→来ながら', '[Group 3] します→しながら / 来ます→来ながら', '[Nhóm 3] します→しながら / 来ます→来ながら']}
+};
+
+/* ============ 汉字->假名映射 ============ */
+function buildMap(word, kana){
+  var map = {}, wp = 0, kp = 0;
+  while (wp < word.length && kp < kana.length){
+    var ch = word[wp];
+    if (KANA_RE.test(ch)){
+      if (kana[kp] === ch){ kp++; wp++; }
+      else { kp++; }
+    } else {
+      var start = kp, nx = wp + 1;
+      while (nx < word.length && !KANA_RE.test(word[nx])) nx++;
+      var nk = nx < word.length ? word[nx] : null;
+      while (kp < kana.length && (nk ? kana[kp] !== nk : true)) kp++;
+      if (!map[ch]) map[ch] = kana.slice(start, kp);
+      wp = nx;
+    }
+  }
+  return map;
+}
+function kanaize(s, map){
+  var out = '';
+  for (var i = 0; i < s.length; i++){
+    var ch = s[i];
+    if (KANA_RE.test(ch)) out += ch;
+    else out += (map[ch] || ch);
+  }
+  return out.replace(/[、。\s]/g, '');
+}
+
+/* ============ 渲染：复习页 DOM 契约 ============ */
+var lessonSel = document.getElementById('lessonSel');
+var listEl = document.getElementById('list');
+var BOOK = 1;
+var SPK_SVG = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z"/><path d="M14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg>';
+
+function fillAll(){
+  var html = '';
+  VERBS[BOOK].forEach(function(les){
+    var lesson = les.lesson;
+    var verbs = les.verbs.filter(function(v){
+      return !/ています$/.test(v.word) && v.word !== 'いらっしゃいます';
+    });
+    if (!verbs.length) return;
+    html += '<section class="lesson-group" id="lesson-' + lesson + '">'
+      + '<h2 class="lesson-group-title"><span class="prompt-text i18n zh">第' + lesson + '課</span>'
+      + '<span class="prompt-text i18n en">Lesson ' + lesson + '</span>'
+      + '<span class="prompt-text i18n vi">Bài ' + lesson + '</span></h2>';
+    verbs.forEach(function(v){
+      v.zhs0 = (v.zhs || '').split(/[；;、]/)[0];
+      var c = conj(v.dict, v.type);
+      var map = buildMap(v.word, v.kana || v.word);
+      var typeName = {'1':'一类','2':'二类','3':'三类'}[String(v.type)] || '';
+      var i18n = wordI18n(v, lesson);
+      var rows = '';
+      rows += '<tr class="vrow">'
+        + '<td class="col-word"><span class="w-w">' + escHtml(v.word) + '</span>'
+        + '<span class="w-sub">辞書形：' + escHtml(v.dict) + '・' + typeName + '・'
+        + '<span class="prompt-text i18n zh">' + escHtml(v.zhs0 || '') + '</span>'
+        + '<span class="prompt-text i18n en">' + escHtml(i18n.en || '') + '</span>'
+        + '<span class="prompt-text i18n vi">' + escHtml(i18n.vi || '') + '</span>'
+        + '</span></td>';
+      COLS.forEach(function(col){
+        var ans = col.ans(v, c);
+        if (v.gobj) ans = v.gobj + ans;
+        var ansK = kanaize(ans, map);
+        var fid = 'l' + lesson + 'w' + v.num + '_' + col.id;
+        var parts = [ansK, ansK, '', ''];
+        rows += '<td class="cell" data-col="' + col.id + '" data-key="' + fid + '"'
+          + ' data-kana="' + ansK + '" data-kana-full="' + ansK + '"'
+          + ' data-map="' + qjs(map) + '" data-notes="[]" data-parts="' + qjs(parts) + '">'
+          + '<span class="prompt" style="display:none">第' + lesson + '課 ' + escHtml(v.word) + '・' + escHtml(col.name.zh) + '</span>'
+          + '<span class="answer" style="display:none">' + escHtml(ansK) + '</span>'
+          + '<input type="text" class="quiz-input" placeholder="\u2026" autocomplete="off" autocapitalize="off" spellcheck="false">'
+          + '<button type="button" class="quiz-check" data-i18n-static="check">验证</button>'
+          + '<button type="button" class="wrong-btn">错</button>'
+          + '<span class="quiz-mark"></span>'
+          + '<span class="cell-ans">' + escHtml(ansK) + '</span>'
+          + '<span class="quiz-hint"></span>'
+          + '</td>';
+      });
+      rows += '</tr>';
+      html += '<div class="lesson">'
+        + '<h2 class="lesson-title">' + escHtml(v.word)
+        + '<span class="l-sub">辞書形：' + escHtml(v.dict) + '・' + typeName + '・' + escHtml(v.zhs0 || '') + '</span></h2>'
+        + '<div class="grid-scroll"><table class="vgrid"><colgroup><col class="cg-word">';
+      COLS.forEach(function(col){ html += '<col class="cg-col">'; });
+      html += '</colgroup><thead><tr>'
+        + '<th class="colh col-word"><span class="prompt-text i18n zh">动词</span><span class="prompt-text i18n en">Verb</span><span class="prompt-text i18n vi">Động từ</span></th>';
+      COLS.forEach(function(col){
+        html += '<th class="colh" data-col="' + col.id + '">'
+          + '<span class="col-name"><span class="prompt-text i18n zh">' + escHtml(col.name.zh) + '</span>'
+          + '<span class="prompt-text i18n en">' + escHtml(col.name.en) + '</span>'
+          + '<span class="prompt-text i18n vi">' + escHtml(col.name.vi) + '</span></span>'
+          + '<button type="button" class="rule-btn" data-col="' + col.id + '" title="变形规则">?</button>'
+          + '<button type="button" class="col-toggle" data-col="' + col.id + '" data-i18n-static="showCol">显示答案</button>'
+          + '</th>';
+      });
+      html += '</tr></thead><tbody>' + rows + '</tbody></table></div>'
+        + '<div class="rule-bar" hidden></div>'
+        + '</div>';
+    });
+    html += '</section>';
+  });
+  listEl.innerHTML = html;
+  window.__refreshCounter && window.__refreshCounter();
+  window.__repaintErrors && window.__repaintErrors();
+}
+/* ===== 网格：列显示/隐藏 + 列变形规则 ===== */
+(function(){
+  document.addEventListener('click',function(e){
+    var ct = e.target.closest ? e.target.closest('.col-toggle') : null;
+    if (ct){
+      var col = ct.dataset.col;
+      var on = !ct.classList.contains('on');
+      ct.classList.toggle('on', on);
+      Array.prototype.forEach.call(document.querySelectorAll('td[data-col="'+col+'"]'), function(td){
+        td.classList.toggle('col-on', on);
+      });
+      ct.textContent = on ? L('hideCol') : L('showCol');
+      return;
+    }
+    var rb = e.target.closest ? e.target.closest('.rule-btn') : null;
+    if (rb){
+      var col = rb.dataset.col;
+      var lessonEl = rb.closest('.lesson');
+      var bar = lessonEl ? lessonEl.querySelector('.rule-bar') : null;
+      if (!bar) return;
+      var rules = RULES[col];
+      var parts = [];
+      ['1','2','3'].forEach(function(t){
+        if (rules && rules[t]) {
+          parts.push('<span class="prompt-text i18n zh">' + escHtml(rules[t][0]) + '</span>'
+            + '<span class="prompt-text i18n en">' + escHtml(rules[t][1]) + '</span>'
+            + '<span class="prompt-text i18n vi">' + escHtml(rules[t][2]) + '</span>');
+        }
+      });
+      if (!parts.length) return;
+      bar.innerHTML = parts.join('<br>');
+      bar.hidden = !bar.hidden;
+      rb.classList.toggle('active', !bar.hidden);
+      return;
+    }
+  });
+})();
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function qjs(o){ return escHtml(JSON.stringify(o)); }
+var _wi = {};
+function wordI18n(v, lesson){
+  var k = 'l' + lesson + 'w' + v.num;
+  if (!_wi[k]) _wi[k] = WORD_I18N[k] || {en:v.zhs0, vi:v.zhs0};
+  return _wi[k];
+}
+function jumpToLesson(n){
+  var el = document.getElementById('lesson-' + n);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function loadLessons(){
+  var html = '';
+  VERBS[BOOK].forEach(function(x){
+    html += '<option value="' + x.lesson + '">第' + x.lesson + '課</option>';
+  });
+  lessonSel.innerHTML = html;
+  fillAll();
+  var saved = localStorage.getItem('mn_vb_lesson' + BOOK);
+  if (saved && VERBS[BOOK].some(function(x){ return x.lesson === +saved; })){
+    lessonSel.value = saved;
+    setTimeout(function(){ jumpToLesson(saved); }, 150);
+  }
+}
+lessonSel.addEventListener('change', function(){
+  localStorage.setItem('mn_vb_lesson' + BOOK, lessonSel.value);
+  jumpToLesson(lessonSel.value);
+});
+window.__jumpTo = function(v){ lessonSel.value = v; localStorage.setItem('mn_vb_lesson' + BOOK, v); jumpToLesson(v); };
+loadLessons();
+
+
+/* ===== 多语言：中文 / English / Tiếng Việt ===== */
+var CUR_LANG='zh';
+function L(key,args){
+  var t=(UI_I18N[key]||{})[CUR_LANG]||(UI_I18N[key]||{}).zh||key;
+  if(args){ for(var i=0;i<args.length;i++){ t=String(t).replace('%d',args[i]); } }
+  return t;
+}
+function refreshStatic(){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-static]'),function(el){
+    el.textContent=L(el.getAttribute('data-i18n-static'));
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.quiz-input'),function(x){ x.placeholder=L('placeholder'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.listen-btn'),function(x){ x.title=L('listenTitle'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.wrong-btn'),function(x){
+    var it=x.closest('.cell');
+    if(!it||!it.classList.contains('wrong')) x.textContent=L('wrong');
+  });
+}
+function refreshLang(){
+  var ta=document.getElementById('toggleAll');
+  if(ta) ta.textContent=document.body.classList.contains('show-answers')?L('hideAll'):L('showAll');
+  var lb=document.getElementById('langBtn');
+  if(lb) lb.value=CUR_LANG;
+  refreshStatic();
+  if(window.__repaintErrors) window.__repaintErrors();
+}
+function setLang(lang){
+  CUR_LANG=lang;
+  document.body.classList.remove('lang-zh','lang-en','lang-vi');
+  document.body.classList.add('lang-'+lang);
+  try{ localStorage.setItem('mn_jp_lang_'+'1',lang); }catch(e){}
+  refreshLang();
+}
+(function(){
+  var lb=document.getElementById('langBtn');
+  if(lb) lb.addEventListener('change',function(){ setLang(this.value); });
+  var saved='zh';
+  try{ saved=localStorage.getItem('mn_jp_lang_'+'1')||'zh'; }catch(e){}
+  if(['zh','en','vi'].indexOf(saved)<0) saved='zh';
+  setLang(saved);
+})();
+
+(function(){
+  var btn=document.getElementById('toggleAll');
+  var counter=document.getElementById('counter');
+  function refresh(){
+    var total=document.querySelectorAll('.answer').length;
+    var shown=document.body.classList.contains('show-answers')
+      ?total-document.querySelectorAll('.cell.off').length
+      :document.querySelectorAll('.cell.open').length;
+    counter.textContent=shown+' / '+total;
+    btn.textContent=document.body.classList.contains('show-answers')?L('hideAll'):L('showAll');
+  }
+  window.__refreshCounter=refresh;
+  btn.addEventListener('click',function(){
+    var listening=document.body.classList.contains('listening');
+    document.body.classList.toggle('show-answers');
+    if(document.body.classList.contains('show-answers')){
+      Array.prototype.forEach.call(document.querySelectorAll('.cell.off'),function(it){it.classList.remove('off');});
+      if(listening){
+        Array.prototype.forEach.call(document.querySelectorAll('.cell'),function(it){it.classList.add('show-prompt');});
+      }
+    }else{
+      Array.prototype.forEach.call(document.querySelectorAll('.cell.open'),function(it){it.classList.remove('open');});
+      Array.prototype.forEach.call(document.querySelectorAll('.cell.show-prompt'),function(it){it.classList.remove('show-prompt');});
+    }
+    refresh();
+  });
+  document.addEventListener('click',function(e){
+    var r=e.target.closest?e.target.closest('.reveal'):null;
+    if(r){
+      var item=r.closest('.cell');
+      var listening=document.body.classList.contains('listening');
+      if(item.classList.contains('open')){
+        item.classList.remove('open');
+        item.classList.add('off');
+        item.classList.remove('show-prompt');
+      }else{
+        item.classList.add('open');
+        item.classList.remove('off');
+        if(listening) item.classList.add('show-prompt');
+      }
+      refresh();
+      return;
+    }
+    var rb=e.target.closest?e.target.closest('.rule-btn'):null;
+    if(rb){
+      var box=rb.nextElementSibling;
+      if(box&&box.classList.contains('rule-box')){
+        box.hidden=!box.hidden;
+        rb.classList.toggle('active',!box.hidden);
+      }
+      return;
+    }
+  });
+  var jump=document.getElementById('lessonSel');
+  if(jump) jump.addEventListener('change',function(){
+    if(window.__jumpTo) window.__jumpTo(jump.value);
+  });
+  refresh();
+})();
+
+/* ===== 听写模式：喇叭播放答案语音（由顶部「模式」下拉驱动） ===== */
+(function(){
+  var cur=null;
+  function listenText(it){
+    var pts=[];
+    try{ pts=JSON.parse(it.dataset.parts||'[]'); }catch(e){}
+    if(pts.length>=4&&pts[2]) return pts[2];
+    return pts[0]||'';
+  }
+  function speechRead(it){
+    var txt=listenText(it);
+    if(!txt||!('speechSynthesis' in window)) return;
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    var u=new SpeechSynthesisUtterance(txt);
+    u.lang='ja-JP';
+    u.rate=0.95;
+    window.speechSynthesis.speak(u);
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest?e.target.closest('.listen-btn,.ans-spk'):null;
+    if(!b) return;
+    var it=b.closest('.cell');
+    if(cur){ try{ cur.pause(); }catch(e2){} cur=null; }
+    var cls=b.classList;
+    Array.prototype.forEach.call(document.querySelectorAll('.listen-btn.playing,.ans-spk.playing'),
+      function(x){ x.classList.remove('playing'); });
+    var src=b.getAttribute('data-listen');
+    if(src){
+      var a=new Audio(src);
+      a.onplay=function(){ cls.add('playing'); };
+      a.onended=function(){ cls.remove('playing'); cur=null; };
+      a.onerror=function(){ cls.remove('playing'); cur=null; speechRead(it); };
+      cur=a;
+      var p=a.play();
+      if(p&&p.catch){ p.catch(function(){ speechRead(it); }); }
+    }else{
+      speechRead(it);
+      cls.add('playing');
+      setTimeout(function(){ cls.remove('playing'); }, 900);
+    }
+  });
+  window.__setListen=function(on){
+    document.body.classList.toggle('listening',on);
+    Array.prototype.forEach.call(document.querySelectorAll('.cell.open'),function(it){
+      it.classList.toggle('show-prompt',on);
+    });
+    if(!on){
+      Array.prototype.forEach.call(document.querySelectorAll('.cell.show-prompt'),function(it){
+        it.classList.remove('show-prompt');
+      });
+    }
+  };
+})();
+
+/* 复制时剥离 ruby 注音：只复制日语正文，不带 <rt> 假名 */
+(function(){
+  document.addEventListener('copy',function(e){
+    var sel=window.getSelection();
+    if(!sel||!sel.rangeCount||sel.isCollapsed) return;
+    var range=sel.getRangeAt(0);
+    if(!range||range.collapsed) return;
+    var c=document.createElement('div');
+    c.appendChild(range.cloneContents());
+    var rts=c.querySelectorAll('rt');
+    for(var i=rts.length-1;i>=0;i--){ rts[i].parentNode.removeChild(rts[i]); }
+    var rubies=c.querySelectorAll('ruby');
+    for(var j=rubies.length-1;j>=0;j--){
+      var r=rubies[j];
+      while(r.firstChild){ r.parentNode.insertBefore(r.firstChild,r); }
+      r.parentNode.removeChild(r);
+    }
+    if(e.clipboardData){
+      e.clipboardData.setData('text/plain',c.textContent||'');
+      e.clipboardData.setData('text/html',c.innerHTML||'');
+      e.preventDefault();
+    }
+  });
+})();
+
+/* ===== 错题模式：只看错题，按错误次数从多到少排序（顶部「模式」下拉驱动） ===== */
+(function(){
+  var STORE_KEY='mn_jp_err_'+'1';
+  function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; } }
+  var zone=document.getElementById('wrongZone');
+  var title=document.getElementById('wrongZoneTitle');
+  var sum=document.getElementById('wrongZoneSum');
+  var snap=null;
+  window.__wrongActive=false;
+  function allItems(){ return Array.prototype.slice.call(document.querySelectorAll('.cell')); }
+  function ancestorList(){
+    var seen=[];
+    allItems().forEach(function(it){
+      var p=it.parentNode;
+      while(p&&p!==document.body){
+        if(p.classList&&p.classList.contains('lesson')&&seen.indexOf(p)<0){
+          seen.push(p);
+        }
+        p=p.parentNode;
+      }
+    });
+    return seen;
+  }
+  window.__enterWrong=function(){
+    var errs=loadStore();
+    var items=allItems();
+    items.forEach(function(it){
+      var c=errs[it.dataset.key]?errs[it.dataset.key].c:0;
+      it.style.visibility = c>0 ? '' : 'hidden';
+      if(c>0) it.classList.add('wrong');
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.lesson'),function(a){
+      var any=Array.prototype.slice.call(a.querySelectorAll('.cell')).some(function(it){ return it.style.visibility!=='hidden'; });
+      if(!any){ a.setAttribute('data-wrong-hidden','1'); a.style.display='none'; }
+    });
+    var withErr=items.filter(function(it){ return errs[it.dataset.key] && errs[it.dataset.key].c>0; });
+    var total=withErr.reduce(function(s,it){return s+errs[it.dataset.key].c;},0);
+    title.textContent=L('wrongZoneTitle');
+    sum.textContent=withErr.length?L('wrongZoneSum',[withErr.length,total]):L('wrongZoneEmpty');
+    zone.hidden=false;
+    window.__wrongActive=true;
+  };
+  window.__exitWrong=function(){
+    window.__wrongActive=false;
+    zone.hidden=true;
+    Array.prototype.forEach.call(document.querySelectorAll('.cell'),function(it){ it.style.visibility=''; });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-wrong-hidden]'),function(a){
+      a.style.display=''; a.removeAttribute('data-wrong-hidden');
+    });
+  };
+  window.__reapplyWrong=function(){
+    if(!window.__wrongActive) return;
+    window.__exitWrong(); window.__enterWrong();
+  };
+  var sel=document.getElementById('modeSel');
+  if(sel){
+    sel.addEventListener('change',function(){
+      var v=this.value;
+      if(v==='listen'){
+        window.__exitWrong&&window.__exitWrong();
+        window.__setListen&&window.__setListen(true);
+      }else if(v==='wrong'){
+        window.__setListen&&window.__setListen(false);
+        window.__enterWrong&&window.__enterWrong();
+      }else{
+        window.__setListen&&window.__setListen(false);
+        window.__exitWrong&&window.__exitWrong();
+      }
+    });
+  }
+})();
+
+(function(){
+  var STORE_KEY='mn_jp_err_'+'1';
+  var BOOK_LABEL='大家日语1动词变形练习';
+  function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ return {}; } }
+  function saveStore(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(store)); }catch(e){} }
+  function escHtml2(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  var store=loadStore();
+  function allItems(){ return Array.prototype.slice.call(document.querySelectorAll('.cell')); }
+  function refreshBadge(){
+    document.getElementById('errCount').textContent=Object.keys(store).length;
+  }
+  function paintRow(it,c){
+    it.classList.add('wrong');
+    var wb=it.querySelector('.wrong-btn');
+    if(wb) wb.textContent=L('wrong')+' ×'+c;
+  }
+  function recordError(it){
+    var k=it.dataset.key;
+    if(!store[k]){
+      store[k]={p:it.querySelector('.prompt').innerText.trim(),
+                a:it.querySelector('.answer').innerText.trim().replace(/\s+/g,' '),
+                c:0,t:Date.now()};
+    }
+    store[k].c+=1; store[k].t=Date.now();
+    saveStore(); paintRow(it,store[k].c); refreshBadge();
+    if(window.__wrongActive&&window.__reapplyWrong){ window.__reapplyWrong(); }
+    return store[k].c;
+  }
+  window.__repaintErrors=function(){
+    allItems().forEach(function(it){
+      var k=it.dataset.key;
+      if(store[k]) paintRow(it,store[k].c);
+    });
+  };
+  Object.keys(store).forEach(function(k){
+    var it=document.querySelector('.cell[data-key="'+k+'"]');
+    if(it) paintRow(it, store[k].c);
+  });
+  document.addEventListener('click',function(e){
+    var wb=e.target.closest?e.target.closest('.wrong-btn'):null;
+    if(wb){ recordError(wb.closest('.cell')); }
+  });
+
+  /* ===== 默写输入验证 ===== */
+  function kataToHira(s){
+    return s.replace(/[\u30a1-\u30f6]/g,function(c){
+      return String.fromCharCode(c.charCodeAt(0)-0x60);
+    });
+  }
+  function normalize(s){
+    s=s.replace(/[\s\u3000]+/g,'');
+    s=s.replace(/[。．.!！?？、，,；;：:（）()「」『』・｜|\u2014\u2013\u00b7]/g,'');
+    s=kataToHira(s);
+    s=s.replace(/ー/g,'う');
+    s=s.toLowerCase();
+    return s;
+  }
+  function mapKana(s,map){
+    var keys=Object.keys(map).sort(function(a,b){return b.length-a.length;});
+    var out='',i=0;
+    while(i<s.length){
+      var matched=false;
+      for(var j=0;j<keys.length;j++){
+        var k=keys[j];
+        if(s.substr(i,k.length)===k){ out+=map[k]; i+=k.length; matched=true; break; }
+      }
+      if(!matched){ out+=s[i]; i++; }
+    }
+    return out;
+  }
+  function isKanaVariant(mapped,kp,notes){
+    if(!notes||!notes.length) return false;
+    var stack=[mapped],seen={};
+    while(stack.length){
+      var cur=stack.pop();
+      if(cur===kp) return true;
+      if(seen[cur]) continue;
+      seen[cur]=1;
+      for(var i=0;i<notes.length;i++){
+        var n=notes[i],idx=cur.indexOf(n);
+        while(idx>=0){
+          stack.push(cur.slice(0,idx)+cur.slice(idx+n.length));
+          idx=cur.indexOf(n,idx+1);
+        }
+      }
+    }
+    return false;
+  }
+  function checkItem(it){
+    var inp=it.querySelector('.quiz-input');
+    var mark=it.querySelector('.quiz-mark');
+    var hint=it.querySelector('.quiz-hint');
+    var u=normalize(inp.value);
+    if(!u) return;
+    var map={},notes=[],parts=[];
+    try{ map=JSON.parse(it.dataset.map); }catch(e){}
+    try{ notes=JSON.parse(it.dataset.notes||'[]'); }catch(e){}
+    try{ parts=JSON.parse(it.dataset.parts||'[]'); }catch(e){}
+    var mapped=mapKana(u,map);
+    var kp=normalize(it.dataset.kana), kf=normalize(it.dataset.kanaFull||it.dataset.kana);
+    var ok=!!((mapped===kp)||(mapped===kf)||isKanaVariant(mapped,kp,notes));
+    if(!ok&&parts.length>=4){
+      var wP=normalize(parts[0]),wF=normalize(parts[1]||parts[0]);
+      var sP=normalize(parts[2]||''),sF=normalize(parts[3]||parts[2]||'');
+      ok=!!((mapped===wP)||(mapped===wF)||isKanaVariant(mapped,wP,notes)
+        ||(sP&&((mapped===sP)||(mapped===sF)||isKanaVariant(mapped,sP,notes))));
+    }
+    if(ok){
+      it.classList.add('quiz-ok'); it.classList.remove('quiz-bad');
+      inp.className='quiz-input ok'; inp.disabled=true;
+      mark.textContent='✓'; mark.className='quiz-mark ok';
+      hint.textContent=L('correct'); hint.className='quiz-hint ok';
+    }else{
+      it.classList.add('quiz-bad'); it.classList.remove('quiz-ok');
+      inp.className='quiz-input bad';
+      mark.textContent='✗'; mark.className='quiz-mark bad';
+      var c=recordError(it);
+      hint.textContent=L('wrongMsg',[c]);
+      hint.className='quiz-hint';
+      it.classList.add('open'); it.classList.remove('off');
+      if(window.__refreshCounter) window.__refreshCounter();
+    }
+  }
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest?e.target.closest('.quiz-check'):null;
+    if(btn) checkItem(btn.closest('.cell'));
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.keyCode===13){
+      var inp=e.target;
+      if(inp&&inp.classList&&inp.classList.contains('quiz-input')){
+        e.preventDefault(); checkItem(inp.closest('.cell'));
+      }
+    }
+  });
+
+  var panel=document.getElementById('errPanel');
+  function sortedEntries(){
+    return Object.keys(store).map(function(k){ return {k:k,r:store[k]}; })
+      .sort(function(a,b){ return b.r.c-a.r.c || b.r.t-a.r.t; });
+  }
+  function renderList(){
+    var es=sortedEntries();
+    var sum=es.reduce(function(s,e){return s+e.r.c;},0);
+    document.getElementById('errPanelCount').textContent=es.length?L('errSum',[es.length,sum]):'';
+    var list=document.getElementById('errList');
+    if(!es.length){
+      list.innerHTML='<div class="err-empty">'+escHtml2(L('errEmpty'))+'</div>';
+      return;
+    }
+    list.innerHTML=es.map(function(e){
+      return '<div class="err-entry" data-key="'+e.k+'">'
+        +'<div class="pr">'+escHtml2(e.r.p)+'<span class="times">×'+e.r.c+'</span></div>'
+        +'<div class="ans">'+escHtml2(e.r.a)+'</div></div>';
+    }).join('');
+    Array.prototype.forEach.call(list.querySelectorAll('.err-entry'),function(en){
+      en.addEventListener('click',function(){
+        var target=document.querySelector('.cell[data-key="'+en.dataset.key+'"]');
+        panel.classList.remove('open');
+        if(target) target.scrollIntoView({behavior:'smooth',block:'center'});
+      });
+    });
+  }
+  document.getElementById('errBook').addEventListener('click',function(){
+    renderList(); panel.classList.add('open');
+  });
+  document.getElementById('errClose').addEventListener('click',function(){
+    panel.classList.remove('open');
+  });
+  panel.addEventListener('click',function(e){
+    if(e.target===panel) panel.classList.remove('open');
+  });
+  document.getElementById('errClear').addEventListener('click',function(){
+    if(!Object.keys(store).length) return;
+    if(!confirm(L('confirmClear'))) return;
+    store={}; saveStore();
+    allItems().forEach(function(it){
+      it.classList.remove('wrong');
+      var wb=it.querySelector('.wrong-btn'); if(wb) wb.textContent=L('wrong');
+    });
+    refreshBadge(); renderList();
+  });
+  document.getElementById('errExport').addEventListener('click',function(){
+    var es=sortedEntries();
+    if(!es.length){ alert(L('errEmptyAlert')); return; }
+    var sum=es.reduce(function(s,e){return s+e.r.c;},0);
+    var lines=['# 错题本 · '+BOOK_LABEL,'',
+      '导出时间：'+new Date().toLocaleString(),'',
+      '共 '+es.length+' 条，累计错误 '+sum+' 次','',
+      '| 次数 | 中文提示 | 日语答案 |','| --- | --- | --- |'];
+    es.forEach(function(e){
+      lines.push('| ×'+e.r.c+' | '+e.r.p.replace(/\|/g,'/')+' | '+e.r.a.replace(/\|/g,'/')+' |');
+    });
+    var blob=new Blob([lines.join('\n')],{type:'text/markdown;charset=utf-8'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='错题本_'+BOOK_LABEL+'.md';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },500);
+  });
+  refreshBadge();
+})();
+
+
+</script>
+</body>
+</html>

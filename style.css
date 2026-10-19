@@ -21,8 +21,10 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .btn-primary:hover{background:#9c2c1a}
 .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:6px}
 .btn-ghost:hover{border-color:#b9b2a6}
+.back-home{white-space:nowrap;flex:0 0 auto;text-decoration:none;font-size:13px}
 select.btn-ghost{max-width:170px}
 .counter{font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.book-label{font-size:13px;color:var(--ink-soft);white-space:nowrap}
 main{max-width:960px;margin:0 auto;padding:18px 16px 70px}
 .howto{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 18px;font-size:13.5px;color:var(--ink-soft);margin-bottom:24px}
 .howto b{color:var(--ink)}
@@ -39,19 +41,20 @@ main{max-width:960px;margin:0 auto;padding:18px 16px 70px}
 .prompt{flex:0 1 47%;font-weight:600;min-width:0}
 .prompt .num{color:var(--ink-soft);font-weight:400;font-size:12px;margin-right:5px}
 .answer-zone{flex:1 1 50%;min-width:0}
-.reveal{display:inline-block;background:none;border:1px solid var(--line);border-radius:5px;color:var(--ink-soft);padding:0 12px;font-size:12px;line-height:1.9}
+.reveal{display:inline-block;background:none;border:1px solid var(--line);border-radius:5px;color:var(--ink-soft);padding:0 12px;font-size:12px;line-height:1.9;white-space:nowrap;flex:0 0 auto}
 .reveal:hover{border-color:var(--accent);color:var(--accent)}
 .answer{display:none;background:var(--accent-soft);border-radius:4px;padding:4px 10px;font-size:14.5px}
 .answer ruby{ruby-align:center;ruby-position:over}
 .answer rt{font-size:.82em;color:#8a5a4c;font-weight:400}
 .answer .a-word{font-weight:700;margin-right:8px}
+.answer .a-tag{color:var(--ink-soft);font-size:12px;font-weight:400;margin-right:6px}
 /* ===== 听写模式：喇叭播放答案语音 ===== */
 .listen-btn{display:none;vertical-align:middle;margin-left:8px;padding:2px 10px;
   border:1px solid var(--line);background:var(--card);color:var(--accent);
-  border-radius:6px;cursor:pointer;font-size:12px;line-height:1.5;flex:0 0 auto}
+  border-radius:6px;cursor:pointer;font-size:12px;line-height:1.5;flex:0 0 auto;white-space:nowrap}
 .listen-btn:hover{background:var(--accent-soft)}
 .listen-btn.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
-body.listening .prompt-text{display:none!important}
+body.listening .prompt .prompt-text{display:none!important}
 body.listening .listen-btn{display:inline-flex;align-items:center;gap:4px}
 .listen-word{display:none;font-weight:700;color:var(--accent);margin-right:6px}
 body.listening .listen-word{display:inline}
@@ -62,11 +65,11 @@ body.listening.lang-vi .dict-item.show-prompt .prompt-text.i18n.vi{display:inlin
 .ans-spk{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;
   margin-left:8px;padding:2px 10px;border:1px solid var(--line);
   background:var(--card);color:var(--accent);border-radius:6px;cursor:pointer;
-  font-size:12px;line-height:1.5;flex:0 0 auto}
+  font-size:12px;line-height:1.5;flex:0 0 auto;white-space:nowrap}
 .ans-spk:hover{background:var(--accent-soft)}
 .ans-spk.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media print{.listen-btn{display:none!important}.ans-spk{display:none!important}
-  body.listening .prompt-text{display:none!important}
+  body.listening .prompt .prompt-text{display:none!important}
   body.listening.lang-zh .prompt-text.i18n.zh{display:inline!important}
   body.listening.lang-en .prompt-text.i18n.en{display:inline!important}
   body.listening.lang-vi .prompt-text.i18n.vi{display:inline!important}}
@@ -87,6 +90,12 @@ body.show-answers .dict-item.off .answer{display:none}
 .gpoint .dict-item{padding:6px 2px}
 .wrong-btn{display:inline-block;background:none;border:1px solid #dcc0b8;border-radius:5px;color:var(--accent);padding:0 10px;font-size:12px;line-height:1.9;margin-left:6px}
 .wrong-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rule-btn{display:inline-block;background:none;border:1px dashed #c9c2b4;border-radius:5px;color:var(--ink-soft);padding:0 10px;font-size:12px;line-height:1.9;margin-left:6px;white-space:nowrap;flex:0 0 auto}
+.rule-btn:hover{border-color:var(--accent);color:var(--accent)}
+.rule-btn.active{background:var(--accent-soft);border-style:solid;border-color:var(--accent);color:var(--accent)}
+.rule-box{margin-top:5px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:5px;padding:5px 10px;font-size:12.5px;color:var(--ink);line-height:1.7}
+.rule-box[hidden]{display:none}
+.rule-example{margin-top:2px;color:var(--accent);font-weight:600;font-size:13px}
 .dict-item.wrong{background:#fdf1ee;border-radius:4px}
 .wrong-zone{border:1px dashed var(--accent);border-radius:8px;padding:10px 14px;margin-bottom:24px;background:#fffdfa}
 .wrong-zone[hidden]{display:none}
@@ -94,16 +103,16 @@ body.show-answers .dict-item.off .answer{display:none}
 .wrong-zone-sum{margin:0 0 6px;font-size:12px;color:var(--ink-soft)}
 @media print{.wrong-zone{display:none!important}}
 /* ===== 默写输入验证 ===== */
-.quiz{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.quiz{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;margin-bottom:5px}
 .quiz-input{flex:1 1 auto;min-width:0;max-width:340px;border:1px solid var(--line);border-radius:5px;
-  padding:3px 10px;font-size:14px;font-family:inherit;line-height:1.7;color:var(--ink);background:#fff}
+  padding:3px 10px;font-size:14px;font-family:inherit;line-height:1.7;color:var(--ink);background:#fff;white-space:nowrap}
 .quiz-input:focus{outline:2px solid #d9b9ad;outline-offset:0;border-color:var(--accent)}
 .quiz-input.ok{border-color:#2e7d32;background:#f0f8f0;color:#1b5e20}
 .quiz-input.bad{border-color:#b0341f;background:#fdf1ee;color:#7f1d12}
 .quiz-input:disabled{opacity:.7}
-.quiz-check{border:1px solid var(--line);background:#fff;border-radius:5px;color:var(--ink);padding:1px 12px;font-size:12.5px;line-height:1.9}
+.quiz-check{border:1px solid var(--line);background:#fff;border-radius:5px;color:var(--ink);padding:1px 12px;font-size:12.5px;line-height:1.9;white-space:nowrap;flex:0 0 auto}
 .quiz-check:hover{border-color:var(--accent);color:var(--accent)}
-.quiz-mark{font-size:13px;font-weight:700;white-space:nowrap}
+.quiz-mark{font-size:13px;font-weight:700;white-space:nowrap;flex:0 0 auto}
 .quiz-mark.ok{color:#2e7d32}
 .quiz-mark.bad{color:#b0341f}
 .quiz-hint{display:block;font-size:12px;color:var(--accent);margin:1px 0 3px}
@@ -176,6 +185,8 @@ footer{max-width:960px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:va
   .toolbar,.howto,footer{display:none}
   main{max-width:none;padding:0}
   .lesson{margin:0 0 14px;break-before:page}
+  .lesson-group{break-before:page}
+  .lesson-group .lesson{break-before:auto}
   .lesson:first-of-type{break-before:auto}
   .lesson-title{font-size:15px;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:6px}
   .lesson-title::after{display:none}
@@ -207,5 +218,67 @@ footer{max-width:960px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:va
 .spk:hover{color:#9c2c1a;background:var(--accent-soft)}
 .spk.playing{color:#fff;background:var(--accent)}
 /* 动词/词组标题行内的小字信息 */
+.lesson-group{margin:42px 0 0;scroll-margin-top:70px}
+.lesson-group-title{font-family:"Yu Mincho","Hiragino Mincho ProN","SimSun","Songti SC",serif;font-size:26px;font-weight:700;margin:0 0 4px;padding-bottom:9px;border-bottom:2px solid var(--line);position:relative}
+.lesson-group-title::after{content:"";position:absolute;left:0;bottom:-2px;width:64px;height:2px;background:var(--accent)}
+.lesson-group .lesson{margin:26px 0 8px}
 .l-sub{font-size:13px;color:var(--ink-soft);font-weight:400;margin-left:10px}
 @media (max-width:480px){.l-sub{display:block;margin-left:0;font-size:12px}}
+
+/* ===== 动词变形网格（verb conjugation grid） ===== */
+.grid-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:4px 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table.vgrid{border-collapse:collapse;table-layout:fixed;font-size:12.5px}
+.vgrid .cg-word{width:118px}
+.vgrid .cg-col{width:108px}
+.vgrid .colh{padding:6px 8px;border:1px solid var(--line);background:var(--paper);vertical-align:bottom;white-space:nowrap;width:108px;overflow:hidden}
+.vgrid .colh.col-word{width:118px}
+.vgrid .col-name{display:block;font-weight:700;font-size:12.5px;margin-bottom:4px}
+.vgrid .colh .rule-btn,.vgrid .colh .col-toggle{display:inline-block;white-space:nowrap;flex:0 0 auto;margin:1px 2px}
+.vgrid .col-word{position:sticky;left:0;z-index:2;background:var(--paper);width:118px;overflow:hidden}
+.vgrid .vrow .col-word{min-width:118px}
+.vgrid .cell{border:1px solid var(--line);padding:4px 6px;width:108px;height:70px;vertical-align:top;overflow:hidden}
+.vgrid .w-w{font-weight:700;font-size:13.5px;display:block}
+.vgrid .w-sub{font-size:10.5px;color:var(--ink-soft);line-height:1.5;display:block}
+.cell .quiz-input{width:100%;box-sizing:border-box;font-size:12px;padding:2px 5px;border:1px solid var(--line);border-radius:4px}
+.cell .quiz-check,.cell .wrong-btn{white-space:nowrap;flex:0 0 auto;margin-top:2px;font-size:11px;padding:1px 6px}
+.cell .quiz-mark{font-size:12px;margin-left:3px}
+.cell-ans{display:none;font-weight:700;color:var(--accent);font-size:12.5px;line-height:1.5;word-break:break-all}
+.cell .quiz-hint{display:block;font-size:10.5px;color:#8a6d3b;min-height:0;margin:2px 0 0;line-height:1.35;word-break:break-all}
+.cell .quiz-hint.ok{color:#2e7d32}
+.cell .quiz-hint:empty{display:none}
+.cell.col-on .cell-ans{display:inline-block}
+.cell.col-on .quiz-input,.cell.col-on .quiz-check,.cell.col-on .wrong-btn{display:none}
+body.show-answers .cell .cell-ans{display:inline-block}
+body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.show-answers .cell .wrong-btn{display:none}
+.cell.open .cell-ans{display:inline-block}
+/* 显示答案时保持与输入态相同行高列宽：内容在格内自适应，不撑大 */
+.cell.col-on,body.show-answers .cell,.cell.open{vertical-align:middle}
+.cell.col-on .cell-ans,body.show-answers .cell .cell-ans,.cell.open .cell-ans{display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:0;width:100%;word-break:break-all;overflow-wrap:anywhere}
+.cell.quiz-ok{background:#f0f7f0}
+.cell.quiz-bad{background:#fdf0ee}
+.cell.wrong{background:#fbe9e7;box-shadow:inset 0 0 0 2px var(--accent)}
+.vgrid .rule-btn{width:20px;height:20px;padding:0;line-height:1;border-radius:50%;font-weight:700}
+.vgrid .rule-btn.active{background:var(--accent);color:#fff}
+.col-toggle.on{background:var(--accent);color:#fff}
+.rule-bar{display:block;margin:2px 0 10px;font-size:12px;color:var(--ink);background:var(--accent-soft);border-left:3px solid var(--accent);padding:5px 10px;border-radius:4px;line-height:1.7}
+.rule-bar[hidden]{display:none}
+@media (max-width:640px){
+  .lesson-group-title{font-size:21px}
+  .vgrid .cg-word{width:104px}
+  .vgrid .cg-col{width:96px}
+  .vgrid .colh,.vgrid .cell{width:96px;padding:3px 5px}
+  .vgrid .colh.col-word,.vgrid .col-word{width:104px}
+  .vgrid .col-word{min-width:96px}
+  .cell .quiz-hint{font-size:9.5px}
+}
+@media print{
+  .grid-scroll{overflow:visible}
+  .vgrid{font-size:10.5px}
+  .vgrid .cg-word{width:112px}
+  .vgrid .cg-col{width:96px}
+  .vgrid .colh,.vgrid .cell{width:96px;height:auto}
+  .vgrid .colh.col-word,.vgrid .col-word{width:112px}
+  .cell .quiz-input,.cell .quiz-check,.cell .wrong-btn,.cell .quiz-mark,.cell .quiz-hint{display:none}
+  .cell-ans{display:inline-block!important}
+  .rule-btn,.col-toggle,.rule-bar{display:none}
+}

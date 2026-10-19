@@ -34,6 +34,11 @@ button{font-family:inherit;cursor:pointer}
 .hero .sub b{color:var(--ink);font-weight:600}
 
 main{max-width:1000px;margin:0 auto;padding:8px 20px 48px}
+.group{margin-bottom:34px}
+.group:last-child{margin-bottom:0}
+.gtitle{margin:0 0 14px;font-size:17px;letter-spacing:.12em;color:var(--ink-soft);font-weight:600;
+  display:flex;align-items:center;gap:10px}
+.gtitle::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--accent)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
 
 .card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
@@ -96,71 +101,93 @@ footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","N
 
 <script>
 /* ============================================================
-   页面注册表：新增页面只需在此数组追加一条
+   栏目分组：每组一个标题，组内卡片自动渲染
+   新增页面只需在对应分组数组追加一条
    { title/sub/range/desc/badge: {zh, en, vi} 或字符串(不随语言变),
      url: 相对文件名 }
    ============================================================ */
-const PAGES = [
-  {title:{zh:'大家日语1复习', en:'Minna no Nihongo 1 Review', vi:'Minna no Nihongo 1 Ôn tập'},
-   sub:'みんなの日本語 初級Ⅰ',
-   range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
-   desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
-   url:'大家日语1复习.html', badge:{zh:'初级1', en:'Book 1', vi:'Quyển 1'}},
-  {title:{zh:'大家日语2复习', en:'Minna no Nihongo 2 Review', vi:'Minna no Nihongo 2 Ôn tập'},
-   sub:'みんなの日本語 初級Ⅱ',
-   range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
-   desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
-   url:'大家日语2复习.html', badge:{zh:'初级2', en:'Book 2', vi:'Quyển 2'}},
+const GROUPS = [
+  {key:'review', zh:'单词・文法复习', en:'Vocabulary & Grammar Review', vi:'Từ vựng & Ngữ pháp Ôn tập',
+   pages:[
+    {title:{zh:'大家日语1复习', en:'Minna no Nihongo 1 Review', vi:'Minna no Nihongo 1 Ôn tập'},
+     sub:'みんなの日本語 初級Ⅰ',
+     range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
+     desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
+     url:'大家日语1复习.html', badge:{zh:'初级1', en:'Book 1', vi:'Quyển 1'}},
+    {title:{zh:'大家日语2复习', en:'Minna no Nihongo 2 Review', vi:'Minna no Nihongo 2 Ôn tập'},
+     sub:'みんなの日本語 初級Ⅱ',
+     range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
+     desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
+     url:'大家日语2复习.html', badge:{zh:'初级2', en:'Book 2', vi:'Quyển 2'}}
+   ]},
+  {key:'verb', zh:'动词各种变形练习', en:'Verb Conjugation Practice', vi:'Luyện Biến Hóa Động Từ',
+   pages:[
+    {title:{zh:'大家日语1动词变形练习', en:'Book 1 Verb Practice', vi:'Luyện động từ Quyển 1'},
+     sub:'みんなの日本語 初級Ⅰ',
+     range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
+     desc:{zh:'选课，挖空填动词变形', en:'Pick a lesson, fill in the verb form', vi:'Chọn bài, điền biến hóa động từ'},
+     url:'minna-no-nihongo-1-verb-conjugation.html', badge:{zh:'变形1', en:'Verb 1', vi:'Động từ 1'}},
+    {title:{zh:'大家日语2动词变形练习', en:'Book 2 Verb Practice', vi:'Luyện động từ Quyển 2'},
+     sub:'みんなの日本語 初級Ⅱ',
+     range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
+     desc:{zh:'选课，挖空填动词变形', en:'Pick a lesson, fill in the verb form', vi:'Chọn bài, điền biến hóa động từ'},
+     url:'minna-no-nihongo-2-verb-conjugation.html', badge:{zh:'变形2', en:'Verb 2', vi:'Động từ 2'}}
+   ]}
 ];
 
 const I18N = {
   zh:{heroTitle:'日语学习', heroSub:'默写 · 听写 · 错题练习<b>入口</b>',
-      addHint:'以后新增页面：打开本文件，在底部 <code>PAGES</code> 数组里加一条即可，卡片会自动生成',
+      addHint:'以后新增页面：打开本文件，在底部 <code>GROUPS</code> 数组里加一条即可，卡片会自动生成',
       footerText:'日语学习 · 复习工具入口'},
   en:{heroTitle:'Japanese Study', heroSub:'Dictation · Listening · Error Review <b>Home</b>',
-      addHint:'To add a page later: open this file and append one entry to the <code>PAGES</code> array below; the card is generated automatically.',
+      addHint:'To add a page later: open this file and append one entry to the <code>GROUPS</code> array below; the card is generated automatically.',
       footerText:'Japanese Study · Practice Tools Home'},
   vi:{heroTitle:'Học tiếng Nhật', heroSub:'Chính tả · Nghe · Sổ lỗi <b>Trang chủ</b>',
-      addHint:'Muốn thêm trang sau này: mở tệp này và thêm một mục vào mảng <code>PAGES</code> bên dưới; thẻ sẽ tự sinh.',
+      addHint:'Muốn thêm trang sau này: mở tệp này và thêm một mục vào mảng <code>GROUPS</code> bên dưới; thẻ sẽ tự sinh.',
       footerText:'Học tiếng Nhật · Trang chủ công cụ ôn tập'}
 };
 
 function pick(v, lang){ return (v && typeof v === 'object' && !Array.isArray(v)) ? (v[lang] || v.zh) : v; }
 
+function cardHtml(p, lang){
+  return '<a class="card" href="' + p.url + '" aria-label="' + pick(p.title, lang) + '">' +
+    '<span class="badge">' + pick(p.badge, lang) + '</span>' +
+    '<h2>' + pick(p.title, lang) + '</h2>' +
+    '<p class="sub2">' + p.sub + '</p>' +
+    '<p class="range">' + pick(p.range, lang) + '</p>' +
+    '<p class="desc">' + pick(p.desc, lang) + '</p>' +
+    '<span class="go">' + pick({zh:'进入', en:'Open', vi:'Vào'}, lang) +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
+    '</span></a>';
+}
+
 function render(lang){
-  /* 语言按钮高亮 */
   document.querySelectorAll('.langs button').forEach(function(b){
     b.classList.toggle('on', b.getAttribute('data-lang') === lang);
   });
-  /* 静态文案 */
   var t = I18N[lang] || I18N.zh;
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var k = el.getAttribute('data-i18n');
     if (t[k] !== undefined) el.innerHTML = t[k];
   });
   document.title = t.heroTitle + ' · 入口';
-  /* 卡片 */
   var grid = document.getElementById('grid');
   grid.innerHTML = '';
-  PAGES.forEach(function(p){
-    var a = document.createElement('a');
-    a.href = p.url;
-    a.className = 'card';
-    a.setAttribute('aria-label', pick(p.title, lang));
-    a.innerHTML =
-      '<span class="badge">' + pick(p.badge, lang) + '</span>' +
-      '<h2>' + pick(p.title, lang) + '</h2>' +
-      '<p class="sub2">' + p.sub + '</p>' +
-      '<p class="range">' + pick(p.range, lang) + '</p>' +
-      '<p class="desc">' + pick(p.desc, lang) + '</p>' +
-      '<span class="go">' + pick({zh:'进入复习页', en:'Open practice', vi:'Vào ôn tập'}, lang) +
-      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
-      '</span>';
-    grid.appendChild(a);
+  GROUPS.forEach(function(g){
+    var sec = document.createElement('section');
+    sec.className = 'group';
+    var h = document.createElement('h3');
+    h.className = 'gtitle';
+    h.textContent = pick(g, lang);
+    sec.appendChild(h);
+    var inner = document.createElement('div');
+    inner.className = 'grid';
+    g.pages.forEach(function(p){ inner.insertAdjacentHTML('beforeend', cardHtml(p, lang)); });
+    sec.appendChild(inner);
+    grid.appendChild(sec);
   });
 }
 
-/* 语言切换 + 持久化（localStorage 按域名隔离，本地/Pages 各自记住） */
 var LANG_KEY = 'mn_home_lang';
 var curLang = localStorage.getItem(LANG_KEY) || 'zh';
 if (!I18N[curLang]) curLang = 'zh';
