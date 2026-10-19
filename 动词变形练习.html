@@ -103,92 +103,92 @@ function Uk(v){ return v.obj ? v.obj.replace(/を$/, 'が') : ''; }
 var FORMS = [
   {id:'masu', name:'ます形', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['毎日、'+o+c.masu+'。', '每天'+v.zh],
-     ['明日、'+o+c.masu+'。', '明天也'+v.zh]]; }},
+     ['今、'+o+c.masu+'。', '现在'+v.zhs0+'。'],
+     ['毎日、'+o+c.masu+'。', '每天'+v.zhs0+'。']]; }},
   {id:'mashita', name:'た形・過去', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['昨日、'+o+c.mashita+'。', '昨天'+v.zh+'了'],
-     ['先週、'+o+c.mashita+'。', '上周'+v.zh+'了']]; }},
+     ['昨日、'+o+c.mashita+'。', '昨天'+v.zhs0+'了。'],
+     ['さっき、'+o+c.mashita+'。', '刚才'+v.zhs0+'了。']]; }},
   {id:'masen', name:'ません', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     ['今日は'+o+c.masen+'。', '今天不'+v.zh]]; }},
+     ['今は'+o+c.masen+'。', '现在不'+v.zhs0+'。']]; }},
   {id:'masendeshita', name:'ませんでした', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     ['昨日は'+o+c.masendeshita+'。', '昨天没'+v.zh]]; }},
+     ['昨日は'+o+c.masendeshita+'。', '昨天没'+v.zhs0+'。']]; }},
   {id:'te_kudasai', name:'て形＋ください', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     [o+c.te+'ください。', '请'+v.zh],
-     [o+c.te+'くださいませんか。', '能请您'+v.zh+'吗']]; }},
+     [o+c.te+'ください。', '请'+v.zhs0+'。'],
+     [o+c.te+'くださいませんか。', '能请您'+v.zhs0+'吗？']]; }},
   {id:'te_imasu', name:'ています', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['今、'+o+c.te+'います。', '正在'+v.zh],
-     ['毎日、'+o+c.te+'います。', '每天（习惯性）'+v.zh]]; }},
+     ['今、'+o+c.te+'います。', '正在'+v.zhs0+'。'],
+     ['毎日、'+o+c.te+'います。', '每天（习惯性）'+v.zhs0+'。']]; }},
   {id:'te_kara', name:'てから', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.te+'から、出かけます。', v.zh+'后，再出门']]; }},
+     [o+c.te+'から、連絡します。', v.zhs0+'后再联系你。']]; }},
   {id:'ta', name:'た形', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['昨日、'+o+c.ta+'。', '昨天'+v.zh+'了'],
-     ['もう'+o+c.ta+'。', '已经'+v.zh+'了']]; }},
+     ['昨日、'+o+c.ta+'。', '昨天'+v.zhs0+'了。'],
+     ['もう'+o+c.ta+'。', '已经'+v.zhs0+'了。']]; }},
   {id:'nai', name:'ない形', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['まだ'+o+c.nai+'。', '还没'+v.zh],
-     [o+c.nai+'よ。', '（我）不'+v.zh+'哦']]; }},
+     ['まだ'+o+c.nai+'。', '还没'+v.zhs0+'。'],
+     [o+c.nai+'よ。', '（我）不'+v.zhs0+'哦。']]; }},
   {id:'nakatta', name:'なかった', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     ['昨日は'+o+c.nakatta+'。', '昨天没'+v.zh]]; }},
+     ['昨日は'+o+c.nakatta+'。', '昨天没'+v.zhs0+'。']]; }},
   {id:'nai_de', name:'ないでください', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.nai+'でください。', '请不要'+v.zh]]; }},
+     [o+c.nai+'でください。', '请不要'+v.zhs0+'。']]; }},
   {id:'mashou', name:'ましょう', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     ['一緒に'+o+c.mashou+'。', '一起'+v.zh+'吧'],
-     [o+c.mashou+'か。', '（我）'+v.zh+'吧']]; }},
+     ['一緒に'+o+c.mashou+'。', '一起'+v.zhs0+'吧。'],
+     [o+c.mashou+'か。', v.zhs0+'吧。']]; }},
   {id:'tai', name:'たいです', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     [o+c.tai+'です。', '想'+v.zh],
-     ['今、'+o+c.tai+'です。', '现在想'+v.zh]]; }},
+     [o+c.tai+'です。', '想'+v.zhs0+'。'],
+     ['今、'+o+c.tai+'です。', '现在想'+v.zhs0+'。']]; }},
   {id:'takatta', name:'たかった', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     ['前は'+o+c.takatta+'です。', '以前曾想'+v.zh]]; }},
+     ['前は'+o+c.takatta+'です。', '以前曾想'+v.zhs0+'。']]; }},
   {id:'ba', name:'ば形', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     [o+c.ba+'いいです。', '如果'+v.zh+'就好了'],
-     [o+c.ba+'、すぐできます。', '如果'+v.zh+'，马上就能做到']]; }},
+     [o+c.ba+'いいです。', '如果'+v.zhs0+'就好了。'],
+     [o+c.ba+'、よかったです。', '要是'+v.zhs0+'就好了。']]; }},
   {id:'tara', name:'たら', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.tara+'、いいです。', '如果'+v.zh+'的话就好了']]; }},
+     [o+c.tara+'、いいです。', '如果'+v.zhs0+'的话就好了。']]; }},
   {id:'kanou', name:'可能形', freq:'h', n:2,
    build:function(v,c){ var o=O(v); return [
-     [o+c.kanou+'ます。', '能'+v.zh],
-     ['もっと'+o+c.kanou+'ます。', '能更'+v.zh]]; }},
+     [o+c.kanou+'ます。', '能'+v.zhs0+'。'],
+     ['明日、'+o+c.kanou+'ますか。', '明天能'+v.zhs0+'吗？']]; }},
   {id:'ukemi', name:'受身形', freq:'l', n:1,
    build:function(v,c){ var u=Uk(v); return [
-     ['昨日、'+u+c.ukemi+'ました。', '被'+v.zh+'了']]; }},
+     ['昨日、'+u+c.ukemi+'ました。', '被'+v.zhs0+'了。']]; }},
   {id:'shieki', name:'使役形', freq:'l', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.shieki+'ました。', '让（人）'+v.zh+'了']]; }},
+     [o+c.shieki+'ました。', '让（人）'+v.zhs0+'了。']]; }},
   {id:'shieki_ukemi', name:'使役受身', freq:'l', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.shieki_ukemi+'ました。', '被迫'+v.zh+'了']]; }},
+     [o+c.shieki_ukemi+'ました。', '被迫'+v.zhs0+'了。']]; }},
   {id:'meirei', name:'命令形', freq:'l', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.meirei+'！', v.zh+'！']]; }},
+     [o+c.meirei+'！', v.zhs0+'！']]; }},
   {id:'kinshi', name:'禁止形', freq:'l', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+v.dict+'な！', '别'+v.zh+'！']]; }},
+     [o+v.dict+'な！', '别'+v.zhs0+'！']]; }},
   {id:'te_oku', name:'ておく', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.te+'おきます。', '事先'+v.zh]]; }},
+     [o+c.te+'おきます。', '事先'+v.zhs0+'。']]; }},
   {id:'te_shimau', name:'てしまう', freq:'l', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.te+'しまいました。', v.zh+'（完）了']]; }},
+     [o+c.te+'しまいました。', v.zhs0+'（完）了。']]; }},
   {id:'te_miru', name:'てみる', freq:'m', n:1,
    build:function(v,c){ var o=O(v); return [
-     [o+c.te+'みます。', '试着'+v.zh]]; }},
+     [o+c.te+'みます。', '试着'+v.zhs0+'。']]; }},
   {id:'nagara', name:'ながら', freq:'l', n:1,
    build:function(v,c){ if(!v.obj) return null; var o=O(v); return [
-     ['毎日、テレビを見ながら、'+o+c.masu+'。', '每天一边看电视一边'+v.zh]]; }},
+     ['毎日、テレビを見ながら、'+o+c.masu+'。', '每天一边看电视一边'+v.zhs0+'。']]; }},
 ];
 
 /* ============ 汉字->假名映射 ============ */
@@ -256,6 +256,7 @@ function fillLesson(){
   document.getElementById('linfo').textContent = '第' + lesson + '課 · ' + verbs.length + ' 个动词 · 看中文提示，在句中空格填入动词的正确变形';
   var html = '';
   verbs.forEach(function(v){
+    v.zhs0 = (v.zhs || '').split(/[；;、]/)[0];
     var c = conj(v.dict, v.type);
     var map = buildMap(v.word, v.kana || v.word);
     var typeName = {'1':'一类动词','2':'二类动词','3':'三类动词'}[String(v.type)];
