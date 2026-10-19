@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动词变形练习</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b0341f'/%3E%3Ctext x='32' y='44' font-size='30' text-anchor='middle' fill='%23fff' font-family='serif' font-weight='700'%3E動%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f6f5f1; --card:#ffffff; --ink:#2e2a26; --ink-soft:#6f6a63;
+  --line:#ddd8cf; --accent:#b0341f; --accent-soft:#f7e8e2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Yu Gothic","Yu Gothic UI","Hiragino Kaku Gothic ProN","Meiryo","Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;
+  line-height:1.8;font-size:15px}
+button{font-family:inherit;font-size:13px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line)}
+.tb-inner{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.tb-inner h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.02em}
+.tb-inner h1 small{display:block;font-size:11px;color:var(--ink-soft);font-weight:400;letter-spacing:.06em}
+.tb-inner .home{color:var(--accent);font-size:13.5px;text-decoration:none}
+.tb-inner select{font-family:inherit;font-size:13.5px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+#errCount{font-size:12.5px;color:var(--ink-soft)}
+main{max-width:980px;margin:0 auto;padding:16px}
+.linfo{color:var(--ink-soft);font-size:13px;margin:0 0 12px}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.vhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;background:#fbf9f4;border-bottom:1px solid var(--line)}
+.vhead .vword{font-size:17px;font-weight:700}
+.vhead .vdict{color:var(--ink-soft);font-size:13.5px}
+.vhead .vtype{font-size:12px;padding:1px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.vhead .vzh{font-size:13px;color:var(--ink-soft)}
+.spk{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 9px;font-size:12.5px;color:var(--accent)}
+.spk.playing{background:var(--accent);color:#fff}
+.grp-title{padding:8px 16px 2px;font-size:13px;font-weight:600;color:var(--ink-soft);letter-spacing:.1em}
+.frow{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 12px;padding:8px 16px;border-top:1px dashed #ece7dd}
+.frow:first-of-type{border-top:0}
+.frow .prompt{width:230px;flex-shrink:0;font-size:13.5px;color:var(--ink)}
+.frow .prompt .ftag{display:inline-block;margin-left:6px;font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 6px}
+.frow .q{flex:1;min-width:280px;font-size:15px;line-height:2.1}
+.frow .fin{width:150px;padding:2px 8px;font-size:15px;font-family:inherit;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink)}
+.frow .fin.ok{border-color:#2e7d32;background:#f0f8f0}
+.frow .fin.bad{border-color:#b0341f;background:#fdf1ee}
+.frow .ans{display:none;padding:1px 8px;background:#f3efe6;border-radius:4px;font-weight:600;color:var(--ink)}
+.frow .ans.show{display:inline}
+.frow .chk,.frow .rev{border:1px solid var(--line);background:#fff;border-radius:5px;padding:1px 10px;font-size:12.5px;color:var(--ink)}
+.frow .mark{font-size:12px;width:56px;display:inline-block}
+.frow .mark.ok{color:#2e7d32}.frow .mark.bad{color:#b0341f}
+.empty{padding:40px;text-align:center;color:var(--ink-soft)}
+@media (max-width:600px){
+  .frow .prompt{width:100%}
+  .frow .fin{width:120px}
+  .tb-inner h1{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="toolbar"><div class="tb-inner">
+  <a class="home" href="index.html">← 入口</a>
+  <h1>动词变形练习<small>看中文 → 填动词正确变形</small></h1>
+  <select id="bookSel" aria-label="选择册"><option value="1">大家日语初级1</option><option value="2">大家日语初级2</option></select>
+  <select id="lessonSel" aria-label="选择课"></select>
+  <button class="btn" id="toggleAll">全部显示答案</button>
+  <button class="btn" id="clearErr">清空错题</button>
+  <span id="errCount">错题 0</span>
+</div></div>
+<main id="main"></main>
+<script>
+/* ============ 数据：由 build 脚本注入 ============ */
+var VERBS = {"1":[{"lesson":4,"verbs":[{"num":1,"word":"おきます","dict":"おきる","kana":"おきます","type":"2","zhs":"起床","zh":"每天早上7点起床。","sent":"まいあさしちじにおきます","obj":""},{"num":2,"word":"ねます","dict":"ねる","kana":"ねます","type":"2","zhs":"睡觉；就寝","zh":"晚上11点睡觉。","sent":"よるじゅういちじにねます","obj":""},{"num":3,"word":"はたらきます","dict":"はたらく","kana":"はたらきます","type":"1","zhs":"工作；劳动","zh":"在公司上班。","sent":"かいしゃではたらいています","obj":"かいしゃで"},{"num":4,"word":"やすみます","dict":"やすむ","kana":"やすみます","type":"1","zhs":"休息；请假","zh":"星期天休息。","sent":"にちようびはやすみます","obj":""},{"num":5,"word":"べんきょうします","dict":"する","kana":"べんきょうします","type":"3","zhs":"学习","zh":"每晚学日语。","sent":"まいばんにほんごをべんきょうします","obj":"ほんごを"},{"num":6,"word":"おわります","dict":"おわる","kana":"おわります","type":"1","zhs":"结束；完","zh":"银行到下午5点结束。","sent":"ぎんこうはごさいまでです","obj":"ごさいまで"}]},{"lesson":5,"verbs":[{"num":1,"word":"いきます","dict":"いく","kana":"いきます","type":"1","zhs":"去；往","zh":"去学校。","sent":"がっこうへいきます","obj":"っこうへ"},{"num":3,"word":"かえります","dict":"かえる","kana":"かえります","type":"1","zhs":"回去；回来","zh":"下午6点回家。","sent":"ごごろくじにうちへかえります","obj":"うちへ"}]},{"lesson":6,"verbs":[{"num":1,"word":"たべます","dict":"たべる","kana":"たべます","type":"2","zhs":"吃","zh":"午饭吃面包。","sent":"ひるごはんにパンをたべます","obj":"パンを"},{"num":2,"word":"のみます","dict":"のむ","kana":"のみます","type":"1","zhs":"喝","zh":"在咖啡馆喝咖啡。","sent":"喫茶店でコーヒーをのみます","obj":"コーヒーを"},{"num":3,"word":"すいます","dict":"すう","kana":"すいます","type":"1","zhs":"吸（烟）","zh":"","sent":"","obj":""},{"num":5,"word":"みます","dict":"みる","kana":"みます","type":"2","zhs":"看；观看","zh":"晚上看电影。","sent":"よるえいがをみます","obj":"よるえいが"},{"num":6,"word":"ききます","dict":"きく","kana":"ききます","type":"1","zhs":"听；问","zh":"每天早上听广播。","sent":"まいあさラジオをききます","obj":"まいあさラジオを"},{"num":7,"word":"よみます","dict":"よむ","kana":"よみます","type":"1","zhs":"读；念","zh":"在图书馆读书。","sent":"としょかんでほんをよみます","obj":"ほんを"},{"num":8,"word":"かきます","dict":"かく","kana":"かきます","type":"1","zhs":"写；画","zh":"写报告。","sent":"レポートをかきます","obj":"レポートを"},{"num":9,"word":"かいます","dict":"かう","kana":"かいます","type":"1","zhs":"买","zh":"在超市买蔬菜。","sent":"スーパーでやさいをかいます","obj":"やさいを"},{"num":10,"word":"とります","dict":"とる","kana":"とります","type":"1","zhs":"拍；照（相）","zh":"","sent":"","obj":""},{"num":12,"word":"します","dict":"する","kana":"します","type":"3","zhs":"做；干","zh":"做作业。","sent":"しゅくだいをします","obj":"しゅくだいを"},{"num":13,"word":"あいます","dict":"あう","kana":"あいます","type":"1","zhs":"见面；遇见","zh":"在图书馆见朋友。","sent":"としょかんでともだちにあいます","obj":"もだちに"}]},{"lesson":7,"verbs":[{"num":1,"word":"きります","dict":"きる","kana":"きります","type":"1","zhs":"切；剪","zh":"用剪刀剪纸。","sent":"はさみでかみをきります","obj":"かみを"},{"num":2,"word":"おくります","dict":"おくる","kana":"おくります","type":"1","zhs":"寄；送","zh":"给家人寄信。","sent":"かぞくにてがみをおくります","obj":"みを"},{"num":3,"word":"あげます","dict":"あげる","kana":"あげます","type":"2","zhs":"给（别人）","zh":"","sent":"","obj":""},{"num":4,"word":"もらいます","dict":"もらう","kana":"もらいます","type":"1","zhs":"得到；收到","zh":"生日收到了礼物。","sent":"たんじょうびにプレゼントをもらいました","obj":"プレゼントを"},{"num":5,"word":"かします","dict":"かす","kana":"かします","type":"1","zhs":"借出；借给","zh":"把书借给他。","sent":"かれにほんをかします","obj":"ほんを"},{"num":6,"word":"かります","dict":"かりる","kana":"かります","type":"2","zhs":"借入；借来","zh":"在图书馆借书。","sent":"としょかんでほんをかります","obj":"ほんを"},{"num":7,"word":"おしえます","dict":"おしえる","kana":"おしえます","type":"2","zhs":"教；告诉","zh":"教日语。","sent":"にほんごをおしえます","obj":"ほんごを"},{"num":8,"word":"ならいます","dict":"ならう","kana":"ならいます","type":"1","zhs":"学习；练习","zh":"学钢琴。","sent":"ピアノをならいます","obj":"ピアノを"},{"num":9,"word":"かけます","dict":"かける","kana":"かけます","type":"2","zhs":"打（电话）","zh":"","sent":"","obj":""}]},{"lesson":9,"verbs":[{"num":1,"word":"わかります","dict":"わかりる","kana":"わかります","type":"2","zhs":"明白；懂","zh":"懂一点日语。","sent":"にほんごがすこしわかります","obj":"ほんごが"},{"num":2,"word":"あります","dict":"ある","kana":"あります","type":"1","zhs":"有；在（无生命）","zh":"","sent":"","obj":""}]},{"lesson":10,"verbs":[{"num":1,"word":"います","dict":"う","kana":"います","type":"1","zhs":"有；在（人·动物）","zh":"","sent":"","obj":""},{"num":2,"word":"あります","dict":"ある","kana":"あります","type":"1","zhs":"有；在（物·植物）","zh":"","sent":"","obj":""}]},{"lesson":11,"verbs":[{"num":1,"word":"います","dict":"う","kana":"います","type":"1","zhs":"有（孩子）；在（住）","zh":"","sent":"","obj":""},{"num":2,"word":"かかります","dict":"かかる","kana":"かかります","type":"1","zhs":"花费（时间·金钱）","zh":"","sent":"","obj":""},{"num":3,"word":"やすみます","dict":"やすむ","kana":"やすみます","type":"1","zhs":"请假；缺（班）","zh":"","sent":"","obj":""}]},{"lesson":13,"verbs":[{"num":1,"word":"あそびます","dict":"あそぶ","kana":"あそびます","type":"1","zhs":"玩；玩耍","zh":"孩子们在公园玩。","sent":"こうえんでこどもたちがあそんでいます","obj":"あそんで"},{"num":2,"word":"およぎます","dict":"およぐ","kana":"およぎます","type":"1","zhs":"游泳","zh":"在海里游泳。","sent":"うみでおよぎます","obj":"うみで"},{"num":3,"word":"むかえます","dict":"むかえる","kana":"むかえます","type":"2","zhs":"迎接；接","zh":"去车站接他。","sent":"えきまでかれをむかえにいきます","obj":"かれを"},{"num":4,"word":"つかれます","dict":"つかれる","kana":"つかれます","type":"2","zhs":"疲劳；累","zh":"工作了一天，累了。","sent":"いちにちはたらいてつかれました","obj":"いちに"},{"num":5,"word":"だします","dict":"だす","kana":"だします","type":"1","zhs":"寄（信）；出示","zh":"","sent":"","obj":""},{"num":6,"word":"はいります","dict":"はいる","kana":"はいります","type":"1","zhs":"进入；入座","zh":"走进咖啡馆。","sent":"きっさてんにはいります","obj":"きっさてんに"},{"num":7,"word":"でます","dict":"でる","kana":"でます","type":"1","zhs":"出来；出发","zh":"走出咖啡馆。","sent":"きっさてんをでます","obj":"きっさてんを"},{"num":8,"word":"けっこんします","dict":"する","kana":"けっこんします","type":"3","zhs":"结婚","zh":"下个月结婚。","sent":"らいげつけっこんします","obj":""},{"num":9,"word":"かいものします","dict":"する","kana":"かいものします","type":"3","zhs":"买东西","zh":"周末去买东西。","sent":"しゅうまつにかいものします","obj":"しゅうまつに"},{"num":10,"word":"しょくじします","dict":"する","kana":"しょくじします","type":"3","zhs":"吃饭；进餐","zh":"一起吃饭好吗。","sent":"いっしょにしょくじしませんか","obj":"いっしょに"},{"num":11,"word":"さんぽします","dict":"する","kana":"さんぽします","type":"3","zhs":"散步","zh":"在公园散步。","sent":"こうえんをさんぽします","obj":"こうえんを"}]},{"lesson":14,"verbs":[{"num":2,"word":"［に］入ります","dict":"入る","kana":"［に］はいります","type":"1","zhs":"进入；搭乘（交通工具）","zh":"","sent":"","obj":""},{"num":3,"word":"［を］出ます","dict":"出る","kana":"［を］でます","type":"2","zhs":"离开；驶出","zh":"每天早上8点出门。","sent":"毎朝8時に家を出ます","obj":"家を"},{"num":4,"word":"つけます","dict":"つける","kana":"つけます","type":"2","zhs":"打开（电器、灯）","zh":"","sent":"","obj":""},{"num":5,"word":"消します","dict":"消す","kana":"けします","type":"1","zhs":"关掉（电器、灯）","zh":"","sent":"","obj":""},{"num":6,"word":"開けます","dict":"開ける","kana":"あけます","type":"2","zhs":"打开（门、窗）","zh":"","sent":"","obj":""},{"num":7,"word":"閉めます","dict":"閉める","kana":"しめます","type":"2","zhs":"关闭（门、窗）","zh":"","sent":"","obj":""},{"num":8,"word":"急ぎます","dict":"急ぐ","kana":"いそぎます","type":"1","zhs":"赶快；着急","zh":"因为赶电车时间，请快点。","sent":"電車の時間ですから、急いでください","obj":"急いで"},{"num":9,"word":"待ちます","dict":"待つ","kana":"まちます","type":"1","zhs":"等待","zh":"不好意思，请稍等。","sent":"すみませんが、ちょっと待ってください","obj":"ちょっと"},{"num":10,"word":"［音楽を］止めます","dict":"止める","kana":"［おんがくを］とめます","type":"2","zhs":"停止（音乐、机器）","zh":"","sent":"","obj":""},{"num":11,"word":"［車を］停めます","dict":"停める","kana":"［くるまを］とめます","type":"2","zhs":"停车","zh":"把车停在停车场。","sent":"車を駐車場に停めます","obj":"車を"},{"num":12,"word":"持ちます","dict":"持つ","kana":"もちます","type":"1","zhs":"拿；携带","zh":"我帮您拿行李吧？","sent":"荷物を持ちましょうか","obj":"荷物を"},{"num":13,"word":"取ります","dict":"取る","kana":"とります","type":"1","zhs":"取；拿；要（食物）","zh":"","sent":"","obj":""},{"num":14,"word":"手伝います","dict":"手伝う","kana":"てつだいます","type":"1","zhs":"帮忙","zh":"行李真多啊。我帮您吧？","sent":"荷物が多いですね。手伝いましょうか","obj":"多いで"},{"num":15,"word":"呼びます","dict":"呼ぶ","kana":"よびます","type":"1","zhs":"叫（出租车等）；呼喊","zh":"","sent":"","obj":""},{"num":16,"word":"話します","dict":"話す","kana":"はなします","type":"1","zhs":"说；谈话","zh":"用日语和老师交谈。","sent":"先生と日本語で話します","obj":"日本語で"},{"num":17,"word":"見せます","dict":"見せる","kana":"みせます","type":"2","zhs":"出示；给～看","zh":"麻烦您，请出示护照。","sent":"すみません、パスポートを見せてください","obj":"パスポートを"},{"num":18,"word":"［住所を］教えます","dict":"教える","kana":"［じゅうしょを］おしえます","type":"2","zhs":"告诉（地址、电话）；教","zh":"","sent":"","obj":""},{"num":19,"word":"［雨が］降ります","dict":"降る","kana":"［あめが］ふります","type":"1","zhs":"下（雨、雪）","zh":"","sent":"","obj":""},{"num":20,"word":"コピーします","dict":"する","kana":"コピーします","type":"3","zhs":"复印","zh":"请把这份文件复印5份。","sent":"この書類を5枚コピーしてください","obj":"書類を"},{"num":42,"word":"立ちます","dict":"立つ","kana":"たちます","type":"1","zhs":"站立","zh":"等公交车时请按顺序排队站好。","sent":"バスのとき、順番に立ってください","obj":"順番に"},{"num":43,"word":"座ります","dict":"座る","kana":"すわります","type":"1","zhs":"坐","zh":"请坐这里。","sent":"どうぞここに座ってください","obj":"どうぞここに"},{"num":44,"word":"使います","dict":"使う","kana":"つかいます","type":"1","zhs":"使用","zh":"不好意思，请用那支笔。","sent":"このペンを使ってもいいですか。→ すみません、そのペンを使ってください","obj":"ペンを"}]},{"lesson":15,"verbs":[{"num":5,"word":"置きます","dict":"置く","kana":"おきます","type":"1","zhs":"放置；摆","zh":"请把电脑放在桌子上。","sent":"パソコンを机の上に置いてください","obj":"パソコンを"},{"num":6,"word":"作ります","dict":"作る","kana":"つくります","type":"1","zhs":"做；制作；制造","zh":"妈妈每天做便当。","sent":"母は毎日お弁当を作ります","obj":"毎日お弁当を"},{"num":7,"word":"売ります","dict":"売る","kana":"うります","type":"1","zhs":"卖；销售","zh":"这家店卖蛋糕。","sent":"この店はケーキを売っています","obj":"ケーキを"},{"num":8,"word":"知ります","dict":"知る","kana":"しります","type":"1","zhs":"知道；认识（瞬间动词，结果状态用知っています）","zh":"","sent":"","obj":""},{"num":9,"word":"住みます","dict":"住む","kana":"すみます","type":"1","zhs":"居住","zh":"我现在住在东京。","sent":"わたしは今、東京に住んでいます","obj":"住んで"},{"num":10,"word":"研究します","dict":"する","kana":"けんきゅうします","type":"3","zhs":"研究","zh":"在研究日本历史。","sent":"日本の歴史を研究しています","obj":"歴史を"},{"num":11,"word":"知っています","dict":"知る","kana":"しっています","type":"1","zhs":"知道；认识（结果状态）","zh":"","sent":"","obj":""},{"num":12,"word":"住んでいます","dict":"住む","kana":"すんでいます","type":"1","zhs":"住在～（结果状态）","zh":"","sent":"","obj":""},{"num":24,"word":"思い出します","dict":"思い出す","kana":"おもいだします","type":"1","zhs":"想起；回忆起","zh":"","sent":"","obj":""},{"num":26,"word":"いらっしゃいます","dict":"いらっしゃう","kana":"いらっしゃいます","type":"1","zhs":"（人）在；来；去（尊敬语）","zh":"","sent":"","obj":""}]},{"lesson":16,"verbs":[{"num":1,"word":"下ろします","dict":"下ろす","kana":"おろします","type":"1","zhs":"取（钱）；取出；放下","zh":"","sent":"","obj":""},{"num":4,"word":"飲みます","dict":"飲む","kana":"のみます","type":"1","zhs":"喝；吃药","zh":"早饭喝牛奶。","sent":"朝ご飯に牛乳を飲みます","obj":"牛乳を"},{"num":6,"word":"始めます","dict":"始める","kana":"はじめます","type":"2","zhs":"开始","zh":"9点开始上课。","sent":"9時から授業を始めます","obj":"9時から授業を"},{"num":7,"word":"［電車に］乗ります","dict":"乗る","kana":"［でんしゃに］のります","type":"1","zhs":"乘坐（电车等）","zh":"","sent":"","obj":""},{"num":8,"word":"［電車を］降ります","dict":"降りる","kana":"［でんしゃを］おります","type":"2","zhs":"下（电车等）","zh":"","sent":"","obj":""},{"num":9,"word":"乗り換えます","dict":"乗り換える","kana":"のりかえます","type":"2","zhs":"换乘","zh":"在新宿换乘山手线。","sent":"新宿で山手線に乗り換えます","obj":"山手線に"},{"num":10,"word":"［を］浴びます","dict":"浴びる","kana":"［を］あびます","type":"2","zhs":"淋；浴（淋浴、澡）","zh":"","sent":"","obj":""},{"num":11,"word":"入れます","dict":"入れる","kana":"いれます","type":"2","zhs":"放入；装入","zh":"咖啡里放糖。","sent":"コーヒーに砂糖を入れます","obj":"砂糖を"},{"num":12,"word":"出します","dict":"出す","kana":"だします","type":"1","zhs":"拿出；取出；提交","zh":"请从包里拿出钱包。","sent":"かばんから財布を出してください","obj":"かばんから財布を"},{"num":13,"word":"［大学に］入ります","dict":"入る","kana":"［だいがくに］はいります","type":"1","zhs":"考入；进入（大学）","zh":"","sent":"","obj":""},{"num":14,"word":"［大学を］出ます","dict":"出る","kana":"［だいがくを］でます","type":"2","zhs":"毕业（大学）","zh":"","sent":"","obj":""},{"num":15,"word":"押します","dict":"押す","kana":"おします","type":"1","zhs":"推；按","zh":"请按这个按钮。","sent":"このボタンを押してください","obj":"ボタンを"},{"num":51,"word":"見学します","dict":"する","kana":"けんがくします","type":"3","zhs":"参观学习","zh":"明天参观公司。","sent":"明日、会社を見学します","obj":"会社を"},{"num":52,"word":"電話します","dict":"する","kana":"でんわします","type":"3","zhs":"打电话","zh":"稍后给学校打电话。","sent":"後で学校へ電話します","obj":"学校へ"}]},{"lesson":17,"verbs":[{"num":2,"word":"覚えます","dict":"覚える","kana":"おぼえます","type":"2","zhs":"记住；学会","zh":"记很多单词。","sent":"単語をたくさん覚えます","obj":"単語を"},{"num":3,"word":"忘れます","dict":"忘れる","kana":"わすれます","type":"2","zhs":"忘记","zh":"请不要忘记约定。","sent":"約束を忘れないでください","obj":"約束を"},{"num":4,"word":"なくします","dict":"無くす","kana":"なくします","type":"1","zhs":"丢失；弄丢","zh":"钱包弄丢了。","sent":"財布をなくしました","obj":"財布を"},{"num":5,"word":"［を］出します","dict":"出す","kana":"［を］だします","type":"1","zhs":"提交（报告等）","zh":"","sent":"","obj":""},{"num":6,"word":"払います","dict":"払う","kana":"はらいます","type":"1","zhs":"支付","zh":"房租总是月底付。","sent":"家賃はいつも月末に払います","obj":"いつも月末に"},{"num":7,"word":"返します","dict":"返す","kana":"かえします","type":"1","zhs":"归还；放回","zh":"书明天还。","sent":"本は明日返します","obj":""},{"num":8,"word":"出かけます","dict":"出かける","kana":"でかけます","type":"2","zhs":"出门；外出","zh":"我出去一下。","sent":"ちょっと出かけます","obj":"ちょっと"},{"num":9,"word":"脱ぎます","dict":"脱ぐ","kana":"ぬぎます","type":"1","zhs":"脱（衣、鞋）","zh":"","sent":"","obj":""},{"num":10,"word":"持って行きます","dict":"持って行く","kana":"もっていきます","type":"1","zhs":"带去；拿走","zh":"请带毛巾去温泉。","sent":"温泉にタオルを持って行ってください","obj":"タオルを"},{"num":11,"word":"持って来ます","dict":"持って来る","kana":"もってきます","type":"3","zhs":"带来；拿来","zh":"请明天把作业带来。","sent":"宿題を明日持って来てください","obj":"宿題を"},{"num":12,"word":"心配します","dict":"する","kana":"しんぱいします","type":"3","zhs":"担心","zh":"妈妈总是担心我。","sent":"母はわたしのことをいつも心配します","obj":"こと"},{"num":13,"word":"残業します","dict":"する","kana":"ざんぎょうします","type":"3","zhs":"加班","zh":"今天必须加班。","sent":"今日は残業しなければなりません","obj":""},{"num":14,"word":"出張します","dict":"する","kana":"しゅっちょうします","type":"3","zhs":"出差","zh":"下周去大阪出差。","sent":"来週、大阪へ出張します","obj":"大阪へ"},{"num":15,"word":"［薬を］飲みます","dict":"飲む","kana":"［くすりを］のみます","type":"1","zhs":"吃（药）","zh":"","sent":"","obj":""},{"num":16,"word":"［お風呂に］入ります","dict":"入る","kana":"［おふろに］はいります","type":"1","zhs":"洗（澡）；入浴","zh":"","sent":"","obj":""}]},{"lesson":18,"verbs":[{"num":4,"word":"できます","dict":"できる","kana":"できます","type":"2","zhs":"会；能；做得到","zh":"田中先生会开车。","sent":"田中さんは車の運転ができます","obj":"運転が"},{"num":5,"word":"洗います","dict":"洗う","kana":"あらいます","type":"1","zhs":"洗","zh":"自己的衣服自己洗。","sent":"自分の服は自分で洗います","obj":""},{"num":6,"word":"弾きます","dict":"弾く","kana":"ひきます","type":"1","zhs":"弹（钢琴、吉他等）","zh":"","sent":"","obj":""},{"num":7,"word":"歌います","dict":"歌う","kana":"うたいます","type":"1","zhs":"唱","zh":"洗澡时唱歌。","sent":"お風呂の中で歌を歌います","obj":"歌を"},{"num":8,"word":"集めます","dict":"集める","kana":"あつめます","type":"2","zhs":"收集；聚集","zh":"集邮是爱好。","sent":"切手を集めるのが趣味です","obj":"切手を"},{"num":9,"word":"捨てます","dict":"捨てる","kana":"すてます","type":"2","zhs":"扔；丢弃","zh":"不要的纸请扔掉。","sent":"要らない紙は捨ててください","obj":""},{"num":10,"word":"換えます","dict":"換える","kana":"かえます","type":"2","zhs":"换；兑换","zh":"在日本把钱换成美元。","sent":"日本でお金をドルに換えます","obj":"お金を"},{"num":11,"word":"運転します","dict":"する","kana":"うんてんします","type":"3","zhs":"开车；驾驶","zh":"哥哥每天开车去公司。","sent":"兄は毎日車を運転して会社へ行きます","obj":"毎日車を"},{"num":12,"word":"予約します","dict":"する","kana":"よやくします","type":"3","zhs":"预约；预订","zh":"预约了餐厅。","sent":"レストランを予約しました","obj":"レストランを"}]},{"lesson":19,"verbs":[{"num":1,"word":"上がります","dict":"上がる","kana":"あがります","type":"1","zhs":"上；登；升起","zh":"坐电梯上5楼。","sent":"エレベーターで5階に上がります","obj":"上が"},{"num":2,"word":"［山に］登ります","dict":"登る","kana":"［やまに］のぼります","type":"1","zhs":"登（山）","zh":"","sent":"","obj":""},{"num":3,"word":"［に］泊まります","dict":"泊まる","kana":"［に］とまります","type":"1","zhs":"住（旅馆）；投宿","zh":"","sent":"","obj":""},{"num":4,"word":"掃除します","dict":"する","kana":"そうじします","type":"3","zhs":"打扫","zh":"每周末打扫房间。","sent":"毎週末、部屋を掃除します","obj":"部屋を"},{"num":5,"word":"洗濯します","dict":"する","kana":"せんたくします","type":"3","zhs":"洗（衣服）","zh":"","sent":"","obj":""},{"num":6,"word":"練習します","dict":"する","kana":"れんしゅうします","type":"3","zhs":"练习","zh":"每天练30分钟钢琴。","sent":"ピアノを毎日30分練習します","obj":"ピアノを"},{"num":7,"word":"なります","dict":"なる","kana":"なります","type":"1","zhs":"变成；成为","zh":"渐渐变热了。","sent":"だんだん暑くなりました","obj":""}]},{"lesson":20,"verbs":[{"num":3,"word":"［パスポートが］要ります","dict":"要る","kana":"［パスポートが］いります","type":"1","zhs":"需要；必要","zh":"去日本需要签证吗？","sent":"日本へ行くにはビザが要りますか","obj":"ビザが"},{"num":4,"word":"調べます","dict":"調べる","kana":"しらべます","type":"2","zhs":"查；调查","zh":"我用电脑查一下。","sent":"ちょっとパソコンで調べてみます","obj":"パソコンで"},{"num":5,"word":"修理します","dict":"する","kana":"しゅうりします","type":"3","zhs":"修理","zh":"修理坏了的表。","sent":"壊れた時計を修理します","obj":"壊れた時計を"}]},{"lesson":21,"verbs":[{"num":2,"word":"留学します","dict":"する","kana":"りゅうがくします","type":"3","zhs":"留学","zh":"明年想去日本留学。","sent":"来年、日本へ留学したいです","obj":"留学したいで"},{"num":10,"word":"放送します","dict":"する","kana":"ほうそうします","type":"3","zhs":"广播；播放","zh":"那条新闻在电视上播出了。","sent":"そのニュースはテレビで放送されました","obj":"テレビで"},{"num":14,"word":"［会社を］やめます","dict":"辞める","kana":"［かいしゃを］やめます","type":"2","zhs":"辞职；辞掉","zh":"下个月辞职去留学。","sent":"来月、会社をやめて留学します","obj":"会社を"},{"num":16,"word":"思います","dict":"思う","kana":"おもいます","type":"1","zhs":"想；认为","zh":"我也这么想。","sent":"わたしもそう思います","obj":""},{"num":17,"word":"言います","dict":"言う","kana":"いいます","type":"1","zhs":"说；讲","zh":"老师说“别忘了写作业”。","sent":"先生は「宿題を忘れないで」と言いました","obj":"「宿題を"},{"num":18,"word":"勝ちます","dict":"勝つ","kana":"かちます","type":"1","zhs":"胜利；赢","zh":"我们队赢了。","sent":"わたしたちのチームが勝ちました","obj":"チームが"},{"num":19,"word":"負けます","dict":"負ける","kana":"まけます","type":"2","zhs":"输；失败","zh":"比赛输了。","sent":"試合で負けてしまいました","obj":"試合で"},{"num":20,"word":"［お祭りが］あります","dict":"［お祭りが］ある","kana":"［おまつりが］あります","type":"1","zhs":"举办（节日等）","zh":"","sent":"","obj":""},{"num":21,"word":"役に立ちます","dict":"役に立つ","kana":"やくにたちます","type":"1","zhs":"有用；起作用","zh":"这本书非常有用。","sent":"この本はとても役に立ちます","obj":"ても役に"},{"num":42,"word":"［車が］動きます","dict":"動く","kana":"［くるまが］うごきます","type":"1","zhs":"（车）开动；运转","zh":"","sent":"","obj":""},{"num":43,"word":"気をつけます","dict":"気をつける","kana":"きをつけます","type":"2","zhs":"小心；注意","zh":"走路时请注意车辆。","sent":"道を歩くとき、車に気をつけてください","obj":"気を"}]},{"lesson":22,"verbs":[{"num":2,"word":"［ネクタイを］します","dict":"する","kana":"","type":"3","zhs":"系（领带）","zh":"","sent":"","obj":""},{"num":10,"word":"［シャツを］着ます","dict":"着る","kana":"［シャツを］きます","type":"2","zhs":"穿（上衣）","zh":"","sent":"","obj":""},{"num":11,"word":"［靴を］履きます","dict":"履く","kana":"［くつを］はきます","type":"1","zhs":"穿（鞋、裤子）","zh":"","sent":"","obj":""},{"num":12,"word":"［帽子を］かぶります","dict":"被る","kana":"［ぼうしを］かぶります","type":"1","zhs":"戴（帽子）","zh":"","sent":"","obj":""},{"num":13,"word":"［眼鏡を］かけます","dict":"掛ける","kana":"［めがねを］かけます","type":"2","zhs":"戴（眼镜）","zh":"","sent":"","obj":""},{"num":14,"word":"生まれます","dict":"生まれる","kana":"うまれます","type":"2","zhs":"出生","zh":"我出生在东京。","sent":"わたしは東京で生まれました","obj":"東京で"}]},{"lesson":23,"verbs":[{"num":12,"word":"［右へ］曲がります","dict":"曲がる","kana":"［みぎへ］まがります","type":"1","zhs":"拐（弯）；转","zh":"","sent":"","obj":""},{"num":14,"word":"［先生に］聞きます","dict":"聞く","kana":"［せんせいに］ききます","type":"1","zhs":"问；打听","zh":"不懂的时候请问老师。","sent":"わからないとき、先生に聞いてください","obj":"先生に"},{"num":15,"word":"回します","dict":"回す","kana":"まわします","type":"1","zhs":"转；转动","zh":"请把门把手向右转。","sent":"ドアの取っ手を右に回してください","obj":"取っ手を"},{"num":16,"word":"引きます","dict":"引く","kana":"ひきます","type":"1","zhs":"拉；拽","zh":"拉一下把手，热水就出来。","sent":"レバーを引くと、お湯が出ます","obj":"レバーを"},{"num":17,"word":"変えます","dict":"変える","kana":"かえます","type":"2","zhs":"改变；更换","zh":"必须改变计划。","sent":"予定を変えなければなりません","obj":"予定を"},{"num":18,"word":"［に］触ります","dict":"触る","kana":"［に］さわります","type":"1","zhs":"摸；碰","zh":"请不要碰那台机器。","sent":"その機械に触らないでください","obj":"触らないで"},{"num":19,"word":"［ジュースが］出ます","dict":"出る","kana":"［ジュースが］でます","type":"2","zhs":"（饮料等）出；出来","zh":"","sent":"","obj":""},{"num":20,"word":"［道を］歩きます","dict":"歩く","kana":"［みちを］あるきます","type":"1","zhs":"走；步行","zh":"每天从家走到车站。","sent":"毎日、家から駅まで歩きます","obj":"家から駅まで"},{"num":21,"word":"［橋を］渡ります","dict":"渡る","kana":"［はしを］わたります","type":"1","zhs":"过（桥、马路）","zh":"","sent":"","obj":""}]},{"lesson":24,"verbs":[{"num":1,"word":"くれます","dict":"呉れる","kana":"くれます","type":"2","zhs":"给（我/我方）","zh":"","sent":"","obj":""},{"num":2,"word":"連れて行きます","dict":"連れて行く","kana":"つれていきます","type":"1","zhs":"带（人）去","zh":"","sent":"","obj":""},{"num":3,"word":"連れて来ます","dict":"連れて来る","kana":"つれてきます","type":"3","zhs":"带（人）来","zh":"","sent":"","obj":""},{"num":4,"word":"［人を］送ります","dict":"送る","kana":"［ひとを］おくります","type":"1","zhs":"送（人）；送行","zh":"","sent":"","obj":""},{"num":5,"word":"紹介します","dict":"する","kana":"しょうかいします","type":"3","zhs":"介绍","zh":"把朋友介绍到了我公司。","sent":"友達をわたしの会社に紹介しました","obj":"友達を"},{"num":6,"word":"案内します","dict":"する","kana":"あんないします","type":"3","zhs":"向导；带路","zh":"明天我带你逛逛东京吧。","sent":"明日、東京の町を案内しましょう","obj":"町を"},{"num":7,"word":"説明します","dict":"する","kana":"せつめいします","type":"3","zhs":"说明；解释","zh":"请再说明一遍用法。","sent":"もう一度、使い方を説明してください","obj":"使い方を"},{"num":19,"word":"［自転車を］直します","dict":"直す","kana":"［じてんしゃを］なおします","type":"1","zhs":"修理（自行车等）","zh":"","sent":"","obj":""},{"num":20,"word":"［答えを］直します","dict":"直す","kana":"［こたえを］なおします","type":"1","zhs":"订正；修改（答案）","zh":"","sent":"","obj":""},{"num":21,"word":"引っ越しします","dict":"する","kana":"ひっこしします","type":"3","zhs":"搬家","zh":"下个月搬去横滨。","sent":"来月、横浜へ引っ越しします","obj":"横浜へ"}]},{"lesson":25,"verbs":[{"num":2,"word":"考えます","dict":"考える","kana":"かんがえます","type":"2","zhs":"思考；考虑","zh":"请让我考虑一下。","sent":"ちょっと考えさせてください","obj":"ちょっと"},{"num":3,"word":"［駅に］着きます","dict":"着く","kana":"［えきに］つきます","type":"1","zhs":"到达（车站等）","zh":"","sent":"","obj":""},{"num":4,"word":"［年を］取ります","dict":"取る","kana":"［としを］とります","type":"1","zhs":"上年纪；年老","zh":"上了年纪也想精神地生活。","sent":"年を取っても、元気に過ごしたいです","obj":"過ごしたいで"},{"num":15,"word":"頑張ります","dict":"頑張る","kana":"がんばります","type":"1","zhs":"努力；加油","zh":"今后也会努力学日语。","sent":"これからも日本語の勉強を頑張ります","obj":"勉強を"},{"num":18,"word":"足ります","dict":"足りる","kana":"たります","type":"2","zhs":"足够；够","zh":"钱不够，没买成。","sent":"お金が足りなくて、買えませんでした","obj":"買えませんで"}]}],"2":[{"lesson":26,"verbs":[{"num":1,"word":"見ます","dict":"見る","kana":"みます","type":"2","zhs":"看；诊（病）","zh":"周日我在镇上的医院看了病。","sent":"日曜日に町の病院で診てもらいました","obj":"病院で"},{"num":2,"word":"探します","dict":"探す","kana":"さがします","type":"1","zhs":"寻找","zh":"我找了钱包，但哪儿都没有。","sent":"財布を探しましたが、どこにもありませんでした","obj":"財布を"},{"num":3,"word":"遅れます","dict":"遅れる","kana":"おくれます","type":"2","zhs":"迟到、赶不上","zh":"因为公交车没来，我上班迟到了。","sent":"バスが来なかったので、会社に遅れました","obj":"会社に"},{"num":4,"word":"間に合います","dict":"間に合う","kana":"まにあいます","type":"1","zhs":"赶上、来得及","zh":"快点的话能赶上九点的电车。","sent":"急げば九時の電車に間に合います","obj":"電車に"},{"num":5,"word":"やります","dict":"やる","kana":"やります","type":"1","zhs":"做（口语）","zh":"今天的打扫我来做。","sent":"今日の掃除はわたしがやります","obj":"わたしが"},{"num":6,"word":"拾います","dict":"拾う","kana":"ひろいます","type":"1","zhs":"捡","zh":"我在路上捡到了一个钱包。","sent":"道で財布を拾いました","obj":"財布を"},{"num":7,"word":"連絡します","dict":"する","kana":"れんらくします","type":"3","zhs":"联系","zh":"有什么事我马上联系您。","sent":"何かあったらすぐ連絡します","obj":""},{"num":8,"word":"参加します","dict":"する","kana":"さんかします","type":"3","zhs":"参加","zh":"我参加周末的聚会。","sent":"週末のパーティーに参加します","obj":"パーティーに"},{"num":9,"word":"申し込みます","dict":"申し込む","kana":"もうしこみます","type":"1","zhs":"申请、报名","zh":"我报名了暑期日语班。","sent":"夏の日本語コースを申し込みました","obj":"日本語コースを"},{"num":10,"word":"片付きます","dict":"片付く","kana":"かたづきます","type":"1","zhs":"收拾好、整理好","zh":"房间终于收拾好了。","sent":"やっと部屋が片付きました","obj":"部屋が"},{"num":11,"word":"出します","dict":"出す","kana":"だします","type":"1","zhs":"拿出；倒（垃圾）","zh":"可燃垃圾请在周一和周四早上拿出来。","sent":"燃えるごみは月曜日と木曜日の朝に出してください","obj":""},{"num":12,"word":"燃えます","dict":"燃える","kana":"もえます","type":"2","zhs":"燃烧","zh":"这种木头很耐烧。","sent":"この木はよく燃えます","obj":""}]},{"lesson":27,"verbs":[{"num":1,"word":"飼います","dict":"飼う","kana":"かいます","type":"1","zhs":"养（宠物）","zh":"公寓里可以养猫。","sent":"アパートで猫を飼ってもいいです","obj":"猫を"},{"num":2,"word":"建てます","dict":"建てます","kana":"たてます","type":"1","zhs":"建造","zh":"车站前正在盖新大楼。","sent":"駅の前に新しいビルを建てています","obj":"新しいビルを"},{"num":3,"word":"走ります","dict":"走る","kana":"はしります","type":"1","zhs":"跑；行驶","zh":"每天早上我在公园跑步。","sent":"毎朝公園を走ります","obj":"毎朝公園を"},{"num":4,"word":"取ります","dict":"取る","kana":"とります","type":"1","zhs":"拿；取得","zh":"下个月我请三天假。","sent":"来月三日間休みを取ります","obj":"来月三日間休みを"},{"num":5,"word":"見えます","dict":"見える","kana":"みえます","type":"2","zhs":"看得见","zh":"从这里能看见富士山。","sent":"ここから富士山が見えます","obj":"ここから富士山が"},{"num":6,"word":"聞こえます","dict":"聞こえる","kana":"きこえます","type":"2","zhs":"听得见","zh":"能听见隔壁房间的声音。","sent":"隣の部屋の声が聞こえます","obj":"声が"},{"num":7,"word":"できます","dict":"できる","kana":"できます","type":"2","zhs":"会；做好；建成","zh":"我会做一点菜。","sent":"わたしは料理が少しできます","obj":"少しで"},{"num":8,"word":"開きます","dict":"開く","kana":"ひらきます","type":"1","zhs":"开；举办","zh":"周末开办烹饪班。","sent":"週末に料理の教室を開きます","obj":"教室を"},{"num":9,"word":"付けます","dict":"付ける","kana":"つけます","type":"2","zhs":"安上、附上","zh":"这个包带很多口袋。","sent":"この鞄にはポケットがたくさん付いています","obj":"ポケットが"},{"num":10,"word":"飛びます","dict":"飛ぶ","kana":"とびます","type":"1","zhs":"飞","zh":"鸟儿在天上飞。","sent":"鳥が空を飛んでいます","obj":"空を"}]},{"lesson":28,"verbs":[{"num":1,"word":"売れます","dict":"売れます","kana":"うれます","type":"1","zhs":"畅销、好卖","zh":"这部小说非常畅销。","sent":"この小説はとてもよく売れています","obj":""},{"num":2,"word":"踊ります","dict":"踊る","kana":"おどります","type":"1","zhs":"跳舞","zh":"夏日祭上我和大家一起跳了舞。","sent":"夏祭りでみんなと踊りました","obj":"みんなと"},{"num":3,"word":"かみます","dict":"かむ","kana":"かみます","type":"1","zhs":"嚼","zh":"请把食物嚼碎。","sent":"食べ物をよくかんでください","obj":"食べ物を"},{"num":4,"word":"選びます","dict":"選ぶ","kana":"えらびます","type":"1","zhs":"选择","zh":"看了价格再挑商品。","sent":"値段を見て品物を選びます","obj":"見て品物を"},{"num":5,"word":"違います","dict":"違う","kana":"ちがいます","type":"1","zhs":"不同、不对","zh":"她的电话号码和我的不一样。","sent":"彼女の電話番号はわたしのと違います","obj":""},{"num":6,"word":"通います","dict":"通う","kana":"かよいます","type":"1","zhs":"往返（上学、上班）","zh":"我坐电车往返大学。","sent":"大学まで電車で通っています","obj":"電車で"},{"num":7,"word":"メモします","dict":"する","kana":"メモします","type":"3","zhs":"记笔记","zh":"我把老师的话记下来了。","sent":"先生の話をメモしました","obj":"話を"},{"num":8,"word":"おしゃべりします","dict":"する","kana":"おしゃべりします","type":"3","zhs":"闲聊","zh":"我和朋友打电话闲聊。","sent":"友達と電話でおしゃべりします","obj":"電話で"}]},{"lesson":29,"verbs":[{"num":1,"word":"開きます","dict":"開きる","kana":"あきます","type":"2","zhs":"开（自动）","zh":"门自动开。","sent":"ドアが自動で開きます","obj":"自動で"},{"num":2,"word":"閉まります","dict":"閉まる","kana":"しまります","type":"1","zhs":"关（自动）","zh":"一到九点大门就关。","sent":"九時になると門が閉まります","obj":"門が"},{"num":3,"word":"つきます","dict":"つく","kana":"つきます","type":"1","zhs":"（灯）亮","zh":"到晚上玄关的灯就亮。","sent":"夜になると玄関の灯りがつきます","obj":"灯りが"},{"num":4,"word":"消えます","dict":"消える","kana":"きえます","type":"2","zhs":"（灯）熄灭","zh":"灯灭了。","sent":"電気が消えました","obj":"電気が"},{"num":5,"word":"込みます","dict":"込む","kana":"こみます","type":"1","zhs":"拥挤","zh":"早晨的电车很挤。","sent":"朝の電車はとても込みます","obj":""},{"num":6,"word":"すきます","dict":"すく","kana":"すきます","type":"1","zhs":"变得空旷","zh":"一到傍晚路就空了。","sent":"夕方になると道がすきます","obj":"道が"},{"num":7,"word":"壊れます","dict":"壊れる","kana":"こわれます","type":"2","zhs":"坏了、碎了","zh":"椅子弄坏了。","sent":"椅子が壊れてしまいました","obj":"椅子が"},{"num":8,"word":"割れます","dict":"割れる","kana":"われます","type":"2","zhs":"破碎","zh":"杯子在地上摔碎了。","sent":"コップが地面で割れました","obj":"地面で"},{"num":9,"word":"折れます","dict":"折れる","kana":"おれます","type":"2","zhs":"折断","zh":"风把树枝吹断了。","sent":"風で木の枝が折れました","obj":"枝が"},{"num":10,"word":"破れます","dict":"破れる","kana":"やぶれます","type":"2","zhs":"破了、撕破","zh":"纸撕破了。","sent":"紙が破れてしまいました","obj":"紙が"},{"num":11,"word":"汚れます","dict":"汚れる","kana":"よごれます","type":"2","zhs":"弄脏","zh":"衣服弄脏了。","sent":"服が汚れてしまいました","obj":"服が"},{"num":12,"word":"付きます","dict":"付く","kana":"つきます","type":"1","zhs":"附上、带有","zh":"这个闹钟带闹铃功能。","sent":"この時計には目覚まし機能が付いています","obj":"目覚まし機能が"},{"num":13,"word":"外れます","dict":"外れる","kana":"はずれます","type":"2","zhs":"脱落、解开","zh":"扣子掉了。","sent":"ボタンが外れてしまいました","obj":"ボタンが"},{"num":14,"word":"止まります","dict":"止まる","kana":"とまります","type":"1","zhs":"停","zh":"地震导致电梯停了。","sent":"地震でエレベーターが止まりました","obj":"エレベーターが"},{"num":15,"word":"間違えます","dict":"間違える","kana":"まちがえます","type":"2","zhs":"搞错","zh":"我把站务员的名字搞错了。","sent":"駅員の名前を間違えました","obj":"名前を"},{"num":16,"word":"落とします","dict":"落とす","kana":"おとします","type":"1","zhs":"掉落、遗失","zh":"我把钱包掉在路上了。","sent":"財布を道に落としてしまいました","obj":"財布を"},{"num":17,"word":"かかります","dict":"かかる","kana":"かかります","type":"1","zhs":"锁着","zh":"这扇门锁着。","sent":"この扉は鍵がかかっています","obj":"鍵が"},{"num":18,"word":"倒れます","dict":"倒れる","kana":"たおれます","type":"2","zhs":"倒下","zh":"地震把墙震倒了。","sent":"地震で壁が倒れました","obj":"壁が"},{"num":19,"word":"指します","dict":"指す","kana":"さします","type":"1","zhs":"（指针）指","zh":"钟表的指针指着四点。","sent":"時計の針は四時を指しています","obj":""}]},{"lesson":30,"verbs":[{"num":1,"word":"はります","dict":"はる","kana":"はります","type":"1","zhs":"贴、粘","zh":"我在派出所贴街区地图。","sent":"交番に町の地図をはります","obj":"地図を"},{"num":2,"word":"掛けます","dict":"掛ける","kana":"かけます","type":"2","zhs":"挂","zh":"我把镜子挂在墙上。","sent":"壁に鏡を掛けます","obj":"鏡を"},{"num":3,"word":"飾ります","dict":"飾る","kana":"かざります","type":"1","zhs":"装饰","zh":"我在玄关摆花。","sent":"玄関に花を飾ります","obj":"花を"},{"num":4,"word":"並べます","dict":"並べる","kana":"ならべます","type":"2","zhs":"排列、摆放","zh":"我把书摆到书架上。","sent":"本棚に本を並べます","obj":"本を"},{"num":5,"word":"植えます","dict":"植える","kana":"うえます","type":"2","zhs":"种植","zh":"我在院子里种树。","sent":"庭に木を植えます","obj":"木を"},{"num":6,"word":"戻します","dict":"戻す","kana":"もどします","type":"1","zhs":"放回","zh":"我把剪刀放回原处。","sent":"はさみを元の所に戻します","obj":"さみを"},{"num":7,"word":"まとめます","dict":"まとめる","kana":"まとめます","type":"2","zhs":"归纳、汇总","zh":"我把会议意见汇总一下。","sent":"ミーティングの意見をまとめます","obj":"意見を"},{"num":8,"word":"片付けます","dict":"片付ける","kana":"かたづけます","type":"2","zhs":"收拾","zh":"用完后请把房间收拾好。","sent":"使った後、部屋を片付けてください","obj":"部屋を"},{"num":9,"word":"しまいます","dict":"しまう","kana":"しまいます","type":"1","zhs":"收起来","zh":"我把工具收进抽屉。","sent":"道具を引き出しにしまいます","obj":"道具を"},{"num":10,"word":"決めます","dict":"決める","kana":"きめます","type":"2","zhs":"决定","zh":"我定了旅行的日期。","sent":"旅行の日にちを決めました","obj":"ちを"},{"num":11,"word":"知らせます","dict":"知らせる","kana":"しらせます","type":"2","zhs":"通知","zh":"我通知老师我请假。","sent":"先生に休むことを知らせます","obj":"休むこと"},{"num":12,"word":"相談します","dict":"する","kana":"そうだんします","type":"3","zhs":"商量","zh":"别一个人决定，我们商量吧。","sent":"一人で決めないで、相談しましょう","obj":"決めないで"},{"num":13,"word":"予習します","dict":"する","kana":"よしゅうします","type":"3","zhs":"预习","zh":"上课前我预习。","sent":"授業の前に予習します","obj":"前に"},{"num":14,"word":"復習します","dict":"する","kana":"ふくしゅうします","type":"3","zhs":"复习","zh":"当天我就复习。","sent":"その日のうちに復習します","obj":"うちに"},{"num":15,"word":"そのままにします","dict":"する","kana":"そのままにします","type":"3","zhs":"保持原样","zh":"文件请就那样放着。","sent":"書類はそのままにしておいてください","obj":""},{"num":16,"word":"生活します","dict":"する","kana":"せいかつします","type":"3","zhs":"生活","zh":"有应急包的话能生活三天左右。","sent":"非常袋があれば三日ぐらい生活できます","obj":"ば三日ぐらい生活で"},{"num":17,"word":"目が覚めます","dict":"目が覚める","kana":"めがさめます","type":"2","zhs":"醒来","zh":"早上六点我就醒。","sent":"朝六時に目が覚めます","obj":"目が"}]},{"lesson":31,"verbs":[{"num":1,"word":"始まります","dict":"始まる","kana":"はじまります","type":"1","zhs":"开始","zh":"九点开始上课。","sent":"九時に授業が始まります","obj":"授業が"},{"num":2,"word":"続けます","dict":"続ける","kana":"つづけます","type":"2","zhs":"继续","zh":"我继续学日语。","sent":"日本語の勉強を続けます","obj":"勉強を"},{"num":3,"word":"見つけます","dict":"見つける","kana":"みつけます","type":"2","zhs":"找到","zh":"我在网上找到了便宜的酒店。","sent":"インターネットで安いホテルを見つけました","obj":"安いホテルを"},{"num":4,"word":"受けます","dict":"受ける","kana":"うけます","type":"2","zhs":"接受、参加（考试）","zh":"下个月我参加日语考试。","sent":"来月日本語の試験を受けます","obj":"試験を"},{"num":5,"word":"入学します","dict":"する","kana":"にゅうがくします","type":"3","zhs":"入学","zh":"四月我进研究生院。","sent":"四月に大学院に入学します","obj":"大学院に"},{"num":6,"word":"卒業します","dict":"する","kana":"そつぎょうします","type":"3","zhs":"毕业","zh":"明年我大学毕业。","sent":"来年大学を卒業します","obj":"来年大学を"},{"num":7,"word":"出席します","dict":"する","kana":"しゅっせきします","type":"3","zhs":"出席","zh":"我出席会议。","sent":"会議に出席します","obj":"会議に"},{"num":8,"word":"休憩します","dict":"する","kana":"きゅうけいします","type":"3","zhs":"休息","zh":"三点我们休息十分钟吧。","sent":"三時に十分休憩しましょう","obj":""},{"num":9,"word":"残ります","dict":"残る","kana":"のこります","type":"1","zhs":"留下、剩余","zh":"今天我因开会留下。","sent":"今日は会議で残ります","obj":"会議で"},{"num":10,"word":"閉じます","dict":"閉じる","kana":"とじます","type":"2","zhs":"关闭","zh":"九点关门。","sent":"九時に店を閉じます","obj":"店を"},{"num":11,"word":"集まります","dict":"集まる","kana":"あつまります","type":"1","zhs":"聚集","zh":"周末朋友聚到我家。","sent":"週末に友達がうちに集まります","obj":"うちに"},{"num":12,"word":"気がつきます","dict":"気がつく","kana":"きがつきます","type":"1","zhs":"注意到、发觉","zh":"开出车后我才发现忘带钥匙。","sent":"車を出してから鍵を忘れたと気がつきました","obj":"出してから鍵を"}]},{"lesson":32,"verbs":[{"num":1,"word":"運動します","dict":"する","kana":"うんどうします","type":"3","zhs":"运动","zh":"为了健康我每天运动。","sent":"健康のために毎日運動します","obj":""},{"num":2,"word":"成功します","dict":"する","kana":"せいこうします","type":"3","zhs":"成功","zh":"练习的话一定能成功。","sent":"練習すればきっと成功します","obj":"練習すればきっと"},{"num":3,"word":"失敗します","dict":"する","kana":"しっぱいします","type":"3","zhs":"失败","zh":"实验失败了。","sent":"実験に失敗しました","obj":"実験に"},{"num":4,"word":"合格します","dict":"する","kana":"ごうかくします","type":"3","zhs":"合格、考上","zh":"考试合格我很高兴。","sent":"試験に合格してうれしいです","obj":"合格してうれしいで"},{"num":5,"word":"戻ります","dict":"戻る","kana":"もどります","type":"1","zhs":"返回","zh":"傍晚我回家。","sent":"夕方家に戻ります","obj":"夕方家に"},{"num":6,"word":"やみます","dict":"やむ","kana":"やみます","type":"1","zhs":"（雨）停","zh":"到下午雨停了。","sent":"午後になって雨がやみました","obj":"なって雨が"},{"num":7,"word":"晴れます","dict":"晴れる","kana":"はれます","type":"2","zhs":"放晴","zh":"明天会放晴吧。","sent":"明日は晴れるでしょう","obj":"晴れるで"},{"num":8,"word":"曇ります","dict":"曇る","kana":"くもります","type":"1","zhs":"阴天","zh":"傍晚起天变阴。","sent":"夕方から空が曇ります","obj":"夕方から空が"},{"num":9,"word":"吹きます","dict":"吹く","kana":"ふきます","type":"1","zhs":"刮（风）","zh":"北风刮得很猛。","sent":"北の風が強く吹いています","obj":"風が"},{"num":10,"word":"治ります","dict":"治る","kana":"なおります","type":"1","zhs":"痊愈、修好","zh":"吃了药病好了。","sent":"薬を飲んだら病気が治りました","obj":"薬を"},{"num":11,"word":"続きます","dict":"続く","kana":"つづきます","type":"1","zhs":"持续","zh":"发烧持续了三天。","sent":"熱が三日間続いています","obj":"熱が"},{"num":12,"word":"ひきます","dict":"ひく","kana":"ひきます","type":"1","zhs":"患（感冒）","zh":"天冷我感冒了。","sent":"寒い日にかぜをひきました","obj":"かぜを"},{"num":13,"word":"冷やします","dict":"冷やす","kana":"ひやします","type":"1","zhs":"冷却","zh":"烫伤的话请用水冷却。","sent":"やけどをしたら水で冷やしてください","obj":"やけどを"},{"num":14,"word":"無理をします","dict":"する","kana":"むりをします","type":"3","zhs":"硬撑、勉强","zh":"身体不好请别硬撑。","sent":"体が悪いのに無理をしないでください","obj":"無理を"},{"num":15,"word":"ゆっくりします","dict":"する","kana":"ゆっくりします","type":"3","zhs":"慢慢来、从容","zh":"周末我在家放松。","sent":"週末は家でゆっくりします","obj":"家で"},{"num":16,"word":"困ります","dict":"困る","kana":"こまります","type":"1","zhs":"为难","zh":"就算中彩票我也不会为难。","sent":"宝くじが当たっても困りません","obj":""},{"num":17,"word":"当たります","dict":"当たる","kana":"あたります","type":"1","zhs":"中（奖）","zh":"说不定彩票会中呢。","sent":"もしかしたら宝くじが当たるかもしれません","obj":""}]},{"lesson":33,"verbs":[{"num":1,"word":"逃げます","dict":"逃げる","kana":"にげます","type":"2","zhs":"逃跑","zh":"危险，请躲开。","sent":"危ないですから、逃げてください","obj":"すから"},{"num":2,"word":"騒ぎます","dict":"騒ぐ","kana":"さわぎます","type":"1","zhs":"吵闹、骚动","zh":"夜里请别吵闹。","sent":"夜遅く騒がないでください","obj":"ないで"},{"num":3,"word":"あきらめます","dict":"あきらめる","kana":"あきらめます","type":"2","zhs":"放弃","zh":"考试失败也请别放弃。","sent":"試験に失敗してもあきらめないでください","obj":"てもあきらめないで"},{"num":4,"word":"投げます","dict":"投げる","kana":"なげます","type":"2","zhs":"扔、投","zh":"我把球投给旁边的人。","sent":"ボールを隣の人に投げます","obj":"ボールを"},{"num":5,"word":"守ります","dict":"守る","kana":"まもります","type":"1","zhs":"遵守、保卫","zh":"必须遵守规则。","sent":"規則を守らなければなりません","obj":"規則を"},{"num":6,"word":"上げます","dict":"上げる","kana":"あげます","type":"2","zhs":"举起、抬起","zh":"我举手提问。","sent":"手を上げて質問します","obj":"手を"},{"num":7,"word":"下げます","dict":"下げる","kana":"さげます","type":"2","zhs":"放下、降下","zh":"我把行李放到地上。","sent":"荷物を床に下げます","obj":"荷物を"},{"num":8,"word":"伝えます","dict":"伝える","kana":"つたえます","type":"2","zhs":"传达","zh":"请代我向老师问好。","sent":"先生によろしく伝えてください","obj":"先生に"},{"num":9,"word":"注意します","dict":"する","kana":"ちゅういします","type":"3","zhs":"注意、提醒","zh":"请注意车辆过马路。","sent":"車に注意して道路を渡ってください","obj":"注意して道路を"},{"num":10,"word":"外します","dict":"外しる","kana":"はずします","type":"2","zhs":"离开（座位）","zh":"田中现在不在座位上。","sent":"田中さんは今席を外しています","obj":"今席を"},{"num":11,"word":"打ちます","dict":"打つ","kana":"うちます","type":"1","zhs":"打（电报、打字）","zh":"有急事我要发电报。","sent":"急用があるので電報を打ちます","obj":"電報を"},{"num":12,"word":"亡くなります","dict":"亡くなる","kana":"なくなります","type":"1","zhs":"去世","zh":"祖父去年去世了。","sent":"祖父は去年亡くなりました","obj":""},{"num":13,"word":"利用します","dict":"する","kana":"りようします","type":"3","zhs":"利用","zh":"我利用图书馆学习。","sent":"図書館を利用して勉強します","obj":"図書館を"}]},{"lesson":34,"verbs":[{"num":1,"word":"磨きます","dict":"磨く","kana":"みがきます","type":"1","zhs":"刷、磨","zh":"早上起床后刷牙。","sent":"朝起きたら歯を磨きます","obj":"朝起きたら歯を"},{"num":2,"word":"組み立てます","dict":"組み立てる","kana":"くみたてます","type":"2","zhs":"组装","zh":"我照说明书的图组装家具。","sent":"説明書の図のとおりに家具を組み立てます","obj":"家具を"},{"num":3,"word":"降ります","dict":"降りる","kana":"おります","type":"2","zhs":"下车","zh":"我在下一站下车。","sent":"次の駅で電車を降ります","obj":"電車を"},{"num":4,"word":"気がつきます","dict":"気がつく","kana":"きがつきます","type":"1","zhs":"注意到","zh":"下车时我才发觉忘带东西。","sent":"降りるときに忘れ物に気がつきました","obj":"気が"},{"num":5,"word":"つけます","dict":"つける","kana":"つけます","type":"2","zhs":"蘸、抹","zh":"饺子蘸酱油吃。","sent":"餃子にしょうゆをつけて食べます","obj":"しょうゆを"},{"num":6,"word":"見つかります","dict":"見つかる","kana":"みつかります","type":"1","zhs":"找到、被发现","zh":"丢的钥匙终于找到了。","sent":"なくしたかぎがやっと見つかりました","obj":"やっと"},{"num":7,"word":"します","dict":"する","kana":"します","type":"3","zhs":"戴（领带）","zh":"面试我系领带去。","sent":"面接にはネクタイをして行きます","obj":"ネクタイを"},{"num":8,"word":"質問します","dict":"する","kana":"しつもんします","type":"3","zhs":"提问","zh":"上课我举手提问。","sent":"授業中に手を上げて質問します","obj":"手を"},{"num":9,"word":"載せます","dict":"載せる","kana":"のせます","type":"2","zhs":"放在……上","zh":"我把食材盛到大碗上。","sent":"材料をどんぶりに載せます","obj":"材料を"},{"num":10,"word":"煮ます","dict":"煮ます","kana":"にます","type":"1","zhs":"煮、炖","zh":"我用锅煮鸡肉和洋葱。","sent":"なべで鶏肉とたまねぎを煮ます","obj":"たまねぎを"},{"num":11,"word":"煮えます","dict":"煮える","kana":"にえます","type":"2","zhs":"煮熟","zh":"肉煮熟就关火。","sent":"肉が煮えたら火を止めます","obj":"煮えたら火を"},{"num":36,"word":"お茶をたてます","dict":"お茶をたてる","kana":"おちゃをたてます","type":"2","zhs":"沏茶","zh":"我先沏茶。","sent":"先にお茶をたてます","obj":"お茶を"}]},{"lesson":35,"verbs":[{"num":1,"word":"咲きます","dict":"咲く","kana":"さきます","type":"1","zhs":"开（花）","zh":"一到春天樱花就开。","sent":"春になると桜が咲きます","obj":"桜が"},{"num":2,"word":"変わります","dict":"変わる","kana":"かわります","type":"1","zhs":"变化","zh":"附近的景色变了。","sent":"近所の景色が変わりました","obj":"景色が"},{"num":3,"word":"付けます","dict":"付ける","kana":"つけます","type":"2","zhs":"画（圈）","zh":"请在正确答案上画圈。","sent":"正しい答えに丸を付けてください","obj":"丸を"},{"num":4,"word":"かかります","dict":"かかる","kana":"かかります","type":"1","zhs":"接通（电话）","zh":"接待处来电话了。","sent":"受付に電話がかかりました","obj":"電話が"}]},{"lesson":36,"verbs":[{"num":1,"word":"届きます","dict":"届く","kana":"とどきます","type":"1","zhs":"送到、收到","zh":"包裹送到家了。","sent":"荷物が家に届きました","obj":"家に"},{"num":2,"word":"出ます","dict":"出る","kana":"でます","type":"2","zhs":"参加（比赛）","zh":"我参加周日的比赛。","sent":"日曜日の試合に出ます","obj":"試合に"},{"num":3,"word":"打ちます","dict":"打つ","kana":"うちます","type":"1","zhs":"打字","zh":"我用电脑打报告。","sent":"パソコンでレポートを打ちます","obj":"レポートを"},{"num":4,"word":"貯金します","dict":"する","kana":"ちょきんします","type":"3","zhs":"存钱","zh":"我每月存一点钱。","sent":"毎月少しずつ貯金しています","obj":""},{"num":5,"word":"太ります","dict":"太る","kana":"ふとります","type":"1","zhs":"发胖","zh":"最近我胖了。","sent":"このごろ太りました","obj":""},{"num":6,"word":"やせます","dict":"やせる","kana":"やせます","type":"2","zhs":"变瘦、减肥","zh":"我想通过运动减肥。","sent":"運動してやせようと思っています","obj":"運動してやせようと"},{"num":7,"word":"過ぎます","dict":"過ぎる","kana":"すぎます","type":"2","zhs":"过（时间）","zh":"过了九点健身房就关门。","sent":"九時を過ぎたらジムが閉まります","obj":"過ぎたらジムが"},{"num":8,"word":"慣れます","dict":"慣れる","kana":"なれます","type":"2","zhs":"习惯","zh":"我终于习惯了日本的生活。","sent":"日本の生活にやっと慣れました","obj":"やっと"},{"num":9,"word":"チャレンジします","dict":"する","kana":"チャレンジします","type":"3","zhs":"挑战","zh":"今年我要挑战游泳。","sent":"今年は水泳にチャレンジします","obj":"水泳に"}]},{"lesson":37,"verbs":[{"num":1,"word":"褒めます","dict":"褒める","kana":"ほめます","type":"2","zhs":"夸奖","zh":"我被老师夸奖了作文。","sent":"先生に作文を褒められました","obj":"作文を"},{"num":2,"word":"しかります","dict":"しかる","kana":"しかります","type":"1","zhs":"批评","zh":"我净挨批评，没人夸我。","sent":"怒られてばかりで褒められません","obj":"怒られてばかりで"},{"num":3,"word":"誘います","dict":"誘う","kana":"さそいます","type":"1","zhs":"邀请","zh":"我被朋友约去约会。","sent":"友達にデートに誘われました","obj":"デートに"},{"num":4,"word":"起こします","dict":"起こす","kana":"おこします","type":"1","zhs":"叫醒","zh":"早上六点我被母亲叫醒。","sent":"朝六時に母に起こされました","obj":"母に"},{"num":5,"word":"招待します","dict":"する","kana":"しょうたいします","type":"3","zhs":"招待","zh":"我被邀请参加朋友的婚礼。","sent":"友達の結婚式に招待されました","obj":"結婚式に"},{"num":6,"word":"頼みます","dict":"頼む","kana":"たのみます","type":"1","zhs":"拜托","zh":"我被后辈拜托做事。","sent":"後輩に仕事を頼まれました","obj":"仕事を"},{"num":7,"word":"とります","dict":"とる","kana":"とります","type":"1","zhs":"偷","zh":"钱包被小偷偷走了。","sent":"泥棒に財布を取られました","obj":"財布を"},{"num":8,"word":"踏みます","dict":"踏む","kana":"ふみます","type":"1","zhs":"踩","zh":"在拥挤的电车上我被踩了脚。","sent":"満員電車で足を踏まれました","obj":"足を"},{"num":9,"word":"壊します","dict":"壊しる","kana":"こわします","type":"2","zhs":"弄坏","zh":"我把花瓶打碎了。","sent":"私は花瓶を壊してしまいました","obj":"花瓶を"},{"num":10,"word":"汚します","dict":"汚しる","kana":"よごします","type":"2","zhs":"弄脏","zh":"我把裤子弄脏了。","sent":"ズボンを汚してしまいました","obj":"ズボンを"},{"num":11,"word":"行います","dict":"行う","kana":"おこないます","type":"1","zhs":"举行、进行","zh":"镇上举行盛大的祭典。","sent":"町で大きな祭りが行われます","obj":"大きな祭りが"},{"num":12,"word":"輸出します","dict":"する","kana":"ゆしゅつします","type":"3","zhs":"出口","zh":"日本的车出口到海外。","sent":"日本の車は海外に輸出されます","obj":"海外に"},{"num":13,"word":"輸入します","dict":"する","kana":"ゆにゅうします","type":"3","zhs":"进口","zh":"这个国家进口石油。","sent":"この国は石油を輸入しています","obj":"石油を"},{"num":14,"word":"翻訳します","dict":"する","kana":"ほんやくします","type":"3","zhs":"翻译","zh":"这部小说被译成了中文。","sent":"この小説は中国語に翻訳されました","obj":"中国語に"},{"num":15,"word":"発明します","dict":"する","kana":"はつめいします","type":"3","zhs":"发明","zh":"飞机由莱特兄弟发明。","sent":"飛行機はライト兄弟によって発明されました","obj":"ライト兄弟に"},{"num":16,"word":"発見します","dict":"する","kana":"はっけんします","type":"3","zhs":"发现","zh":"发现了新品种的植物。","sent":"新しい種類の植物が発見されました","obj":"植物が"},{"num":17,"word":"設計します","dict":"する","kana":"せっけいします","type":"3","zhs":"设计","zh":"这栋楼由著名建筑师设计。","sent":"このビルは有名な建築家によって設計されました","obj":"有名な建築家に"},{"num":18,"word":"埋め立てます","dict":"埋め立てる","kana":"うめたてます","type":"2","zhs":"填海造地","zh":"海被填成了土地。","sent":"海が埋め立てられて土地になりました","obj":"め立てられて土地に"},{"num":19,"word":"眠ります","dict":"眠る","kana":"ねむります","type":"1","zhs":"睡觉","zh":"夜里十二点之前不睡。","sent":"夜十二時まで眠りません","obj":"夜十二時まで"},{"num":20,"word":"彫ります","dict":"彫る","kana":"ほります","type":"1","zhs":"雕刻","zh":"用木头雕刻着猫的摆件。","sent":"木で猫の置物が彫られています","obj":"置物が"}]},{"lesson":38,"verbs":[{"num":1,"word":"育てます","dict":"育てる","kana":"そだてます","type":"2","zhs":"养育、培育","zh":"我在海岸边养育宝宝。","sent":"海岸近くで赤ちゃんを育てています","obj":"赤ちゃんを"},{"num":2,"word":"入院します","dict":"する","kana":"にゅういんします","type":"3","zhs":"住院","zh":"父亲因胃病住院了。","sent":"父は胃の病気で入院しました","obj":"病気で"},{"num":3,"word":"退院します","dict":"する","kana":"たいいんします","type":"3","zhs":"出院","zh":"下周终于能出院。","sent":"来週やっと退院できます","obj":"退院で"},{"num":4,"word":"入れます","dict":"入れる","kana":"いれます","type":"2","zhs":"打开（电源）","zh":"我打开电脑电源。","sent":"パソコンの電源を入れます","obj":"電源を"},{"num":5,"word":"切ります","dict":"切る","kana":"きります","type":"1","zhs":"关闭（电源）","zh":"用完后请关电源。","sent":"使った後は電源を切ってください","obj":"電源を"},{"num":6,"word":"整理します","dict":"する","kana":"せいりします","type":"3","zhs":"整理","zh":"我把研究室的文件整理整齐。","sent":"研究室の書類をきちんと整理します","obj":"書類を"},{"num":7,"word":"押します","dict":"押す","kana":"おします","type":"1","zhs":"按（印章）","zh":"我在申请表上盖章。","sent":"申込用紙にはんこを押します","obj":"んこを"},{"num":8,"word":"けんかします","dict":"する","kana":"けんかします","type":"3","zhs":"吵架","zh":"双胞胎常吵架。","sent":"双子はよくけんかします","obj":""},{"num":9,"word":"世話をします","dict":"する","kana":"せわをします","type":"3","zhs":"照顾","zh":"我照顾住院的母亲。","sent":"入院中の母の世話をします","obj":"世話を"},{"num":10,"word":"時間がたちます","dict":"時間がたつ","kana":"じかんがたちます","type":"1","zhs":"时间流逝","zh":"时间过得真快。","sent":"時間がたつのは早いです","obj":"早いで"},{"num":11,"word":"似ています","dict":"似ている","kana":"にています","type":"2","zhs":"相似","zh":"姐妹俩长得很像。","sent":"二人の姉妹はよく似ています","obj":""}]},{"lesson":39,"verbs":[{"num":1,"word":"答えます","dict":"答えます","kana":"こたえます","type":"1","zhs":"回答","zh":"回答老师的问题。","sent":"先生の質問に答えます","obj":"質問に"},{"num":2,"word":"びっくりします","dict":"する","kana":"びっくりします","type":"3","zhs":"吃惊，吓一跳","zh":"被巨大的声音吓了一跳。","sent":"大きな音にびっくりしました","obj":"大きな音に"},{"num":3,"word":"がっかりします","dict":"する","kana":"がっかりします","type":"3","zhs":"失望","zh":"比赛输了，很失望。","sent":"試合に負けてがっかりしました","obj":"負けてが"},{"num":4,"word":"安心します","dict":"する","kana":"あんしんします","type":"3","zhs":"放心，安心","zh":"请大家放心。","sent":"みんな安心してください","obj":""},{"num":5,"word":"死にます","dict":"死にる","kana":"しにます","type":"2","zhs":"死","zh":"上个月养的狗死了。","sent":"先月、飼っていた犬が死にました","obj":"死に"},{"num":6,"word":"倒れます","dict":"倒れる","kana":"たおれます","type":"2","zhs":"倒塌，倒下","zh":"地震中大楼倒塌了。","sent":"地震でビルが倒れました","obj":"ビルが"},{"num":7,"word":"通ります","dict":"通る","kana":"とおります","type":"1","zhs":"经过，通过","zh":"经过前面的十字路口。","sent":"前の交差点を通ります","obj":"交差点を"},{"num":8,"word":"焼けます","dict":"焼ける","kana":"やけます","type":"2","zhs":"烤好，烧好","zh":"面包烤得很好。","sent":"パンがきれいに焼けました","obj":"きれいに"},{"num":9,"word":"喧嘩します","dict":"する","kana":"けんかします","type":"3","zhs":"吵架","zh":"和朋友吵架了。","sent":"友達とけんかしました","obj":"友達と"},{"num":10,"word":"遅刻します","dict":"する","kana":"ちこくします","type":"3","zhs":"迟到","zh":"电车晚点，上班迟到了。","sent":"電車が遅れて会社に遅刻しました","obj":"遅れて会社に"},{"num":11,"word":"早退します","dict":"する","kana":"そうたいします","type":"3","zhs":"早退","zh":"因为头疼，下午早退。","sent":"頭が痛いので午後早退します","obj":"頭が"},{"num":12,"word":"離婚します","dict":"する","kana":"りこんします","type":"3","zhs":"离婚","zh":"去年离婚了。","sent":"去年離婚しました","obj":""},{"num":23,"word":"ぶつかります","dict":"ぶつかる","kana":"ぶつかります","type":"1","zhs":"撞上，碰上","zh":"车撞到了墙上。","sent":"車が壁にぶつかりました","obj":"壁に"},{"num":24,"word":"並びます","dict":"並ぶ","kana":"ならびます","type":"1","zhs":"排（队）","zh":"在便利店前面排队。","sent":"コンビニの前で並びます","obj":"前で"},{"num":25,"word":"西洋化します","dict":"する","kana":"せいようかします","type":"3","zhs":"西化","zh":"饮食西化了。","sent":"食事が西洋化しました","obj":"食事が"},{"num":26,"word":"伺います","dict":"伺う","kana":"うかがいます","type":"1","zhs":"拜访，请教（谦让语）","zh":"去老师府上拜访。","sent":"先生のお宅へ伺います","obj":"お宅へ"}]},{"lesson":40,"verbs":[{"num":1,"word":"合います","dict":"合う","kana":"あいます","type":"1","zhs":"（尺寸）合适","zh":"这条裤子不合我的尺寸。","sent":"このズボンはわたしのサイズに合いません","obj":"サイズに"},{"num":2,"word":"酔います","dict":"酔う","kana":"よいます","type":"1","zhs":"醉","zh":"喝醉了。","sent":"お酒に酔いました","obj":"お酒に"},{"num":3,"word":"測ります","dict":"測る","kana":"はかります","type":"1","zhs":"量，测","zh":"量行李的重量。","sent":"荷物の重さをはかります","obj":"重さを"},{"num":4,"word":"数えます","dict":"数えます","kana":"かぞえます","type":"1","zhs":"数","zh":"数找的零钱。","sent":"お釣りを数えます","obj":"お釣りを"},{"num":5,"word":"確かめます","dict":"確かめる","kana":"たしかめます","type":"2","zhs":"确认，查清","zh":"确认出发时间。","sent":"出発の時間を確かめます","obj":"時間を"},{"num":6,"word":"出発します","dict":"する","kana":"しゅっぱつします","type":"3","zhs":"出发","zh":"巴士九点出发。","sent":"バスが九時に出発します","obj":"バスが"},{"num":7,"word":"到着します","dict":"する","kana":"とうちゃくします","type":"3","zhs":"到达","zh":"电车五点到达车站。","sent":"電車は五時に駅に到着します","obj":"駅に"},{"num":29,"word":"手に入れます","dict":"手に入れる","kana":"てにいれます","type":"2","zhs":"弄到手，获得","zh":"弄到了珍贵的邮票。","sent":"珍しい切手を手に入れました","obj":"珍しい切手を"},{"num":30,"word":"動かします","dict":"動かす","kana":"うごかします","type":"1","zhs":"移动，开动","zh":"移动桌子。","sent":"机を動かします","obj":"机を"},{"num":31,"word":"噂します","dict":"する","kana":"うわさします","type":"3","zhs":"谈论，谣传","zh":"谈论老师的事。","sent":"先生のことを噂します","obj":"こと"},{"num":32,"word":"積みます","dict":"積む","kana":"つみます","type":"1","zhs":"装，堆","zh":"把行李装上车。","sent":"荷物を車に積みます","obj":"荷物を"}]},{"lesson":41,"verbs":[{"num":2,"word":"頂きます","dict":"頂く","kana":"いただきます","type":"1","zhs":"得到，领受（谦让语）","zh":"从老师那里得到了书。","sent":"先生に本をいただきました","obj":"本を"},{"num":3,"word":"呼びます","dict":"呼ぶ","kana":"よびます","type":"1","zhs":"叫，邀请","zh":"邀请大家来聚会。","sent":"みんなをパーティーに呼びます","obj":"みんなを"},{"num":4,"word":"やります","dict":"やる","kana":"やります","type":"1","zhs":"给（同辈/晚辈）","zh":"给了儿子玩具。","sent":"息子におもちゃをやりました","obj":"おもちゃを"},{"num":5,"word":"取り替えます","dict":"取り替える","kana":"とりかえます","type":"2","zhs":"交换，更换","zh":"换窗帘。","sent":"カーテンを取り替えます","obj":"カーテンを"},{"num":26,"word":"預かります","dict":"預かる","kana":"あずかります","type":"1","zhs":"保管，代收","zh":"代收钱。","sent":"お金を預かります","obj":"お金を"},{"num":27,"word":"助かります","dict":"助かる","kana":"たすかります","type":"1","zhs":"得救，省事","zh":"孩子得救了。","sent":"子供が助かりました","obj":"子供が"},{"num":28,"word":"助けます","dict":"助ける","kana":"たすけます","type":"2","zhs":"救助，帮助","zh":"救了孩子。","sent":"子供を助けました","obj":"子供を"},{"num":29,"word":"虐めます","dict":"虐める","kana":"いじめます","type":"2","zhs":"欺负","zh":"欺负弟弟。","sent":"弟をいじめます","obj":"弟を"},{"num":30,"word":"暮らします","dict":"暮らす","kana":"くらします","type":"1","zhs":"生活","zh":"从明年起在东京生活。","sent":"来年から東京で暮らします","obj":"来年から東京で"}]},{"lesson":42,"verbs":[{"num":1,"word":"計算します","dict":"する","kana":"けいさんします","type":"3","zhs":"计算","zh":"找零钱。","sent":"お釣りを計算します","obj":"お釣りを"},{"num":2,"word":"沸かします","dict":"沸かす","kana":"わかします","type":"1","zhs":"烧开","zh":"烧水。","sent":"お湯を沸かします","obj":"お湯を"},{"num":3,"word":"包みます","dict":"包む","kana":"つつみます","type":"1","zhs":"包，包裹","zh":"用漂亮的纸包礼物。","sent":"プレゼントをきれいな紙で包みます","obj":"プレゼントを"},{"num":4,"word":"混ぜます","dict":"混ぜる","kana":"まぜます","type":"2","zhs":"混合，搅拌","zh":"蓝和黄混合会变成绿。","sent":"青と黄色を混ぜると緑になります","obj":"黄色を"}]},{"lesson":43,"verbs":[{"num":1,"word":"無くなります","dict":"無くなる","kana":"なくなります","type":"1","zhs":"丢失，用完","zh":"钱用完了。","sent":"お金がなくなりました","obj":"お金が"},{"num":2,"word":"上がります","dict":"上がる","kana":"あがります","type":"1","zhs":"上升，升起","zh":"电梯上升。","sent":"エレベーターが上がります","obj":"上が"},{"num":3,"word":"下がります","dict":"下がる","kana":"さがります","type":"1","zhs":"下降，降低","zh":"电梯下降。","sent":"エレベーターが下がります","obj":"下が"},{"num":4,"word":"増えます","dict":"増える","kana":"ふえます","type":"2","zhs":"增加","zh":"从明年起老师会增加。","sent":"来年から先生が増えます","obj":"来年から先生が"},{"num":5,"word":"減ります","dict":"減りる","kana":"へります","type":"2","zhs":"减少","zh":"从明年起学生会减少。","sent":"来年から学生が減ります","obj":"来年から学生が"},{"num":6,"word":"落ちます","dict":"落ちる","kana":"おちます","type":"2","zhs":"落下，脱落","zh":"苹果掉了。","sent":"りんごが落ちました","obj":"りんごが"},{"num":7,"word":"切れます","dict":"切れる","kana":"きれます","type":"2","zhs":"断；用完","zh":"绳子断了。","sent":"ひもが切れました","obj":"ひもが"},{"num":8,"word":"取れます","dict":"取れる","kana":"とれます","type":"2","zhs":"脱落，取下","zh":"纽扣掉了。","sent":"ボタンが取れました","obj":"ボタンが"},{"num":29,"word":"と言います","dict":"と言いる","kana":"といいます","type":"2","zhs":"叫做（名称）","zh":"有个叫迈克·米勒的人吗？","sent":"マイク・ミラーという人はいますか","obj":"マイク・ミラーと"}]},{"lesson":44,"verbs":[{"num":1,"word":"笑います","dict":"笑う","kana":"わらいます","type":"1","zhs":"笑","zh":"孩子在笑。","sent":"子供が笑っています","obj":"子供が"},{"num":2,"word":"泣きます","dict":"泣く","kana":"なきます","type":"1","zhs":"哭","zh":"孩子在哭。","sent":"子供が泣いています","obj":"子供が"},{"num":3,"word":"濡れます","dict":"濡れる","kana":"ぬれます","type":"2","zhs":"淋湿","zh":"衣服被雨淋湿了。","sent":"雨で服が濡れました","obj":"服が"},{"num":4,"word":"乾きます","dict":"乾く","kana":"かわきます","type":"1","zhs":"干，干燥","zh":"这件衣服已经干了。","sent":"この服はもう乾いています","obj":""},{"num":5,"word":"滑ります","dict":"滑りる","kana":"すべります","type":"2","zhs":"滑；滑倒","zh":"脚下打滑了。","sent":"足が滑りました","obj":"足が"},{"num":6,"word":"起きます","dict":"起きる","kana":"おきます","type":"2","zhs":"发生；起床","zh":"发生了交通事故。","sent":"交通事故が起きました","obj":"交通事故が"},{"num":7,"word":"調節します","dict":"する","kana":"ちょうせつします","type":"3","zhs":"调节","zh":"调节温度。","sent":"温度を調節します","obj":"温度を"},{"num":22,"word":"別れます","dict":"別れる","kana":"わかれます","type":"2","zhs":"分别，离婚","zh":"和妻子分手了。","sent":"妻と別れました","obj":"妻と"},{"num":23,"word":"嫌がります","dict":"嫌がる","kana":"いやがります","type":"1","zhs":"嫌，讨厌","zh":"孩子讨厌学习。","sent":"子供は勉強を嫌がります","obj":"勉強を"}]},{"lesson":45,"verbs":[{"num":1,"word":"遭います","dict":"遭う","kana":"あいます","type":"1","zhs":"遭到，遭遇","zh":"在十字路口遭遇了事故。","sent":"交差点で事故に遭いました","obj":"事故に"},{"num":2,"word":"謝ります","dict":"謝る","kana":"あやまります","type":"1","zhs":"道歉","zh":"迟到了就道歉。","sent":"遅刻したら、謝ります","obj":""},{"num":3,"word":"信じます","dict":"信じる","kana":"しんじます","type":"2","zhs":"相信","zh":"相信老师的话。","sent":"先生の話を信じます","obj":"話を"},{"num":4,"word":"用意します","dict":"する","kana":"よういします","type":"3","zhs":"准备","zh":"准备铅笔和纸。","sent":"鉛筆と紙を用意します","obj":"紙を"},{"num":5,"word":"キャンセルします","dict":"する","kana":"キャンセルします","type":"3","zhs":"取消","zh":"取消预约。","sent":"予約をキャンセルします","obj":"予約を"},{"num":16,"word":"優勝します","dict":"する","kana":"ゆうしょうします","type":"3","zhs":"获胜，夺冠","zh":"比赛中获胜了。","sent":"試合で優勝しました","obj":"試合で"},{"num":17,"word":"目が覚めます","dict":"目が覚める","kana":"めがさめます","type":"2","zhs":"醒来","zh":"被巨响吵醒了。","sent":"大きな音で目が覚めました","obj":"目が"},{"num":18,"word":"鳴ります","dict":"鳴る","kana":"なります","type":"1","zhs":"鸣，响","zh":"电话铃响。","sent":"電話が鳴ります","obj":"電話が"},{"num":19,"word":"セットします","dict":"する","kana":"セットします","type":"3","zhs":"设定，调","zh":"设定录像机预约。","sent":"ビデオの予約をセットします","obj":"予約を"},{"num":20,"word":"眠ります","dict":"眠る","kana":"ねむります","type":"1","zhs":"睡觉","zh":"怎么也睡不着。","sent":"なかなか眠れません","obj":""},{"num":21,"word":"うまくいきます","dict":"うまくいく","kana":"うまくいきます","type":"1","zhs":"顺利进行","zh":"工作进展顺利。","sent":"仕事がうまくいきました","obj":"仕事が"}]},{"lesson":46,"verbs":[{"num":1,"word":"焼きます","dict":"焼く","kana":"やきます","type":"1","zhs":"烤，烧","zh":"烤面包。","sent":"パンを焼きます","obj":"パンを"},{"num":2,"word":"渡します","dict":"渡す","kana":"わたします","type":"1","zhs":"交，渡","zh":"发讲义。","sent":"プリントを渡します","obj":"プリントを"},{"num":3,"word":"出ます","dict":"出る","kana":"でます","type":"2","zhs":"出；出发；出版","zh":"巴士马上要开了。","sent":"もうすぐバスが出ます","obj":"もうすぐバスが"},{"num":4,"word":"帰って来ます","dict":"帰って来る","kana":"かえってきます","type":"2","zhs":"回来","zh":"爸爸七点回来。","sent":"父は七時に帰ってきます","obj":""},{"num":11,"word":"向かいます","dict":"向かう","kana":"むかいます","type":"1","zhs":"朝向，前往","zh":"现在出发去车站。","sent":"今から駅へ向かいます","obj":"今から駅へ"},{"num":12,"word":"手に入ります","dict":"手に入る","kana":"てにはいります","type":"1","zhs":"到手，获得","zh":"弄到了珍贵的邮票。","sent":"珍しい切手が手に入りました","obj":"手に"},{"num":13,"word":"入力します","dict":"する","kana":"にゅうりょくします","type":"3","zhs":"输入","zh":"输入姓名。","sent":"名前を入力します","obj":"名前を"}]},{"lesson":47,"verbs":[{"num":1,"word":"集まります","dict":"集まる","kana":"あつまります","type":"1","zhs":"聚集，集合","zh":"很多人聚集到音乐会。","sent":"大勢の人がコンサートに集まります","obj":"コンサートに"},{"num":2,"word":"別れます","dict":"別れる","kana":"わかれます","type":"2","zhs":"分岔；分别","zh":"一直走，路分成两条。","sent":"まっすぐ行くと、道が二つに分かれます","obj":"二つに"},{"num":3,"word":"長生きします","dict":"する","kana":"ながいきします","type":"3","zhs":"长寿","zh":"抽烟就不能长寿。","sent":"たばこを吸うと、長生きできません","obj":"たばこを"},{"num":4,"word":"します","dict":"する","kana":"します","type":"3","zhs":"（声音）传来；做","zh":"从房间传来孩子的声音。","sent":"部屋から子供の声がします","obj":"声が"},{"num":5,"word":"差します","dict":"差す","kana":"さします","type":"1","zhs":"撑（伞）","zh":"撑伞。","sent":"傘を差します","obj":"傘を"},{"num":18,"word":"比べます","dict":"比べる","kana":"くらべます","type":"2","zhs":"比较","zh":"比较两个价格。","sent":"二つの値段を比べます","obj":"値段を"},{"num":19,"word":"知り合います","dict":"知り合う","kana":"しりあいます","type":"1","zhs":"认识，结识","zh":"上大学时认识了她。","sent":"大学生の時、彼女と知り合いました","obj":"彼女と"},{"num":20,"word":"婚約します","dict":"する","kana":"こんやくします","type":"3","zhs":"订婚","zh":"上个月订婚了。","sent":"先月婚約しました","obj":""}]},{"lesson":48,"verbs":[{"num":1,"word":"降ろします","dict":"降ろす","kana":"おろします","type":"1","zhs":"卸下，放下","zh":"卸行李。","sent":"荷物を降ろします","obj":"荷物を"},{"num":2,"word":"届けます","dict":"届ける","kana":"とどけます","type":"2","zhs":"送到，递送","zh":"把行李送到家。","sent":"荷物を家まで届けます","obj":"荷物を"},{"num":3,"word":"世話をします","dict":"する","kana":"せわをします","type":"3","zhs":"照顾，照料","zh":"照顾孩子。","sent":"子供の世話をします","obj":"世話を"},{"num":4,"word":"楽しみます","dict":"楽しみる","kana":"たのしみます","type":"2","zhs":"享受，欣赏","zh":"享受会话。","sent":"会話を楽しみます","obj":"会話を"},{"num":13,"word":"競争します","dict":"する","kana":"きょうそうします","type":"3","zhs":"竞争","zh":"骑自行车和电车赛跑。","sent":"自転車で電車と競争します","obj":"電車と"},{"num":15,"word":"捕らえます","dict":"捕らえる","kana":"とらえます","type":"2","zhs":"逮捕，抓住","zh":"警察逮捕了犯人。","sent":"警察が犯人を捕らえました","obj":"犯人を"}]},{"lesson":49,"verbs":[{"num":5,"word":"ご覧になります","dict":"ご覧になる","kana":"ごらんになります","type":"1","zhs":"看（尊敬语）","zh":"老师您看了吗？","sent":"先生はご覧になりましたか","obj":"ご覧に"},{"num":7,"word":"過ごします","dict":"過ごす","kana":"すごします","type":"1","zhs":"度过","zh":"小时候在东京度过。","sent":"子供の時、東京で過ごしました","obj":"東京で"},{"num":8,"word":"寄ります","dict":"寄る","kana":"よります","type":"1","zhs":"顺路到","zh":"顺路去书店买了杂志。","sent":"本屋に寄って雑誌を買いました","obj":"寄って雑誌を"},{"num":9,"word":"掛けます","dict":"掛ける","kana":"かけます","type":"2","zhs":"坐；打（电话）","zh":"坐椅子。","sent":"椅子に掛けます","obj":"椅子に"},{"num":10,"word":"勤めます","dict":"勤める","kana":"つとめます","type":"2","zhs":"任职，工作","zh":"在日本公司工作。","sent":"日本の会社に勤めます","obj":"会社に"},{"num":19,"word":"出します","dict":"出す","kana":"だします","type":"1","zhs":"拿出，寄出","zh":"孩子发烧了。","sent":"子供が熱を出しました","obj":"熱を"},{"num":41,"word":"受賞します","dict":"する","kana":"じゅしょうします","type":"3","zhs":"获奖","zh":"获得了和平奖。","sent":"平和賞を受賞しました","obj":"平和賞を"}]},{"lesson":50,"verbs":[{"num":1,"word":"おります","dict":"おりる","kana":"おります","type":"2","zhs":"在（谦让语）","zh":"我在这里。","sent":"わたしはここにおります","obj":"ここに"},{"num":2,"word":"致します","dict":"する","kana":"いたします","type":"3","zhs":"做（谦让语）","zh":"我来做。","sent":"わたしがいたします","obj":"わたしが"},{"num":3,"word":"参ります","dict":"参る","kana":"まいります","type":"1","zhs":"来，去（谦让语）","zh":"我去。","sent":"わたしが参ります","obj":"わたしが"},{"num":4,"word":"伺います","dict":"伺う","kana":"うかがいます","type":"1","zhs":"拜访；请教（谦让语）","zh":"我去您那里拜访。","sent":"わたしがそちらへ伺います","obj":"そちらへ"},{"num":5,"word":"頂きます","dict":"頂く","kana":"いただきます","type":"1","zhs":"得到；吃（谦让语）","zh":"从老师那里得到了书。","sent":"先生に本をいただきました","obj":"本を"},{"num":6,"word":"申します","dict":"申す","kana":"もうします","type":"1","zhs":"说（谦让语）","zh":"是我说的。","sent":"わたしが申しました","obj":"わたしが"},{"num":7,"word":"存じます","dict":"存じる","kana":"ぞんじます","type":"2","zhs":"知道（谦让语）","zh":"我不知道。","sent":"わたしは存じません","obj":""},{"num":8,"word":"拝見します","dict":"する","kana":"はいけんします","type":"3","zhs":"看（谦让语）","zh":"拜读了老师的书。","sent":"先生の本を拝見しました","obj":"本を"},{"num":10,"word":"ございます","dict":"ございる","kana":"ございます","type":"2","zhs":"有，在（丁寧语）","zh":"今天有约定。","sent":"今日は約束がございます","obj":"約束が"},{"num":11,"word":"でございます","dict":"でございる","kana":"でございます","type":"2","zhs":"是（丁寧语）","zh":"是，我是佐藤。","sent":"はい、佐藤でございます","obj":"佐藤で"},{"num":20,"word":"緊張します","dict":"する","kana":"きんちょうします","type":"3","zhs":"紧张","zh":"演讲很紧张。","sent":"スピーチはとても緊張します","obj":""},{"num":21,"word":"撮ります","dict":"撮る","kana":"とります","type":"1","zhs":"拍摄","zh":"把婚礼拍了下来。","sent":"結婚式をビデオに撮りました","obj":"結婚式を"},{"num":22,"word":"叶います","dict":"叶う","kana":"かないます","type":"1","zhs":"实现","zh":"留学的梦想实现了。","sent":"留学する夢が叶いました","obj":"留学する夢が"},{"num":23,"word":"協力します","dict":"する","kana":"きょうりょくします","type":"3","zhs":"合作","zh":"大家一起合作吧。","sent":"みんなで協力しましょう","obj":"みんなで"},{"num":24,"word":"生かします","dict":"生かす","kana":"いかします","type":"1","zhs":"活用，发挥","zh":"发挥留学的经验。","sent":"留学の経験を生かします","obj":"経験を"},{"num":25,"word":"迷惑をかけます","dict":"迷惑をかけます","kana":"めいわくをかけます","type":"3","zhs":"添麻烦","zh":"给父母添了麻烦。","sent":"両親に迷惑をかけました","obj":"迷惑を"},{"num":26,"word":"放送します","dict":"する","kana":"ほうそうします","type":"3","zhs":"播放，广播","zh":"在NHK播出。","sent":"NHKで放送します","obj":"NHKで"},{"num":27,"word":"感謝します","dict":"する","kana":"かんしゃします","type":"3","zhs":"感谢","zh":"感谢父母。","sent":"両親に感謝しています","obj":"両親に"}]}]};
+
+/* ============ 活用引擎 ============ */
+var KANA_RE = /[\u3040-\u30ffー]/;
+function conj(dict, type){
+  var tail = dict.slice(-1);
+  var stem = dict.slice(0, -1);
+  var c = {};
+  if (type === '3'){
+    if (dict === 'する' || dict.endsWith('する')){
+      var s = dict.slice(0, -2);
+      c.masu = s + 'します'; c.masen = s + 'しません'; c.mashita = s + 'しました';
+      c.masendeshita = s + 'しませんでした';
+      c.te = s + 'して'; c.ta = s + 'した'; c.nai = s + 'しない'; c.nakatta = s + 'しなかった';
+      c.ba = s + 'すれば'; c.tara = s + 'したら'; c.kanou = s + 'できます';
+      c.ukemi = s + 'されます'; c.shieki = s + 'させます'; c.shieki_ukemi = s + 'させられます';
+      c.meirei = s + 'しろ'; c.mashou = s + 'しましょう'; c.tai = s + 'したい'; c.takatta = s + 'したかった';
+    } else if (dict === '来る' || dict === 'くる'){
+      var k = dict.slice(0, -1);
+      c.masu = k + 'きます'; c.masen = k + 'きません'; c.mashita = k + 'きました';
+      c.masendeshita = k + 'きませんでした';
+      c.te = k + 'きて'; c.ta = k + 'きた'; c.nai = k + 'こない'; c.nakatta = k + 'こなかった';
+      c.ba = k + 'くれば'; c.tara = k + 'きたら'; c.kanou = k + 'こられます';
+      c.ukemi = k + 'こられます'; c.shieki = k + 'こさせます'; c.shieki_ukemi = k + 'こさせられます';
+      c.meirei = k + 'こい'; c.mashou = k + 'きましょう'; c.tai = k + 'きたい'; c.takatta = k + 'きたかった';
+    } else { c.masu = dict; }
+    return c;
+  }
+  if (type === '2'){
+    c.masu = stem + 'ます'; c.masen = stem + 'ません'; c.mashita = stem + 'ました';
+    c.masendeshita = stem + 'ませんでした';
+    c.te = stem + 'て'; c.ta = stem + 'た'; c.nai = stem + 'ない'; c.nakatta = stem + 'なかった';
+    c.ba = stem + 'れば'; c.tara = stem + 'たら'; c.kanou = stem + 'られます';
+    c.ukemi = stem + 'られます'; c.shieki = stem + 'させます'; c.shieki_ukemi = stem + 'させられます';
+    c.meirei = stem + 'ろ'; c.mashou = stem + 'ましょう'; c.tai = stem + 'たい'; c.takatta = stem + 'たかった';
+    return c;
+  }
+  /* 一类动词 */
+  var naiStem = '';
+  if (dict === 'ある'){ naiStem = 'な'; c.nai = 'ない'; c.nakatta = 'なかった'; }
+  else if (dict === 'くれる'){ naiStem = 'くれ'; c.nai = 'くれない'; c.nakatta = 'くれなかった'; }
+  else {
+    var aMap = {'う':'わ','く':'か','ぐ':'が','す':'さ','つ':'た','ぬ':'な','ぶ':'ば','む':'ま','る':'ら'};
+    var aK = aMap[tail] || 'あ';
+    c.nai = stem + aK + 'ない'; c.nakatta = stem + aK + 'なかった';
+    naiStem = stem + aK;
+  }
+  var teTa = {'く':'いて','ぐ':'いで','う':'って','つ':'って','る':'って','む':'んで','ぶ':'んで','ぬ':'んで','す':'して'};
+  if ((dict === '行く') || (dict === 'いく')){ c.te = '行って'; c.ta = '行った'; }
+  else if ((dict === '逝く') || (dict === 'いく')){ c.te = '逝って'; c.ta = '逝った'; }
+  else {
+    var tt = teTa[tail] || 'って';
+    c.te = stem + tt; c.ta = stem + tt.slice(0, -1) + 'た';
+  }
+  var eMap = {'う':'え','く':'け','ぐ':'げ','す':'せ','つ':'て','ぬ':'ね','ぶ':'べ','む':'め','る':'れ'};
+  var eK = eMap[tail] || tail;
+  c.ba = stem + eK + 'ば';
+  c.meirei = stem + eK;
+  c.kanou = (tail === 'す') ? (stem + 'せる') : (stem + eK + 'る');
+  c.ukemi = naiStem + 'れる';
+  c.shieki = naiStem + 'せる';
+  c.shieki_ukemi = naiStem + 'せられる';
+  c.masu = stem + {'う':'い','く':'き','ぐ':'ぎ','す':'し','つ':'ち','ぬ':'に','ぶ':'び','む':'み','る':'り'}[tail] + 'ます';
+  c.masen = c.masu.slice(0, -2) + 'ません';
+  c.mashita = c.masu.slice(0, -2) + 'ました';
+  c.masendeshita = c.masu.slice(0, -2) + 'ませんでした';
+  c.mashou = c.masu.slice(0, -2) + 'ましょう';
+  c.tai = c.masu.slice(0, -2) + 'たい';
+  c.takatta = c.masu.slice(0, -2) + 'たかった';
+  c.tara = c.ta + 'ら';
+  return c;
+}
+
+/* ============ 变形模板（高频在前） ============ */
+function O(v){ return v.obj || ''; }
+function Uk(v){ return v.obj ? v.obj.replace(/を$/, 'が') : ''; }
+
+var FORMS = [
+  {id:'masu', name:'ます形', freq:'h', tag:'現在', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['毎日、'+o+c.masu+'。', '每天'+v.zh],
+     ['明日、'+o+c.masu+'。', '明天也'+v.zh]]; }},
+  {id:'mashita', name:'た形・過去', freq:'h', tag:'過去', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['昨日、'+o+c.mashita+'。', '昨天'+v.zh+'了'],
+     ['先週、'+o+c.mashita+'。', '上周'+v.zh+'了']]; }},
+  {id:'masen', name:'ません', freq:'m', tag:'否定', n:1,
+   build:function(v,c){ var o=O(v); return [
+     ['今日は'+o+c.masen+'。', '今天不'+v.zh]]; }},
+  {id:'masendeshita', name:'ませんでした', freq:'m', tag:'過去否定', n:1,
+   build:function(v,c){ var o=O(v); return [
+     ['昨日は'+o+c.masendeshita+'。', '昨天没'+v.zh]]; }},
+  {id:'te_kudasai', name:'て形＋ください', freq:'h', tag:'請求', n:2,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.te+'ください。', '请'+v.zh],
+     [o+c.te+'くださいませんか。', '能请您'+v.zh+'吗']]; }},
+  {id:'te_imasu', name:'ています', freq:'h', tag:'進行', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['今、'+o+c.te+'います。', '正在'+v.zh],
+     ['毎日、'+o+c.te+'います。', '每天（习惯性）'+v.zh]]; }},
+  {id:'te_kara', name:'てから', freq:'m', tag:'接续', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.te+'から、出かけます。', v.zh+'后，再出门']]; }},
+  {id:'ta', name:'た形', freq:'h', tag:'完了', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['昨日、'+o+c.ta+'。', '昨天'+v.zh+'了'],
+     ['もう'+o+c.ta+'。', '已经'+v.zh+'了']]; }},
+  {id:'nai', name:'ない形', freq:'h', tag:'否定', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['まだ'+o+c.nai+'。', '还没'+v.zh],
+     [o+c.nai+'よ。', '（我）不'+v.zh+'哦']]; }},
+  {id:'nakatta', name:'なかった', freq:'m', tag:'過去否定', n:1,
+   build:function(v,c){ var o=O(v); return [
+     ['昨日は'+o+c.nakatta+'。', '昨天没'+v.zh]]; }},
+  {id:'nai_de', name:'ないでください', freq:'m', tag:'禁止', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.nai+'でください。', '请不要'+v.zh]]; }},
+  {id:'mashou', name:'ましょう', freq:'h', tag:'意向', n:2,
+   build:function(v,c){ var o=O(v); return [
+     ['一緒に'+o+c.mashou+'。', '一起'+v.zh+'吧'],
+     [o+c.mashou+'か。', '（我）'+v.zh+'吧']]; }},
+  {id:'tai', name:'たいです', freq:'h', tag:'愿望', n:2,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.tai+'です。', '想'+v.zh],
+     ['今、'+o+c.tai+'です。', '现在想'+v.zh]]; }},
+  {id:'takatta', name:'たかった', freq:'m', tag:'過去愿望', n:1,
+   build:function(v,c){ var o=O(v); return [
+     ['前は'+o+c.takatta+'です。', '以前曾想'+v.zh]]; }},
+  {id:'ba', name:'ば形', freq:'h', tag:'假定', n:2,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.ba+'いいです。', '如果'+v.zh+'就好了'],
+     [o+c.ba+'、すぐできます。', '如果'+v.zh+'，马上就能做到']]; }},
+  {id:'tara', name:'たら', freq:'m', tag:'条件', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.tara+'、いいです。', '如果'+v.zh+'的话就好了']]; }},
+  {id:'kanou', name:'可能形', freq:'h', tag:'可能', n:2,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.kanou+'ます。', '能'+v.zh],
+     ['もっと'+o+c.kanou+'ます。', '能更'+v.zh]]; }},
+  {id:'ukemi', name:'受身形', freq:'l', tag:'被动', n:1,
+   build:function(v,c){ var u=Uk(v); return [
+     ['昨日、'+u+c.ukemi+'ました。', '被'+v.zh+'了']]; }},
+  {id:'shieki', name:'使役形', freq:'l', tag:'使役', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.shieki+'ました。', '让（人）'+v.zh+'了']]; }},
+  {id:'shieki_ukemi', name:'使役受身', freq:'l', tag:'使役被动', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.shieki_ukemi+'ました。', '被迫'+v.zh+'了']]; }},
+  {id:'meirei', name:'命令形', freq:'l', tag:'命令', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.meirei+'！', v.zh+'！']]; }},
+  {id:'kinshi', name:'禁止形', freq:'l', tag:'禁止', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+dict(v)+'な！', '别'+v.zh+'！']]; }},
+  {id:'te_oku', name:'ておく', freq:'m', tag:'准备', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.te+'おきます。', '事先'+v.zh]]; }},
+  {id:'te_shimau', name:'てしまう', freq:'l', tag:'完了', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.te+'しまいました。', v.zh+'（完）了']]; }},
+  {id:'te_miru', name:'てみる', freq:'m', tag:'尝试', n:1,
+   build:function(v,c){ var o=O(v); return [
+     [o+c.te+'みます。', '试着'+v.zh]]; }},
+  {id:'nagara', name:'ながら', freq:'l', tag:'同时', n:1,
+   build:function(v,c){ if(!v.obj) return null; var o=O(v); return [
+     ['毎日、テレビを見ながら、'+o+c.masu+'。', '每天一边看电视一边'+v.zh]]; }},
+];
+function dict(v){ return v.dict; }
+
+/* ============ 汉字->假名映射 ============ */
+function buildMap(word, kana){
+  var map = {}, wp = 0, kp = 0;
+  while (wp < word.length && kp < kana.length){
+    var ch = word[wp];
+    if (KANA_RE.test(ch)){
+      if (kana[kp] === ch){ kp++; wp++; }
+      else { kp++; }
+    } else {
+      var start = kp, nx = wp + 1;
+      while (nx < word.length && !KANA_RE.test(word[nx])) nx++;
+      var nk = nx < word.length ? word[nx] : null;
+      while (kp < kana.length && (nk ? kana[kp] !== nk : true)) kp++;
+      if (!map[ch]) map[ch] = kana.slice(start, kp);
+      wp = nx;
+    }
+  }
+  return map;
+}
+function kanaize(s, map){
+  var out = '';
+  for (var i = 0; i < s.length; i++){
+    var ch = s[i];
+    if (KANA_RE.test(ch)) out += ch;
+    else out += (map[ch] || ch);
+  }
+  return out.replace(/[、。\s]/g, '');
+}
+
+/* ============ 渲染 ============ */
+var bookSel = document.getElementById('bookSel'), lessonSel = document.getElementById('lessonSel');
+var main = document.getElementById('main');
+var ERR_KEY = 'mn_vb_err';
+function errs(){ try { return JSON.parse(localStorage.getItem(ERR_KEY) || '{}'); } catch(e){ return {}; } }
+function errTotal(){ var e = errs(), n = 0; for (var k in e) n += e[k]; return n; }
+function refreshErr(){ document.getElementById('errCount').textContent = '错题 ' + errTotal(); }
+function speak(text, btn){
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP'; u.rate = 0.9;
+  if (btn){
+    document.querySelectorAll('.spk.playing').forEach(function(b){ b.classList.remove('playing'); });
+    btn.classList.add('playing');
+    u.onend = function(){ btn.classList.remove('playing'); };
+    u.onerror = function(){ btn.classList.remove('playing'); };
+  }
+  speechSynthesis.speak(u);
+}
+function fillLesson(){
+  var book = +bookSel.value, lesson = +lessonSel.value;
+  var les = VERBS[book].filter(function(x){ return x.lesson === lesson; })[0];
+  var verbs = les ? les.verbs : [];
+  refreshErr();
+  if (!verbs.length){
+    main.innerHTML = '<p class="empty">该课没有动词词条（教材本课无动词）。</p>';
+    return;
+  }
+  var html = '<p class="linfo">第' + lesson + '課 · ' + verbs.length + ' 个动词 · 看中文提示，在句中空格填入动词的正确变形</p>';
+  verbs.forEach(function(v, vi){
+    var c = conj(v.dict, v.type);
+    var map = buildMap(v.word, v.kana || v.word);
+    html += '<section class="vcard"><header class="vhead" data-kana="' + (v.kana || v.word).replace(/"/g, '&quot;') + '">' +
+      '<span class="vword">' + v.word + '</span>' +
+      '<span class="vdict">辞書形：' + v.dict + '</span>' +
+      '<span class="vtype">' + {'1':'一类动词','2':'二类动词','3':'三类动词'}[String(v.type)] + '</span>' +
+      '<span class="vzh">' + (v.zhs || '') + '</span>' +
+      '<button type="button" class="spk" data-speak="' + v.word.replace(/"/g, '&quot;') + '">喇叭</button>' +
+      '</header>';
+    ['h', 'm', 'l'].forEach(function(fr){
+      var items = FORMS.filter(function(f){ return f.freq === fr; });
+      if (!items.length) return;
+      html += '<div class="grp-title">' + ({h:'常用变形', m:'常用变形', l:'其他变形'})[fr] + '</div>';
+      items.forEach(function(f){
+        var pairs = f.build(v, c);
+        if (!pairs) return;
+        pairs.forEach(function(p, pi){
+          var sent = p[0], zh = p[1];
+          /* 动词短语 = 句尾最后一个词（去标点，去句末语气词 か） */
+          var tail = sent.slice(0, -1).match(/[^、。！\s]+$/)[0];
+          if (tail.slice(-1) === 'か') tail = tail.slice(0, -1);
+          var formStr = tail;
+          var ansK = kanaize(formStr, map);
+          var fid = 'l' + lesson + 'w' + v.num + '_' + f.id + '_' + pi;
+          var fill = sent.replace(formStr, '<input type="text" class="fin" data-ans="' + ansK + '" data-key="' + fid + '" placeholder="动词" autocomplete="off" autocapitalize="off" spellcheck="false">');
+          html += '<div class="frow"><div class="prompt">' + zh + '<span class="ftag">' + f.name + '</span></div>' +
+            '<div class="q">' + fill + '<b class="ans">' + ansK + '</b><span class="mark"></span>' +
+            '<button type="button" class="chk">验证</button>' +
+            '<button type="button" class="rev">显示答案</button>' +
+            '<button type="button" class="spk" data-speak="' + sent.replace(/"/g, '&quot;') + '">喇叭</button>' +
+            '</div></div>';
+        });
+      });
+    });
+    html += '</section>';
+  });
+  main.innerHTML = html;
+  bind(main);
+}
+function bind(root){
+  root.querySelectorAll('.spk').forEach(function(b){
+    b.addEventListener('click', function(){ speak(b.getAttribute('data-speak'), b); });
+  });
+  root.querySelectorAll('.fin').forEach(function(inp){
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') check(inp); });
+  });
+  root.querySelectorAll('.chk').forEach(function(b){
+    b.addEventListener('click', function(){ check(b.parentNode.querySelector('.fin')); });
+  });
+  root.querySelectorAll('.rev').forEach(function(b){
+    b.addEventListener('click', function(){
+      var ans = b.parentNode.querySelector('.ans');
+      if (ans) ans.classList.toggle('show');
+    });
+  });
+}
+function check(inp){
+  var v = inp.value.trim();
+  var ans = inp.getAttribute('data-ans');
+  var key = inp.getAttribute('data-key');
+  var mark = inp.parentNode.querySelector('.mark');
+  if (!v){ inp.classList.add('bad'); mark.textContent = '请填写'; mark.className = 'mark bad'; return; }
+  var kanaized = kanaize(v, kanjiMapFor(inp));
+  var ok = (kanaized.length >= 2 && ans.indexOf(kanaized) === 0) || kanaized.indexOf(ans) >= 0;
+  inp.classList.remove('ok', 'bad');
+  inp.classList.add(ok ? 'ok' : 'bad');
+  mark.textContent = ok ? '✓ 正确' : '✗ 错误';
+  mark.className = 'mark ' + (ok ? 'ok' : 'bad');
+  if (!ok){
+    var e = errs(); e[key] = (e[key] || 0) + 1;
+    localStorage.setItem(ERR_KEY, JSON.stringify(e));
+    refreshErr();
+    var ansEl = inp.parentNode.querySelector('.ans');
+    if (ansEl) ansEl.classList.add('show');
+  }
+}
+var _maps = {};
+function kanjiMapFor(inp){
+  var key = inp.getAttribute('data-key');
+  var w = inp.closest('.vcard').querySelector('.vword').textContent;
+  var dict = inp.closest('.vcard').querySelector('.vdict').textContent.replace('辞書形：','');
+  var kana = inp.closest('.vcard').querySelector('.vhead').getAttribute('data-kana');
+  if (!_maps[key]) _maps[key] = buildMap(w, kana || w);
+  return _maps[key];
+}
+function loadLessons(){
+  var book = +bookSel.value;
+  var html = '';
+  VERBS[book].forEach(function(x){
+    html += '<option value="' + x.lesson + '">第' + x.lesson + '課</option>';
+  });
+  lessonSel.innerHTML = html;
+  var saved = localStorage.getItem('mn_vb_lesson' + book);
+  if (saved && VERBS[book].some(function(x){ return x.lesson === +saved; })) lessonSel.value = saved;
+  fillLesson();
+}
+bookSel.addEventListener('change', function(){
+  localStorage.setItem('mn_vb_book', bookSel.value);
+  loadLessons();
+});
+lessonSel.addEventListener('change', function(){
+  localStorage.setItem('mn_vb_lesson' + bookSel.value, lessonSel.value);
+  fillLesson();
+});
+document.getElementById('toggleAll').addEventListener('click', function(){
+  var on = this.textContent.indexOf('全部显示') >= 0;
+  this.textContent = on ? '全部隐藏答案' : '全部显示答案';
+  document.querySelectorAll('.ans').forEach(function(a){
+    if (!on) a.classList.add('show'); else a.classList.remove('show');
+  });
+});
+document.getElementById('clearErr').addEventListener('click', function(){
+  if (!confirm('确认清空全部错题记录？')) return;
+  localStorage.removeItem(ERR_KEY); refreshErr();
+});
+var savedBook = localStorage.getItem('mn_vb_book');
+if (savedBook && (savedBook === '1' || savedBook === '2')) bookSel.value = savedBook;
+loadLessons();
+</script>
+</body>
+</html>
