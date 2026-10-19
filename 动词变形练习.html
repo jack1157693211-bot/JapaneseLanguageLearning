@@ -19,43 +19,74 @@ body{margin:0;background:var(--paper);color:var(--ink);
 button{font-family:inherit;font-size:13px;cursor:pointer}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .toolbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line)}
-.tb-inner{max-width:980px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.tb-inner{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
 .tb-inner h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.02em}
 .tb-inner h1 small{display:block;font-size:11px;color:var(--ink-soft);font-weight:400;letter-spacing:.06em}
 .tb-inner .home{color:var(--accent);font-size:13.5px;text-decoration:none}
-.tb-inner select{font-family:inherit;font-size:13.5px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
-.btn{padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px}
-.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-#errCount{font-size:12.5px;color:var(--ink-soft)}
-main{max-width:980px;margin:0 auto;padding:16px}
-.linfo{color:var(--ink-soft);font-size:13px;margin:0 0 12px}
-.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:16px;overflow:hidden}
-.vhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;background:#fbf9f4;border-bottom:1px solid var(--line)}
-.vhead .vword{font-size:17px;font-weight:700}
+.tb-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.btn-primary{border:none;background:var(--accent);color:#fff;padding:6px 14px;border-radius:6px;font-weight:600}
+.btn-primary:hover{background:#9c2c1a}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);padding:5px 12px;border-radius:6px}
+.btn-ghost:hover{border-color:#b9b2a6}
+select.btn-ghost{max-width:170px}
+.counter{font-size:12px;color:var(--ink-soft);white-space:nowrap}
+main{max-width:960px;margin:0 auto;padding:18px 16px 70px}
+.linfo{color:var(--ink-soft);font-size:12px;margin:0 0 14px}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:8px;margin-bottom:20px;overflow:hidden}
+.vhead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:8px 14px;border-bottom:1px solid var(--line)}
+.vhead .vword{font-size:15px;font-weight:700}
 .vhead .vdict{color:var(--ink-soft);font-size:13.5px}
 .vhead .vtype{font-size:12px;padding:1px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.vhead .vzh{font-size:13px;color:var(--ink-soft)}
-.spk{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 9px;font-size:12.5px;color:var(--accent)}
-.spk.playing{background:var(--accent);color:#fff}
-.grp-title{padding:8px 16px 2px;font-size:13px;font-weight:600;color:var(--ink-soft);letter-spacing:.1em}
-.frow{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 12px;padding:8px 16px;border-top:1px dashed #ece7dd}
-.frow:first-of-type{border-top:0}
-.frow .prompt{width:230px;flex-shrink:0;font-size:13.5px;color:var(--ink)}
-.frow .prompt .ftag{display:inline-block;margin-left:6px;font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 6px}
-.frow .q{flex:1;min-width:280px;font-size:15px;line-height:2.1}
-.frow .fin{width:150px;padding:2px 8px;font-size:15px;font-family:inherit;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink)}
-.frow .fin.ok{border-color:#2e7d32;background:#f0f8f0}
-.frow .fin.bad{border-color:#b0341f;background:#fdf1ee}
-.frow .ans{display:none;padding:1px 8px;background:#f3efe6;border-radius:4px;font-weight:600;color:var(--ink)}
-.frow .ans.show{display:inline}
-.frow .chk,.frow .rev{border:1px solid var(--line);background:#fff;border-radius:5px;padding:1px 10px;font-size:12.5px;color:var(--ink)}
-.frow .mark{font-size:12px;width:56px;display:inline-block}
-.frow .mark.ok{color:#2e7d32}.frow .mark.bad{color:#b0341f}
+.vhead .vzh{font-size:13.5px;color:var(--ink-soft)}
+/* ===== 喇叭（图标，同复习页） ===== */
+.spk{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;
+  padding:2px 10px;border:1px solid var(--line);background:var(--card);color:var(--accent);
+  border-radius:6px;cursor:pointer;font-size:12px;line-height:1.5;flex:0 0 auto}
+.spk:hover{background:var(--accent-soft)}
+.spk.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
+.vhead .spk{margin-left:auto}
+.grp-title{font-size:15px;font-weight:700;margin:18px 14px 2px;padding-top:10px;border-top:1px solid var(--line)}
+.grp-title:first-child{border-top:0;margin-top:10px;padding-top:0}
+.frow{border-bottom:1px dotted var(--line);padding:8px 14px;display:flex;gap:12px;align-items:flex-start}
+.frow:last-child{border-bottom:none}
+.frow .prompt{flex:0 1 47%;font-weight:600;min-width:0;font-size:14.5px}
+.frow .prompt .ftag{display:inline-block;margin-left:6px;font-size:11px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 6px;vertical-align:1px}
+.frow .q{flex:1 1 50%;min-width:0;font-size:14.5px;line-height:2.1}
+.frow .fin{max-width:340px;width:170px;border:1px solid var(--line);border-radius:5px;
+  padding:3px 10px;font-size:14px;font-family:inherit;line-height:1.7;color:var(--ink);background:#fff}
+.frow .fin:focus{outline:2px solid #d9b9ad;outline-offset:0;border-color:var(--accent)}
+.frow .fin.ok{border-color:#2e7d32;background:#f0f8f0;color:#1b5e20}
+.frow .fin.bad{border-color:#b0341f;background:#fdf1ee;color:#7f1d12}
+.frow .ans{display:none;background:var(--accent-soft);border-radius:4px;padding:4px 10px;font-size:14.5px;font-weight:700}
+.frow .ans.show{display:inline-block}
+.frow .chk{border:1px solid var(--line);background:#fff;border-radius:5px;color:var(--ink);padding:1px 12px;font-size:12.5px;line-height:1.9}
+.frow .chk:hover{border-color:var(--accent);color:var(--accent)}
+.frow .mark{font-size:13px;font-weight:700;white-space:nowrap;min-width:52px;display:inline-block}
+.frow .mark.ok{color:#2e7d32}
+.frow .mark.bad{color:#b0341f}
 .empty{padding:40px;text-align:center;color:var(--ink-soft)}
-@media (max-width:600px){
-  .frow .prompt{width:100%}
-  .frow .fin{width:120px}
-  .tb-inner h1{font-size:15px}
+@media (max-width:640px){
+  .tb-inner{padding:8px 12px}
+  .tb-controls{margin-left:0;width:100%}
+  .frow{flex-direction:column;gap:2px}
+  .frow .prompt{flex:none;width:100%}
+  .frow .q{width:100%}
+  .frow .fin{width:100%;max-width:none}
+  .vhead .spk{margin-left:0}
+}
+@media (max-width:360px){
+  .tb-inner{padding:6px 8px;gap:6px}
+  .tb-inner h1{font-size:13.5px}
+  .tb-inner h1 small{font-size:10px}
+  .btn-primary,.btn-ghost{padding:5px 8px;font-size:11.5px}
+  select.btn-ghost{max-width:118px}
+  .counter{font-size:11px}
+  main{padding:12px 8px 50px}
+  .grp-title{font-size:13.5px}
+  .frow .prompt{font-size:13px}
+  .frow .q{font-size:13px}
+  .frow .ans{font-size:13px;padding:3px 6px}
+  .spk{margin-left:4px;padding:1px 7px}
 }
 </style>
 </head>
@@ -63,11 +94,13 @@ main{max-width:980px;margin:0 auto;padding:16px}
 <div class="toolbar"><div class="tb-inner">
   <a class="home" href="index.html">← 入口</a>
   <h1>动词变形练习<small>看中文 → 填动词正确变形</small></h1>
-  <select id="bookSel" aria-label="选择册"><option value="1">大家日语初级1</option><option value="2">大家日语初级2</option></select>
-  <select id="lessonSel" aria-label="选择课"></select>
-  <button class="btn" id="toggleAll">全部显示答案</button>
-  <button class="btn" id="clearErr">清空错题</button>
-  <span id="errCount">错题 0</span>
+  <div class="tb-controls">
+    <select id="bookSel" class="btn-ghost" aria-label="选择册"><option value="1">大家日语初级1</option><option value="2">大家日语初级2</option></select>
+    <select id="lessonSel" class="btn-ghost" aria-label="选择课"></select>
+    <button class="btn-ghost" id="toggleAll">全部显示答案</button>
+    <button class="btn-ghost" id="clearErr">清空错题</button>
+    <span class="counter" id="errCount">错题 0</span>
+  </div>
 </div></div>
 <main id="main"></main>
 <script>
@@ -308,7 +341,7 @@ function fillLesson(){
       '<span class="vdict">辞書形：' + v.dict + '</span>' +
       '<span class="vtype">' + {'1':'一类动词','2':'二类动词','3':'三类动词'}[String(v.type)] + '</span>' +
       '<span class="vzh">' + (v.zhs || '') + '</span>' +
-      '<button type="button" class="spk" data-speak="' + v.word.replace(/"/g, '&quot;') + '">喇叭</button>' +
+      '<button type="button" class="spk" data-speak="' + v.word.replace(/"/g, '&quot;') + '" title="播放日语读音" aria-label="播放日语读音"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z"/><path d="M14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg></button>' +
       '</header>';
     ['h', 'm', 'l'].forEach(function(fr){
       var items = FORMS.filter(function(f){ return f.freq === fr; });
@@ -330,7 +363,7 @@ function fillLesson(){
             '<div class="q">' + fill + '<b class="ans">' + ansK + '</b><span class="mark"></span>' +
             '<button type="button" class="chk">验证</button>' +
             '<button type="button" class="rev">显示答案</button>' +
-            '<button type="button" class="spk" data-speak="' + sent.replace(/"/g, '&quot;') + '">喇叭</button>' +
+            '<button type="button" class="spk" data-speak="' + sent.replace(/"/g, '&quot;') + '" title="播放日语读音" aria-label="播放日语读音"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.06A4.5 4.5 0 0 0 16.5 12z"/><path d="M14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg></button>' +
             '</div></div>';
         });
       });
