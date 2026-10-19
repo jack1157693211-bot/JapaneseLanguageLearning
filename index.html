@@ -17,8 +17,15 @@ body{margin:0;background:var(--paper);color:var(--ink);
   font-family:"Yu Gothic","Yu Gothic UI","Hiragino Kaku Gothic ProN","Meiryo","Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;
   line-height:1.8;font-size:15px}
 a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
 
-.hero{max-width:1000px;margin:0 auto;padding:72px 20px 40px;text-align:center}
+.hero{max-width:1000px;margin:0 auto;padding:56px 20px 40px;text-align:center}
+.langs{display:inline-flex;gap:6px;margin-bottom:22px;padding:4px;background:var(--card);
+  border:1px solid var(--line);border-radius:999px}
+.langs button{border:0;background:transparent;color:var(--ink-soft);font-size:13px;
+  padding:4px 16px;border-radius:999px;line-height:1.6;transition:background .14s ease,color .14s ease}
+.langs button:hover{color:var(--ink)}
+.langs button.on{background:var(--accent);color:#fff}
 .kicker{display:inline-block;margin:0 0 10px;padding:2px 14px;border:1px solid var(--accent);color:var(--accent);
   border-radius:999px;font-size:13px;letter-spacing:.28em;font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
 .hero h1{margin:0;font-size:46px;line-height:1.2;letter-spacing:.06em;font-weight:700;
@@ -54,7 +61,7 @@ footer{border-top:1px solid var(--line);padding:22px 20px 30px;text-align:center
 footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
 
 @media (max-width:520px){
-  .hero{padding:48px 16px 28px}
+  .hero{padding:36px 16px 24px}
   .hero h1{font-size:34px}
   main{padding:4px 14px 36px}
 }
@@ -64,9 +71,14 @@ footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","N
 
 <header>
   <div class="hero">
+    <div class="langs" role="group" aria-label="Language / Ngôn ngữ / 语言">
+      <button type="button" data-lang="zh">中文</button>
+      <button type="button" data-lang="en">English</button>
+      <button type="button" data-lang="vi">Tiếng Việt</button>
+    </div>
     <p class="kicker">日本語の勉強</p>
-    <h1>日语学习</h1>
-    <p class="sub">默写 · 听写 · 错题练习<b>入口</b></p>
+    <h1 data-i18n="heroTitle">日语学习</h1>
+    <p class="sub" data-i18n="heroSub">默写 · 听写 · 错题练习<b>入口</b></p>
   </div>
 </header>
 
@@ -74,46 +86,92 @@ footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","N
   <!-- ===== 页面卡片网格（由下方 PAGES 数组自动渲染） ===== -->
   <div id="grid" class="grid"></div>
 
-  <p class="addhint">以后新增页面：打开本文件，在底部 <code>PAGES</code> 数组里加一条即可，卡片会自动生成</p>
+  <p class="addhint" data-i18n="addHint">以后新增页面：打开本文件，在底部 <code>PAGES</code> 数组里加一条即可，卡片会自动生成</p>
 </main>
 
 <footer>
   <p class="jp">継続は力なり</p>
-  <p>日语学习 · 复习工具入口</p>
+  <p data-i18n="footerText">日语学习 · 复习工具入口</p>
 </footer>
 
 <script>
 /* ============================================================
    页面注册表：新增页面只需在此数组追加一条
-   { title: 卡片标题, sub: 日文副标题, range: 覆盖范围,
-     desc: 一句话说明, url: 相对文件名, badge: 角标文字 }
+   { title/sub/range/desc/badge: {zh, en, vi} 或字符串(不随语言变),
+     url: 相对文件名 }
    ============================================================ */
 const PAGES = [
-  {title:'大家日语1复习', sub:'みんなの日本語 初級Ⅰ', range:'第1課 ～ 第25課',
-   desc:'单词・文法 默写 / 听写 / 错题本', url:'大家日语1复习.html', badge:'初级1'},
-  {title:'大家日语2复习', sub:'みんなの日本語 初級Ⅱ', range:'第26課 ～ 第50課',
-   desc:'单词・文法 默写 / 听写 / 错题本', url:'大家日语2复习.html', badge:'初级2'},
+  {title:{zh:'大家日语1复习', en:'Minna no Nihongo 1 Review', vi:'Minna no Nihongo 1 Ôn tập'},
+   sub:'みんなの日本語 初級Ⅰ',
+   range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
+   desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
+   url:'大家日语1复习.html', badge:{zh:'初级1', en:'Book 1', vi:'Quyển 1'}},
+  {title:{zh:'大家日语2复习', en:'Minna no Nihongo 2 Review', vi:'Minna no Nihongo 2 Ôn tập'},
+   sub:'みんなの日本語 初級Ⅱ',
+   range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
+   desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
+   url:'大家日语2复习.html', badge:{zh:'初级2', en:'Book 2', vi:'Quyển 2'}},
 ];
 
-(function render(){
+const I18N = {
+  zh:{heroTitle:'日语学习', heroSub:'默写 · 听写 · 错题练习<b>入口</b>',
+      addHint:'以后新增页面：打开本文件，在底部 <code>PAGES</code> 数组里加一条即可，卡片会自动生成',
+      footerText:'日语学习 · 复习工具入口'},
+  en:{heroTitle:'Japanese Study', heroSub:'Dictation · Listening · Error Review <b>Home</b>',
+      addHint:'To add a page later: open this file and append one entry to the <code>PAGES</code> array below; the card is generated automatically.',
+      footerText:'Japanese Study · Practice Tools Home'},
+  vi:{heroTitle:'Học tiếng Nhật', heroSub:'Chính tả · Nghe · Sổ lỗi <b>Trang chủ</b>',
+      addHint:'Muốn thêm trang sau này: mở tệp này và thêm một mục vào mảng <code>PAGES</code> bên dưới; thẻ sẽ tự sinh.',
+      footerText:'Học tiếng Nhật · Trang chủ công cụ ôn tập'}
+};
+
+function pick(v, lang){ return (v && typeof v === 'object' && !Array.isArray(v)) ? (v[lang] || v.zh) : v; }
+
+function render(lang){
+  /* 语言按钮高亮 */
+  document.querySelectorAll('.langs button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-lang') === lang);
+  });
+  /* 静态文案 */
+  var t = I18N[lang] || I18N.zh;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.title = t.heroTitle + ' · 入口';
+  /* 卡片 */
   var grid = document.getElementById('grid');
+  grid.innerHTML = '';
   PAGES.forEach(function(p){
     var a = document.createElement('a');
     a.href = p.url;
     a.className = 'card';
-    a.setAttribute('aria-label', '进入' + p.title);
+    a.setAttribute('aria-label', pick(p.title, lang));
     a.innerHTML =
-      '<span class="badge">' + p.badge + '</span>' +
-      '<h2>' + p.title + '</h2>' +
+      '<span class="badge">' + pick(p.badge, lang) + '</span>' +
+      '<h2>' + pick(p.title, lang) + '</h2>' +
       '<p class="sub2">' + p.sub + '</p>' +
-      '<p class="range">' + p.range + '</p>' +
-      '<p class="desc">' + p.desc + '</p>' +
-      '<span class="go">进入复习页' +
+      '<p class="range">' + pick(p.range, lang) + '</p>' +
+      '<p class="desc">' + pick(p.desc, lang) + '</p>' +
+      '<span class="go">' + pick({zh:'进入复习页', en:'Open practice', vi:'Vào ôn tập'}, lang) +
       '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
       '</span>';
     grid.appendChild(a);
   });
-})();
+}
+
+/* 语言切换 + 持久化（localStorage 按域名隔离，本地/Pages 各自记住） */
+var LANG_KEY = 'mn_home_lang';
+var curLang = localStorage.getItem(LANG_KEY) || 'zh';
+if (!I18N[curLang]) curLang = 'zh';
+document.querySelectorAll('.langs button').forEach(function(b){
+  b.addEventListener('click', function(){
+    curLang = b.getAttribute('data-lang');
+    localStorage.setItem(LANG_KEY, curLang);
+    render(curLang);
+  });
+});
+render(curLang);
 </script>
 </body>
 </html>
