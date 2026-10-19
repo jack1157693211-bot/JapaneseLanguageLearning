@@ -1,0 +1,211 @@
+
+
+:root{
+  --paper:#f6f5f1; --card:#ffffff; --ink:#2e2a26; --ink-soft:#6f6a63;
+  --line:#ddd8cf; --accent:#b0341f; --accent-soft:#f7e8e2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Yu Gothic","Yu Gothic UI","Hiragino Kaku Gothic ProN","Meiryo","Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;
+  line-height:1.8;font-size:15px}
+button{font-family:inherit;font-size:13px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line)}
+.tb-inner{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.tb-inner h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.02em}
+.tb-inner h1 small{display:block;font-size:11px;color:var(--ink-soft);font-weight:400;letter-spacing:.06em}
+.tb-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto}
+.btn-primary{border:none;background:var(--accent);color:#fff;padding:7px 16px;border-radius:6px;font-weight:600}
+.btn-primary:hover{background:#9c2c1a}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:6px}
+.btn-ghost:hover{border-color:#b9b2a6}
+select.btn-ghost{max-width:170px}
+.counter{font-size:12px;color:var(--ink-soft);white-space:nowrap}
+main{max-width:960px;margin:0 auto;padding:18px 16px 70px}
+.howto{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 18px;font-size:13.5px;color:var(--ink-soft);margin-bottom:24px}
+.howto b{color:var(--ink)}
+.howto ol{margin:6px 0 0;padding-left:22px}
+.howto li{margin:3px 0}
+.lesson{margin:36px 0 8px}
+.lesson-title{font-family:"Yu Mincho","Hiragino Mincho ProN","SimSun","Songti SC",serif;font-size:22px;font-weight:700;margin:0 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line);position:relative}
+.lesson-title::after{content:"";position:absolute;left:0;bottom:-2px;width:54px;height:2px;background:var(--accent)}
+.lesson-meta{font-size:12px;color:var(--ink-soft);margin:0 0 14px}
+.sec-title{font-size:15px;font-weight:700;margin:22px 0 6px}
+.sec-title .cnt{color:var(--ink-soft);font-weight:400;font-size:12px;margin-left:8px}
+.dict-item{border-bottom:1px dotted var(--line);padding:7px 2px;display:flex;gap:12px;align-items:flex-start}
+.dict-item:last-child{border-bottom:none}
+.prompt{flex:0 1 47%;font-weight:600;min-width:0}
+.prompt .num{color:var(--ink-soft);font-weight:400;font-size:12px;margin-right:5px}
+.answer-zone{flex:1 1 50%;min-width:0}
+.reveal{display:inline-block;background:none;border:1px solid var(--line);border-radius:5px;color:var(--ink-soft);padding:0 12px;font-size:12px;line-height:1.9}
+.reveal:hover{border-color:var(--accent);color:var(--accent)}
+.answer{display:none;background:var(--accent-soft);border-radius:4px;padding:4px 10px;font-size:14.5px}
+.answer ruby{ruby-align:center;ruby-position:over}
+.answer rt{font-size:.82em;color:#8a5a4c;font-weight:400}
+.answer .a-word{font-weight:700;margin-right:8px}
+/* ===== 听写模式：喇叭播放答案语音 ===== */
+.listen-btn{display:none;vertical-align:middle;margin-left:8px;padding:2px 10px;
+  border:1px solid var(--line);background:var(--card);color:var(--accent);
+  border-radius:6px;cursor:pointer;font-size:12px;line-height:1.5;flex:0 0 auto}
+.listen-btn:hover{background:var(--accent-soft)}
+.listen-btn.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
+body.listening .prompt-text{display:none!important}
+body.listening .listen-btn{display:inline-flex;align-items:center;gap:4px}
+.listen-word{display:none;font-weight:700;color:var(--accent);margin-right:6px}
+body.listening .listen-word{display:inline}
+body.listening.lang-zh .dict-item.show-prompt .prompt-text.i18n.zh{display:inline!important}
+body.listening.lang-en .dict-item.show-prompt .prompt-text.i18n.en{display:inline!important}
+body.listening.lang-vi .dict-item.show-prompt .prompt-text.i18n.vi{display:inline!important}
+/* 默写模式：答案句子后的常驻喇叭 */
+.ans-spk{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;
+  margin-left:8px;padding:2px 10px;border:1px solid var(--line);
+  background:var(--card);color:var(--accent);border-radius:6px;cursor:pointer;
+  font-size:12px;line-height:1.5;flex:0 0 auto}
+.ans-spk:hover{background:var(--accent-soft)}
+.ans-spk.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media print{.listen-btn{display:none!important}.ans-spk{display:none!important}
+  body.listening .prompt-text{display:none!important}
+  body.listening.lang-zh .prompt-text.i18n.zh{display:inline!important}
+  body.listening.lang-en .prompt-text.i18n.en{display:inline!important}
+  body.listening.lang-vi .prompt-text.i18n.vi{display:inline!important}}
+/* ===== 多语言切换：默认显示中文，body.lang-en/vi 切换 ===== */
+.i18n.en,.i18n.vi,.prompt-text.i18n.en,.prompt-text.i18n.vi{display:none}
+body.lang-en .i18n.zh,body.lang-vi .i18n.zh{display:none}
+body.lang-en .i18n.en{display:inline}
+body.lang-vi .i18n.vi{display:inline}
+body.lang-en .prompt-text.i18n.zh,body.lang-vi .prompt-text.i18n.zh{display:none}
+body.lang-en .prompt-text.i18n.en{display:inline}
+body.lang-vi .prompt-text.i18n.vi{display:inline}
+
+.dict-item.open .answer,body.show-answers .answer{display:block}
+body.show-answers .dict-item.off .answer{display:none}
+.gpoint{margin:16px 0 4px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px 4px}
+.gpoint h4{margin:0 0 6px;font-size:15px;font-weight:700}
+.explain{font-size:13.5px;color:var(--ink-soft);margin:0 0 8px;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.gpoint .dict-item{padding:6px 2px}
+.wrong-btn{display:inline-block;background:none;border:1px solid #dcc0b8;border-radius:5px;color:var(--accent);padding:0 10px;font-size:12px;line-height:1.9;margin-left:6px}
+.wrong-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dict-item.wrong{background:#fdf1ee;border-radius:4px}
+.wrong-zone{border:1px dashed var(--accent);border-radius:8px;padding:10px 14px;margin-bottom:24px;background:#fffdfa}
+.wrong-zone[hidden]{display:none}
+.wrong-zone-title{margin:0 0 4px;font-size:15px;font-weight:700;color:var(--accent)}
+.wrong-zone-sum{margin:0 0 6px;font-size:12px;color:var(--ink-soft)}
+@media print{.wrong-zone{display:none!important}}
+/* ===== 默写输入验证 ===== */
+.quiz{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.quiz-input{flex:1 1 auto;min-width:0;max-width:340px;border:1px solid var(--line);border-radius:5px;
+  padding:3px 10px;font-size:14px;font-family:inherit;line-height:1.7;color:var(--ink);background:#fff}
+.quiz-input:focus{outline:2px solid #d9b9ad;outline-offset:0;border-color:var(--accent)}
+.quiz-input.ok{border-color:#2e7d32;background:#f0f8f0;color:#1b5e20}
+.quiz-input.bad{border-color:#b0341f;background:#fdf1ee;color:#7f1d12}
+.quiz-input:disabled{opacity:.7}
+.quiz-check{border:1px solid var(--line);background:#fff;border-radius:5px;color:var(--ink);padding:1px 12px;font-size:12.5px;line-height:1.9}
+.quiz-check:hover{border-color:var(--accent);color:var(--accent)}
+.quiz-mark{font-size:13px;font-weight:700;white-space:nowrap}
+.quiz-mark.ok{color:#2e7d32}
+.quiz-mark.bad{color:#b0341f}
+.quiz-hint{display:block;font-size:12px;color:var(--accent);margin:1px 0 3px}
+.quiz-hint:empty{display:none}
+.quiz-hint.ok{color:#2e7d32}
+.quiz-hint b{font-weight:700}
+.quiz-hint .ok-hint{color:#2e7d32;display:none}
+.dict-item.quiz-ok{background:#f4faf4;border-radius:4px}
+.err-panel{position:fixed;inset:0;background:rgba(40,32,28,.45);display:none;z-index:60;align-items:flex-start;justify-content:center;overflow:auto;padding:26px 12px}
+.err-panel.open{display:flex}
+.err-card{background:#fffdf9;width:100%;max-width:760px;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.22);padding:18px 20px}
+.err-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.err-head h2{margin:0;font-size:17px}
+.err-head .spacer{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.err-list{margin:14px 0 4px;max-height:62vh;overflow:auto;border-top:1px solid var(--line)}
+.err-entry{padding:8px 4px;border-bottom:1px dotted var(--line);cursor:pointer}
+.err-entry:hover{background:#faf6f0}
+.err-entry .pr{font-weight:600;font-size:14px}
+.err-entry .ans{font-size:13px;color:#444;margin-top:2px}
+.err-entry .times{display:inline-block;background:var(--accent);color:#fff;border-radius:10px;padding:0 8px;font-size:11.5px;margin-left:8px;vertical-align:1px}
+.err-empty{padding:26px 0;text-align:center;color:var(--ink-soft);font-size:13.5px}
+.err-hint{font-size:12px;color:var(--ink-soft);margin:8px 0 0}
+footer{max-width:960px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink-soft)}
+@media (max-width:640px){
+  .tb-inner{padding:8px 12px}
+  .tb-controls{margin-left:0;width:100%}
+  .dict-item{flex-direction:column;gap:4px}
+  .prompt{flex:none}
+  .answer-zone{width:100%}
+  .howto{font-size:12.5px}
+}
+@media (max-width:480px){
+  .tb-inner h1{font-size:15px}
+  .tb-inner h1 small{font-size:10.5px}
+  .tb-controls{gap:6px}
+  .btn-primary,.btn-ghost{padding:6px 10px;font-size:12px}
+  select.btn-ghost{max-width:132px;font-size:12px}
+  main{padding:14px 10px 60px}
+  .howto{padding:10px 12px}
+  .lesson-title{font-size:19px}
+  .prompt{font-size:14px}
+  .quiz{flex-wrap:wrap}
+  .quiz-input{max-width:none;width:100%}
+  .gpoint{padding:8px 10px 2px}
+  .explain{font-size:12.5px}
+  .listen-word{max-width:100%;word-break:keep-all}
+}
+@media (max-width:360px){
+  .tb-inner{padding:6px 8px;gap:6px}
+  .tb-inner h1{font-size:13.5px}
+  .tb-inner h1 small{font-size:10px}
+  .btn-primary,.btn-ghost{padding:5px 8px;font-size:11.5px}
+  select.btn-ghost{max-width:118px}
+  .counter{font-size:11px}
+  main{padding:12px 8px 50px}
+  .lesson-title{font-size:17px}
+  .sec-title{font-size:13.5px}
+  .dict-item{gap:2px;padding:6px 0}
+  .prompt{font-size:13px}
+  .answer{font-size:13px;padding:3px 6px}
+  .reveal,.wrong-btn{font-size:11px;padding:0 8px}
+  .listen-btn{margin-left:4px;padding:1px 7px}
+  .ans-spk{margin-left:4px;padding:1px 7px}
+  .gpoint h4{font-size:13.5px}
+  .err-card{padding:12px}
+}
+@media print{
+  @page{size:A4;margin:9mm 8mm}
+  body{background:#fff;font-size:12px}
+  .toolbar,.howto,footer{display:none}
+  main{max-width:none;padding:0}
+  .lesson{margin:0 0 14px;break-before:page}
+  .lesson:first-of-type{break-before:auto}
+  .lesson-title{font-size:15px;border-bottom:1px solid #999;padding-bottom:3px;margin-bottom:6px}
+  .lesson-title::after{display:none}
+  .lesson-meta,.sec-title .cnt{display:none}
+  .sec-title{font-size:12.5px;margin:12px 0 2px}
+  .lesson,.gpoint{display:block!important}
+  .dict-item{display:grid!important;grid-template-columns:1fr 1fr;gap:0 12px;border-bottom:1px dotted #bbb;padding:4px 0;break-inside:avoid}
+  .prompt{font-size:12px;color:#111;padding-right:8px;border-right:1px solid #ccc}
+  .prompt .num{font-size:11px}
+  .answer-zone{min-height:2.4em}
+  .quiz,.reveal,.wrong-btn,.quiz-hint{display:none}
+  .dict-item.wrong,.dict-item.quiz-ok{background:none}
+  .err-panel{display:none!important}
+  .answer{display:block;background:none;border:none;padding:0;font-size:12px;color:#222;line-height:1.7}
+  .answer ruby{ruby-align:center;ruby-position:over}
+  .answer rt{font-size:.78em;color:#555}
+  .answer .a-word{margin-right:6px}
+  .gpoint{border:1px solid #ccc;border-radius:0;padding:6px 10px 2px;break-inside:avoid}
+  .gpoint h4{font-size:12.5px;margin-bottom:4px}
+  .explain{font-size:11px;padding-bottom:5px;margin-bottom:5px;border-bottom:1px dashed #bbb}
+}
+
+
+/* ===== 公共喇叭图标（纯图标，无按钮外观） ===== */
+.spk{display:inline-flex;align-items:center;vertical-align:middle;
+  background:none;border:none;padding:2px;color:var(--accent);
+  border-radius:50%;cursor:pointer;flex:0 0 auto}
+.spk svg{display:block}
+.spk:hover{color:#9c2c1a;background:var(--accent-soft)}
+.spk.playing{color:#fff;background:var(--accent)}
+/* 动词/词组标题行内的小字信息 */
+.l-sub{font-size:13px;color:var(--ink-soft);font-weight:400;margin-left:10px}
+@media (max-width:480px){.l-sub{display:block;margin-left:0;font-size:12px}}
