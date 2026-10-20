@@ -234,11 +234,12 @@ table.vgrid{border-collapse:collapse;table-layout:fixed;font-size:12.5px}
 .vgrid .colh.col-word{width:118px}
 .vgrid .col-name{display:block;font-weight:700;font-size:12.5px;margin-bottom:4px}
 .vgrid .colh .rule-btn,.vgrid .colh .col-toggle{display:inline-block;white-space:nowrap;flex:0 0 auto;margin:1px 2px}
-.vgrid .col-word{position:sticky;left:0;z-index:2;background:var(--paper);width:118px;overflow:hidden}
+.vgrid .col-word{position:sticky;left:0;z-index:2;background:var(--paper);width:118px;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
 .vgrid .vrow .col-word{min-width:118px}
 .vgrid .cell{border:1px solid var(--line);padding:4px 6px;width:108px;height:70px;vertical-align:top;overflow:hidden}
-.vgrid .w-w{font-weight:700;font-size:13.5px;display:block}
-.vgrid .w-sub{font-size:10.5px;color:var(--ink-soft);line-height:1.5;display:block}
+.vgrid .w-w{font-weight:700;font-size:13.5px;display:block;flex:0 0 auto}
+.vgrid .w-sub{font-size:10.5px;color:var(--ink-soft);line-height:1.5;display:block;flex:1 1 auto;overflow:hidden}
+.vgrid .row-toggle{display:block;width:100%;white-space:nowrap;font-size:9.5px;padding:1px 4px;margin-top:2px;flex:0 0 auto;overflow:hidden;color:var(--accent)}
 .cell .quiz-input{width:100%;box-sizing:border-box;font-size:12px;padding:2px 5px;border:1px solid var(--line);border-radius:4px}
 .cell .quiz-check,.cell .wrong-btn{white-space:nowrap;flex:0 0 auto;margin-top:2px;font-size:11px;padding:1px 6px}
 .cell .quiz-mark{font-size:12px;margin-left:3px}
@@ -251,9 +252,11 @@ table.vgrid{border-collapse:collapse;table-layout:fixed;font-size:12.5px}
 body.show-answers .cell .cell-ans{display:inline-block}
 body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.show-answers .cell .wrong-btn{display:none}
 .cell.open .cell-ans{display:inline-block}
+.cell.open .quiz-input,.cell.open .quiz-check,.cell.open .wrong-btn{display:none}
+.vrow.row-on .quiz-input,.vrow.row-on .quiz-check,.vrow.row-on .wrong-btn{display:none}
 /* 显示答案时保持与输入态相同行高列宽：内容在格内自适应，不撑大 */
 .cell.col-on,body.show-answers .cell,.cell.open{vertical-align:middle}
-.cell.col-on .cell-ans,body.show-answers .cell .cell-ans,.cell.open .cell-ans{display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:0;width:100%;word-break:break-all;overflow-wrap:anywhere}
+.cell.col-on .cell-ans,body.show-answers .cell .cell-ans,.cell.open .cell-ans,.vrow.row-on .cell-ans{display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:0;width:100%;word-break:break-all;overflow-wrap:anywhere}
 .cell.quiz-ok{background:#f0f7f0}
 .cell.quiz-bad{background:#fdf0ee}
 .cell.wrong{background:#fbe9e7;box-shadow:inset 0 0 0 2px var(--accent)}
@@ -278,7 +281,7 @@ body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.sho
   .vgrid .cg-col{width:96px}
   .vgrid .colh,.vgrid .cell{width:96px;height:auto}
   .vgrid .colh.col-word,.vgrid .col-word{width:112px}
-  .cell .quiz-input,.cell .quiz-check,.cell .wrong-btn,.cell .quiz-mark,.cell .quiz-hint{display:none}
+  .cell .quiz-input,.cell .quiz-check,.cell .wrong-btn,.cell .quiz-mark,.cell .quiz-hint,.vgrid .row-toggle{display:none}
   .cell-ans{display:inline-block!important}
   .rule-btn,.col-toggle,.rule-bar{display:none}
 }
