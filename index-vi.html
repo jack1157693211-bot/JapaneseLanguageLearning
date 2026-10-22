@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Học tiếng Nhật · Trang chủ</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b0341f'/%3E%3Ctext x='32' y='44' font-size='36' text-anchor='middle' fill='%23fff' font-family='serif' font-weight='700'%3E日%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f6f5f1; --card:#ffffff; --ink:#2e2a26; --ink-soft:#6f6a63;
+  --line:#ddd8cf; --accent:#b0341f; --accent-soft:#f7e8e2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Yu Gothic","Yu Gothic UI","Hiragino Kaku Gothic ProN","Meiryo","Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;
+  line-height:1.8;font-size:15px}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+.hero{max-width:1000px;margin:0 auto;padding:56px 20px 40px;text-align:center}
+.langs{display:inline-flex;gap:6px;margin-bottom:22px;padding:4px;background:var(--card);
+  border:1px solid var(--line);border-radius:999px}
+.langs button{border:0;background:transparent;color:var(--ink-soft);font-size:13px;
+  padding:4px 16px;border-radius:999px;line-height:1.6;transition:background .14s ease,color .14s ease}
+.langs button:hover{color:var(--ink)}
+.langs button.on{background:var(--accent);color:#fff}
+.kicker{display:inline-block;margin:0 0 10px;padding:2px 14px;border:1px solid var(--accent);color:var(--accent);
+  border-radius:999px;font-size:13px;letter-spacing:.28em;font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
+.hero h1{margin:0;font-size:46px;line-height:1.2;letter-spacing:.06em;font-weight:700;
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
+.hero .sub{margin:14px 0 0;color:var(--ink-soft);font-size:15px;letter-spacing:.08em}
+.hero .sub b{color:var(--ink);font-weight:600}
+
+main{max-width:1000px;margin:0 auto;padding:8px 20px 48px}
+.group{margin-bottom:34px}
+.group:last-child{margin-bottom:0}
+.gtitle{margin:0 0 14px;font-size:17px;letter-spacing:.12em;color:var(--ink-soft);font-weight:600;
+  display:flex;align-items:center;gap:10px}
+.gtitle::before{content:'';width:4px;height:16px;border-radius:2px;background:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+
+.card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:22px 24px 20px;box-shadow:0 1px 2px rgba(0,0,0,.04);
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.10);border-color:#c9c2b4}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card .badge{align-self:flex-start;margin-bottom:14px;padding:1px 12px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent);font-size:12.5px;letter-spacing:.1em}
+.card h2{margin:0;font-size:21px;letter-spacing:.03em}
+.card .sub2{margin:2px 0 0;font-size:12.5px;color:var(--ink-soft);letter-spacing:.06em;
+  font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
+.card .range{margin:12px 0 4px;font-size:13.5px;color:var(--ink-soft)}
+.card .desc{margin:0 0 18px;font-size:13.5px;color:var(--ink-soft)}
+.card .go{margin-top:auto;display:flex;align-items:center;gap:6px;color:var(--accent);
+  font-size:14px;font-weight:600;letter-spacing:.05em}
+.card .go svg{transition:transform .16s ease}
+.card:hover .go svg{transform:translateX(3px)}
+
+.addhint{margin-top:34px;padding:14px 18px;border:1px dashed var(--line);border-radius:10px;
+  color:var(--ink-soft);font-size:12.5px;text-align:center}
+.addhint code{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:0 6px;font-size:12px}
+
+footer{border-top:1px solid var(--line);padding:22px 20px 30px;text-align:center;color:var(--ink-soft);font-size:12.5px}
+footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","Noto Serif JP","Noto Serif SC",serif}
+
+@media (max-width:520px){
+  .hero{padding:36px 16px 24px}
+  .hero h1{font-size:34px}
+  main{padding:4px 14px 36px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero">
+    <div class="langs" role="group" aria-label="Ngôn ngữ / Language / 语言">
+      <button type="button" data-lang="zh" data-file="index.html">中文</button>
+      <button type="button" data-lang="en" data-file="index-en.html">English</button>
+      <button type="button" class="on" data-lang="vi" data-file="index-vi.html">Tiếng Việt</button>
+    </div>
+    <p class="kicker">日本語の勉強</p>
+    <h1>Học tiếng Nhật</h1>
+    <p class="sub">Chính tả · Nghe · Sổ lỗi <b>Trang chủ</b></p>
+  </div>
+</header>
+
+<main>
+  <!-- ===== 单词・文法复习 ===== -->
+  <section class="group">
+    <h3 class="gtitle">Từ vựng &amp; Ngữ pháp Ôn tập</h3>
+    <div class="grid">
+      <a class="card" href="大家日语1复习.html">
+        <span class="badge">Quyển 1</span>
+        <h2>Minna no Nihongo 1 Ôn tập</h2>
+        <p class="sub2">みんなの日本語 初級Ⅰ</p>
+        <p class="range">Bài 1 – 25</p>
+        <p class="desc">Từ vựng &amp; ngữ pháp · chính tả / nghe / sổ lỗi</p>
+        <span class="go">Vào<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card" href="大家日语2复习.html">
+        <span class="badge">Quyển 2</span>
+        <h2>Minna no Nihongo 2 Ôn tập</h2>
+        <p class="sub2">みんなの日本語 初級Ⅱ</p>
+        <p class="range">Bài 26 – 50</p>
+        <p class="desc">Từ vựng &amp; ngữ pháp · chính tả / nghe / sổ lỗi</p>
+        <span class="go">Vào<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== 动词各种变形练习 ===== -->
+  <section class="group">
+    <h3 class="gtitle">Luyện Biến Hóa Động Từ</h3>
+    <div class="grid">
+      <a class="card" href="minna-no-nihongo-1-verb-conjugation-vi.html">
+        <span class="badge">Động từ 1</span>
+        <h2>Luyện động từ Quyển 1</h2>
+        <p class="sub2">みんなの日本語 初級Ⅰ</p>
+        <p class="range">Bài 1 – 25</p>
+        <p class="desc">Chọn bài, điền biến hóa động từ</p>
+        <span class="go">Vào<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card" href="minna-no-nihongo-2-verb-conjugation-vi.html">
+        <span class="badge">Động từ 2</span>
+        <h2>Luyện động từ Quyển 2</h2>
+        <p class="sub2">みんなの日本語 初級Ⅱ</p>
+        <p class="range">Bài 26 – 50</p>
+        <p class="desc">Chọn bài, điền biến hóa động từ</p>
+        <span class="go">Vào<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <p class="addhint">Muốn thêm trang sau này: mở tệp này và sao chép một thẻ phía trên.</p>
+</main>
+
+<footer>
+  <p class="jp">継続は力なり</p>
+  <p>Học tiếng Nhật · Trang chủ công cụ ôn tập</p>
+</footer>
+
+<script>
+/* 语言切换 = 跳转到对应的语言 HTML 文件（每个文件只含一种语言，加载最省流量） */
+var CUR_FILE = 'index-vi.html';
+var LANG_FILES = {'zh':'index.html','en':'index-en.html','vi':'index-vi.html'};
+var LANG_KEY = 'mn_home_lang';
+/* 子页面语言 key 同步（复习页/动词页共用），点进子页面就是所选语言 */
+function syncSubLang(lang){
+  try{
+    localStorage.setItem('mn_jp_lang_1', lang);
+    localStorage.setItem('mn_jp_lang_2', lang);
+  }catch(e){}
+}
+/* 记住上次语言：打开时若记住的语言 != 当前文件语言，跳转到对应文件 */
+try{
+  var saved = localStorage.getItem(LANG_KEY) || 'zh';
+  if (saved !== 'vi' && LANG_FILES[saved] && LANG_FILES[saved] !== CUR_FILE){
+    syncSubLang(saved);
+    location.replace(LANG_FILES[saved]);
+  }
+}catch(e){}
+document.querySelectorAll('.langs button').forEach(function(b){
+  b.addEventListener('click', function(){
+    var lang = b.getAttribute('data-lang');
+    var file = b.getAttribute('data-file');
+    try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
+    syncSubLang(lang);
+    if (file && file !== CUR_FILE) location.replace(file);
+  });
+});
+</script>
+</body>
+</html>

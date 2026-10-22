@@ -285,3 +285,31 @@ body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.sho
   .cell-ans{display:inline-block!important}
   .rule-btn,.col-toggle,.rule-bar{display:none}
 }
+
+/* ===== 变形规则总览弹层 ===== */
+#ovPanel{background:rgba(40,32,28,.55)}
+#ovPanel .err-card{margin:auto;max-width:860px;max-height:92vh;overflow-y:auto;padding-bottom:26px}
+.ov-intro{margin:0 0 14px;padding:10px 12px;background:var(--accent-soft);border-radius:8px;font-weight:600;color:var(--accent);line-height:1.6}
+.ov-card{margin:14px 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.ov-card h3{margin:0 0 8px;font-size:15px}
+.ov-g1 h3{color:#2f6bb3}
+.ov-g2 h3{color:#2e7d4f}
+.ov-g3 h3{color:#b26a00}
+.ov-special h3{color:var(--accent)}
+.ov-tip{margin:0 0 8px;padding:6px 10px;background:#faf8f4;border-left:3px solid var(--line);border-radius:4px;font-size:13px;color:var(--ink-soft);line-height:1.6}
+.ov-rows{margin:0 0 8px;padding-left:20px;line-height:1.7}
+.ov-rows li{margin:2px 0;font-size:14px}
+.ov-examples{margin:0;padding:8px 10px;background:#f3f1ec;border-radius:6px;font-size:13.5px;color:var(--ink);line-height:1.7}
+.ov-table-wrap{overflow-x:auto;margin-top:6px}
+.ov-table{width:100%;min-width:680px;border-collapse:collapse;font-size:13px}
+.ov-table th,.ov-table td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;line-height:1.6}
+.ov-table thead th{background:#f3f1ec;font-weight:600}
+.ov-table tbody tr:nth-child(even){background:#faf8f4}
+.ov-table .ov-tname{white-space:nowrap;font-weight:600}
+@media (max-width:560px){
+  .ov-card{padding:10px}
+  .ov-rows{padding-left:16px}
+  .ov-rows li,.ov-tip,.ov-examples,.ov-table{font-size:12.5px}
+  .ov-table th,.ov-table td{padding:5px 6px}
+  .ov-table{min-width:620px}
+}

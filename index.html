@@ -76,129 +76,101 @@ footer .jp{letter-spacing:.2em;font-family:"Yu Mincho","Hiragino Mincho ProN","N
 
 <header>
   <div class="hero">
-    <div class="langs" role="group" aria-label="Language / Ngôn ngữ / 语言">
-      <button type="button" data-lang="zh">中文</button>
-      <button type="button" data-lang="en">English</button>
-      <button type="button" data-lang="vi">Tiếng Việt</button>
+    <div class="langs" role="group" aria-label="语言 / Language / Ngôn ngữ">
+      <button type="button" class="on" data-lang="zh" data-file="index.html">中文</button>
+      <button type="button" data-lang="en" data-file="index-en.html">English</button>
+      <button type="button" data-lang="vi" data-file="index-vi.html">Tiếng Việt</button>
     </div>
     <p class="kicker">日本語の勉強</p>
-    <h1 data-i18n="heroTitle">日语学习</h1>
-    <p class="sub" data-i18n="heroSub">默写 · 听写 · 错题练习<b>入口</b></p>
+    <h1>日语学习</h1>
+    <p class="sub">默写 · 听写 · 错题练习<b>入口</b></p>
   </div>
 </header>
 
 <main>
-  <!-- ===== 页面卡片网格（由下方 PAGES 数组自动渲染） ===== -->
-  <div id="grid" class="grid"></div>
+  <!-- ===== 单词・文法复习 ===== -->
+  <section class="group">
+    <h3 class="gtitle">单词・文法复习</h3>
+    <div class="grid">
+      <a class="card" href="大家日语1复习.html">
+        <span class="badge">初级1</span>
+        <h2>大家日语1复习</h2>
+        <p class="sub2">みんなの日本語 初級Ⅰ</p>
+        <p class="range">第1課 ～ 第25課</p>
+        <p class="desc">单词・文法 默写 / 听写 / 错题本</p>
+        <span class="go">进入<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card" href="大家日语2复习.html">
+        <span class="badge">初级2</span>
+        <h2>大家日语2复习</h2>
+        <p class="sub2">みんなの日本語 初級Ⅱ</p>
+        <p class="range">第26課 ～ 第50課</p>
+        <p class="desc">单词・文法 默写 / 听写 / 错题本</p>
+        <span class="go">进入<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </section>
 
-  <p class="addhint" data-i18n="addHint">以后新增页面：打开本文件，在底部 <code>PAGES</code> 数组里加一条即可，卡片会自动生成</p>
+  <!-- ===== 动词各种变形练习 ===== -->
+  <section class="group">
+    <h3 class="gtitle">动词各种变形练习</h3>
+    <div class="grid">
+      <a class="card" href="minna-no-nihongo-1-verb-conjugation.html">
+        <span class="badge">变形1</span>
+        <h2>大家日语1动词变形练习</h2>
+        <p class="sub2">みんなの日本語 初級Ⅰ</p>
+        <p class="range">第1課 ～ 第25課</p>
+        <p class="desc">选课，挖空填动词变形</p>
+        <span class="go">进入<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="card" href="minna-no-nihongo-2-verb-conjugation.html">
+        <span class="badge">变形2</span>
+        <h2>大家日语2动词变形练习</h2>
+        <p class="sub2">みんなの日本語 初級Ⅱ</p>
+        <p class="range">第26課 ～ 第50課</p>
+        <p class="desc">选课，挖空填动词变形</p>
+        <span class="go">进入<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <p class="addhint">以后新增页面：打开本文件，照上面的卡片抄一条即可</p>
 </main>
 
 <footer>
   <p class="jp">継続は力なり</p>
-  <p data-i18n="footerText">日语学习 · 复习工具入口</p>
+  <p>日语学习 · 复习工具入口</p>
 </footer>
 
 <script>
-/* ============================================================
-   栏目分组：每组一个标题，组内卡片自动渲染
-   新增页面只需在对应分组数组追加一条
-   { title/sub/range/desc/badge: {zh, en, vi} 或字符串(不随语言变),
-     url: 相对文件名 }
-   ============================================================ */
-const GROUPS = [
-  {key:'review', zh:'单词・文法复习', en:'Vocabulary & Grammar Review', vi:'Từ vựng & Ngữ pháp Ôn tập',
-   pages:[
-    {title:{zh:'大家日语1复习', en:'Minna no Nihongo 1 Review', vi:'Minna no Nihongo 1 Ôn tập'},
-     sub:'みんなの日本語 初級Ⅰ',
-     range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
-     desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
-     url:'大家日语1复习.html', badge:{zh:'初级1', en:'Book 1', vi:'Quyển 1'}},
-    {title:{zh:'大家日语2复习', en:'Minna no Nihongo 2 Review', vi:'Minna no Nihongo 2 Ôn tập'},
-     sub:'みんなの日本語 初級Ⅱ',
-     range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
-     desc:{zh:'单词・文法 默写 / 听写 / 错题本', en:'Vocabulary & grammar · dictation / listening / error book', vi:'Từ vựng & ngữ pháp · chính tả / nghe / sổ lỗi'},
-     url:'大家日语2复习.html', badge:{zh:'初级2', en:'Book 2', vi:'Quyển 2'}}
-   ]},
-  {key:'verb', zh:'动词各种变形练习', en:'Verb Conjugation Practice', vi:'Luyện Biến Hóa Động Từ',
-   pages:[
-    {title:{zh:'大家日语1动词变形练习', en:'Book 1 Verb Practice', vi:'Luyện động từ Quyển 1'},
-     sub:'みんなの日本語 初級Ⅰ',
-     range:{zh:'第1課 ～ 第25課', en:'Lesson 1 – 25', vi:'Bài 1 – 25'},
-     desc:{zh:'选课，挖空填动词变形', en:'Pick a lesson, fill in the verb form', vi:'Chọn bài, điền biến hóa động từ'},
-     url:'minna-no-nihongo-1-verb-conjugation.html', badge:{zh:'变形1', en:'Verb 1', vi:'Động từ 1'}},
-    {title:{zh:'大家日语2动词变形练习', en:'Book 2 Verb Practice', vi:'Luyện động từ Quyển 2'},
-     sub:'みんなの日本語 初級Ⅱ',
-     range:{zh:'第26課 ～ 第50課', en:'Lesson 26 – 50', vi:'Bài 26 – 50'},
-     desc:{zh:'选课，挖空填动词变形', en:'Pick a lesson, fill in the verb form', vi:'Chọn bài, điền biến hóa động từ'},
-     url:'minna-no-nihongo-2-verb-conjugation.html', badge:{zh:'变形2', en:'Verb 2', vi:'Động từ 2'}}
-   ]}
-];
-
-const I18N = {
-  zh:{heroTitle:'日语学习', heroSub:'默写 · 听写 · 错题练习<b>入口</b>',
-      addHint:'以后新增页面：打开本文件，在底部 <code>GROUPS</code> 数组里加一条即可，卡片会自动生成',
-      footerText:'日语学习 · 复习工具入口'},
-  en:{heroTitle:'Japanese Study', heroSub:'Dictation · Listening · Error Review <b>Home</b>',
-      addHint:'To add a page later: open this file and append one entry to the <code>GROUPS</code> array below; the card is generated automatically.',
-      footerText:'Japanese Study · Practice Tools Home'},
-  vi:{heroTitle:'Học tiếng Nhật', heroSub:'Chính tả · Nghe · Sổ lỗi <b>Trang chủ</b>',
-      addHint:'Muốn thêm trang sau này: mở tệp này và thêm một mục vào mảng <code>GROUPS</code> bên dưới; thẻ sẽ tự sinh.',
-      footerText:'Học tiếng Nhật · Trang chủ công cụ ôn tập'}
-};
-
-function pick(v, lang){ return (v && typeof v === 'object' && !Array.isArray(v)) ? (v[lang] || v.zh) : v; }
-
-function cardHtml(p, lang){
-  return '<a class="card" href="' + p.url + '" aria-label="' + pick(p.title, lang) + '">' +
-    '<span class="badge">' + pick(p.badge, lang) + '</span>' +
-    '<h2>' + pick(p.title, lang) + '</h2>' +
-    '<p class="sub2">' + p.sub + '</p>' +
-    '<p class="range">' + pick(p.range, lang) + '</p>' +
-    '<p class="desc">' + pick(p.desc, lang) + '</p>' +
-    '<span class="go">' + pick({zh:'进入', en:'Open', vi:'Vào'}, lang) +
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
-    '</span></a>';
-}
-
-function render(lang){
-  document.querySelectorAll('.langs button').forEach(function(b){
-    b.classList.toggle('on', b.getAttribute('data-lang') === lang);
-  });
-  var t = I18N[lang] || I18N.zh;
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var k = el.getAttribute('data-i18n');
-    if (t[k] !== undefined) el.innerHTML = t[k];
-  });
-  document.title = t.heroTitle + ' · 入口';
-  var grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  GROUPS.forEach(function(g){
-    var sec = document.createElement('section');
-    sec.className = 'group';
-    var h = document.createElement('h3');
-    h.className = 'gtitle';
-    h.textContent = pick(g, lang);
-    sec.appendChild(h);
-    var inner = document.createElement('div');
-    inner.className = 'grid';
-    g.pages.forEach(function(p){ inner.insertAdjacentHTML('beforeend', cardHtml(p, lang)); });
-    sec.appendChild(inner);
-    grid.appendChild(sec);
-  });
-}
-
+/* 语言切换 = 跳转到对应的语言 HTML 文件（每个文件只含一种语言，加载最省流量） */
+var CUR_FILE = 'index.html';
+var LANG_FILES = {'zh':'index.html','en':'index-en.html','vi':'index-vi.html'};
 var LANG_KEY = 'mn_home_lang';
-var curLang = localStorage.getItem(LANG_KEY) || 'zh';
-if (!I18N[curLang]) curLang = 'zh';
+/* 子页面语言 key 同步（复习页/动词页共用），点进子页面就是所选语言 */
+function syncSubLang(lang){
+  try{
+    localStorage.setItem('mn_jp_lang_1', lang);
+    localStorage.setItem('mn_jp_lang_2', lang);
+  }catch(e){}
+}
+/* 记住上次语言：打开时若记住的语言 != 当前文件语言，跳转到对应文件 */
+try{
+  var saved = localStorage.getItem(LANG_KEY) || 'zh';
+  if (saved !== 'zh' && LANG_FILES[saved] && LANG_FILES[saved] !== CUR_FILE){
+    syncSubLang(saved);
+    location.replace(LANG_FILES[saved]);
+  }
+}catch(e){}
 document.querySelectorAll('.langs button').forEach(function(b){
   b.addEventListener('click', function(){
-    curLang = b.getAttribute('data-lang');
-    localStorage.setItem(LANG_KEY, curLang);
-    render(curLang);
+    var lang = b.getAttribute('data-lang');
+    var file = b.getAttribute('data-file');
+    try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
+    syncSubLang(lang);
+    if (file && file !== CUR_FILE) location.replace(file);
   });
 });
-render(curLang);
 </script>
 </body>
 </html>
