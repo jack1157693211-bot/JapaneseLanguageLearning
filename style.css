@@ -308,10 +308,28 @@ body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.sho
 .ov-table thead th{background:#f3f1ec;font-weight:600}
 .ov-table tbody tr:nth-child(even){background:#faf8f4}
 .ov-table .ov-tname{white-space:nowrap;font-weight:600}
+#ovPanel .err-card{max-width:1180px}
+.ov-quick-table{width:100%;min-width:0;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.ov-quick-table th,.ov-quick-table td{border:1px solid var(--line);padding:5px 6px;text-align:left;vertical-align:top;line-height:1.5;word-break:break-word;overflow-wrap:anywhere}
+.ov-quick-table thead th{background:#f3f1ec;font-weight:600}
+.ov-quick-table thead th .i18n{white-space:nowrap}
+.ov-qtail{display:block;min-height:14px;margin-top:2px;font-size:10.5px;font-weight:600;opacity:.85}
+.ov-kana{display:block;min-height:12px;font-size:9.5px;font-weight:400;opacity:.65;margin-bottom:1px}
+.ov-rowmark{color:var(--accent)}
+.ov-quick-table th:nth-child(4),.ov-quick-table td:nth-child(4),
+.ov-quick-table th:nth-child(6),.ov-quick-table td:nth-child(6),
+.ov-quick-table th:nth-child(9),.ov-quick-table td:nth-child(9),
+.ov-quick-table th:nth-child(10),.ov-quick-table td:nth-child(10){border-left:2px solid var(--accent)}
+.ov-quick-table .ov-qlabel{white-space:nowrap;font-weight:600;background:#faf8f4;width:62px}
+.ov-qrow.g1 .ov-qlabel{color:#2a7d4f}
+.ov-qrow.g2 .ov-qlabel{color:#2f5ea8}
+.ov-qrow.g3 .ov-qlabel{color:#a6562a}
 @media (max-width:560px){
   .ov-card{padding:10px}
   .ov-rows{padding-left:16px}
   .ov-rows li,.ov-tip,.ov-examples,.ov-table{font-size:12.5px}
   .ov-table th,.ov-table td{padding:5px 6px}
   .ov-table{min-width:620px}
+  .ov-quick-table{font-size:11px}
+  .ov-quick-table th,.ov-quick-table td{padding:4px 5px}
 }
