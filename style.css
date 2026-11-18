@@ -316,10 +316,10 @@ body.show-answers .cell .quiz-input,body.show-answers .cell .quiz-check,body.sho
 .ov-qtail{display:block;min-height:14px;margin-top:2px;font-size:10.5px;font-weight:600;opacity:.85}
 .ov-kana{display:block;min-height:12px;font-size:9.5px;font-weight:400;opacity:.65;margin-bottom:1px}
 .ov-rowmark{color:var(--accent)}
-.ov-quick-table th:nth-child(4),.ov-quick-table td:nth-child(4),
-.ov-quick-table th:nth-child(6),.ov-quick-table td:nth-child(6),
-.ov-quick-table th:nth-child(9),.ov-quick-table td:nth-child(9),
-.ov-quick-table th:nth-child(10),.ov-quick-table td:nth-child(10){border-left:2px solid var(--accent)}
+.ov-quick-table th:nth-child(5),.ov-quick-table td:nth-child(5),
+.ov-quick-table th:nth-child(7),.ov-quick-table td:nth-child(7),
+.ov-quick-table th:nth-child(10),.ov-quick-table td:nth-child(10),
+.ov-quick-table th:nth-child(11),.ov-quick-table td:nth-child(11){border-left:2px solid var(--accent)}
 .ov-quick-table .ov-qlabel{white-space:nowrap;font-weight:600;background:#faf8f4;width:62px}
 .ov-qrow.g1 .ov-qlabel{color:#2a7d4f}
 .ov-qrow.g2 .ov-qlabel{color:#2f5ea8}
