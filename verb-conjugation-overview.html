@@ -7,11 +7,10 @@
 <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b0341f'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%23fff' font-family='serif'%3E動%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 <style>
-/* 独立总览页：速查表列宽按内容自适应，后续新增列自动纳入；主容器随最宽表格撑开，页面变宽而非卡片内滚动 */
-.ov-page .tb-inner,.ov-page footer{max-width:1440px}
-.ov-page main{width:max-content;min-width:100%;max-width:1440px}
-.ov-page .ov-card{min-width:100%}
-.ov-page .ov-quick-table{table-layout:auto;width:100%;min-width:max-content;font-size:12px}
+/* 独立总览页：版面放宽；速查表均分列宽、铺满容器，长词格内换行，不出现横向滚动条 */
+.ov-page .tb-inner,.ov-page main,.ov-page footer{max-width:1440px}
+.ov-page main{width:auto}
+.ov-page .ov-quick-table{table-layout:fixed;width:100%;min-width:0;font-size:12px}
 .ov-page .ov-quick-table th,.ov-page .ov-quick-table td{padding:6px 8px}
 .ov-page .ov-quick-table thead th .i18n{white-space:normal}
 .ov-page .ov-quick-table .ov-qlabel{width:56px;white-space:nowrap}
